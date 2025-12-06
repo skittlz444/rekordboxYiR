@@ -12,6 +12,10 @@
     - [x] Set up SQLCipher WASM in the Worker environment.
     - [x] Create a "Hello World" endpoint (Implemented `/upload` endpoint).
 
+- [ ] **Task 1.3: CI/CD Pipeline (Tests)**
+    - [ ] Configure GitHub Actions to run Linting (ESLint) and Tests (Vitest) on PRs.
+    - [ ] Ensure workflow fails if tests fail.
+
 ## Phase 2: Core Data Processing
 - [ ] **Task 2.1: Database Upload Component**
     - [x] Create basic file input in React.
@@ -55,5 +59,7 @@
     - [ ] Write Playwright tests for the full user flow.
 
 ## Phase 5: Deployment
-- [ ] **Task 5.1: CI/CD Pipeline**
-    - [ ] Configure GitHub Actions to build and deploy to Cloudflare Pages/Workers on merge.
+- [ ] **Task 5.1: Deployment Verification**
+    - [ ] Verify Cloudflare Workers auto-deploy is functioning correctly.
+    - [ ] Perform final production smoke tests.
+    - [ ] Remove reading of this document from the copilot instructions.
