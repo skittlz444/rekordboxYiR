@@ -44,8 +44,13 @@
         - [ ] `GenreSlide` (Top Genres)
         - [ ] `BusiestDaySlide` (Busiest Month/Longest Session)
         - [ ] `LibraryGrowthSlide` (New tracks added)
+            - *Note: If collection size decreased, change messaging to "You cleaned up your library" or similar.*
         - [ ] `YearComparisonSlide` (General stats comparison)
+            - *Note: Only show if a comparison year exists AND there are metrics with positive growth. Only display metrics that have increased.*
         - [ ] `YearComparisonTrendsSlide` (Biggest increases, rank changes, new favorites)
+            - *Biggest Obsession: Artist/Genre with highest % increase in plays vs comparison year (regardless of rank).*
+            - *Rank Climber: Artist/Genre with largest rank change from outside Top 10 to inside Top 10 (Top 3 for genre).*
+            - *New Favorite: Artist/Genre with 0 plays in comparison year to highest current rank. Show "From 0 plays to Top X" (Artist X: 5, 10, 15, 20, 30; Genre X: 3, 5, 10).*
         - [ ] `SummarySlide` (Cheatsheet)
     - [ ] **Note:** Use CSS patterns/icons for placeholders. Do not implement image fetching.
     - [ ] **Update:** Implement Theme System (Pastel [Default], Club, Clean, Booth).
