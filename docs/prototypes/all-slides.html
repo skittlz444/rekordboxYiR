@@ -43,40 +43,67 @@
         }
 
         /* Aspect Ratio Adaptations */
-        body[data-ratio="1:1"] .hide-on-square { display: none !important; }
-        body[data-ratio="1:1"] .show-on-square { display: block !important; }
+        body[data-ratio="1:1"] .hide-on-square,
+        body[data-ratio="4:5"] .hide-on-square { display: none !important; }
         
-        /* Compact spacing for square */
-        body[data-ratio="1:1"] .slide-p-square { padding: 1.5rem !important; }
-        body[data-ratio="1:1"] .slide-gap-square { gap: 0.5rem !important; }
-        body[data-ratio="1:1"] .slide-text-square-sm { font-size: 1.5rem !important; line-height: 1.2 !important; }
-        body[data-ratio="1:1"] .slide-mt-square-sm { margin-top: 1rem !important; margin-bottom: 1rem !important; }
+        body[data-ratio="1:1"] .show-on-square,
+        body[data-ratio="4:5"] .show-on-square { display: block !important; }
+        
+        /* Compact spacing for square/portrait */
+        body[data-ratio="1:1"] .slide-p-square,
+        body[data-ratio="4:5"] .slide-p-square { padding: 1.5rem !important; }
+        
+        body[data-ratio="1:1"] .slide-gap-square,
+        body[data-ratio="4:5"] .slide-gap-square { gap: 0.5rem !important; }
+        
+        body[data-ratio="1:1"] .slide-text-square-sm,
+        body[data-ratio="4:5"] .slide-text-square-sm { font-size: 1.5rem !important; line-height: 1.2 !important; }
+        
+        body[data-ratio="1:1"] .slide-mt-square-sm,
+        body[data-ratio="4:5"] .slide-mt-square-sm { margin-top: 1rem !important; margin-bottom: 1rem !important; }
         
         /* Specific Layout shifts */
-        body[data-ratio="1:1"] .flex-row-square { flex-direction: row !important; align-items: stretch !important; }
+        body[data-ratio="1:1"] .flex-row-square,
+        body[data-ratio="4:5"] .flex-row-square { flex-direction: row !important; align-items: stretch !important; }
+        
         body[data-ratio="1:1"] .grid-cols-square-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; display: grid !important; }
-        body[data-ratio="1:1"] .h-auto-square { height: auto !important; }
+        body[data-ratio="4:5"] .grid-cols-square-2 { grid-template-columns: 1fr !important; display: grid !important; }
+        
+        body[data-ratio="1:1"] .h-auto-square,
+        body[data-ratio="4:5"] .h-auto-square { height: auto !important; }
 
         /* Hashtag Positioning */
-        body[data-ratio="1:1"] .slide-tag { left: auto !important; right: 2rem !important; text-align: right; }
+        body[data-ratio="1:1"] .slide-tag,
+        body[data-ratio="4:5"] .slide-tag { left: auto !important; right: 2rem !important; text-align: right; }
 
         /* Genre Chart Sizing */
-        body[data-ratio="1:1"] .slide-chart-square { width: 8rem !important; height: 8rem !important; margin-bottom: 0 !important; margin-right: 1rem !important; }
-        body[data-ratio="1:1"] .slide-chart-inner { width: 5rem !important; height: 5rem !important; }
+        body[data-ratio="1:1"] .slide-chart-square,
+        body[data-ratio="4:5"] .slide-chart-square { width: 8rem !important; height: 8rem !important; margin-bottom: 0 !important; margin-right: 1rem !important; }
+        
+        body[data-ratio="1:1"] .slide-chart-inner,
+        body[data-ratio="4:5"] .slide-chart-inner { width: 5rem !important; height: 5rem !important; }
 
         /* Summary Grid Layout */
-        body[data-ratio="1:1"] .summary-grid-square { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0.5rem !important; }
-        body[data-ratio="1:1"] .summary-col-span-2 { grid-column: span 2; }
+        body[data-ratio="1:1"] .summary-grid-square,
+        body[data-ratio="4:5"] .summary-grid-square { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0.5rem !important; }
+        
+        body[data-ratio="1:1"] .summary-col-span-2,
+        body[data-ratio="4:5"] .summary-col-span-2 { grid-column: span 2; }
 
-        /* Text Sizing Overrides for Square */
-        body[data-ratio="1:1"] .text-huge-square { font-size: 2.5rem !important; line-height: 1 !important; }
-        body[data-ratio="1:1"] .text-big-square { font-size: 1.75rem !important; line-height: 1 !important; }
+        /* Text Sizing Overrides for Square/Portrait */
+        body[data-ratio="1:1"] .text-huge-square,
+        body[data-ratio="4:5"] .text-huge-square { font-size: 2.5rem !important; line-height: 1 !important; }
+        
+        body[data-ratio="1:1"] .text-big-square,
+        body[data-ratio="4:5"] .text-big-square { font-size: 1.75rem !important; line-height: 1 !important; }
         
         /* Card Padding Overrides */
-        body[data-ratio="1:1"] .card-p-square { padding: 0.75rem !important; }
+        body[data-ratio="1:1"] .card-p-square,
+        body[data-ratio="4:5"] .card-p-square { padding: 0.75rem !important; }
         
         /* List Item Compactness */
-        body[data-ratio="1:1"] .list-item-square { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
+        body[data-ratio="1:1"] .list-item-square,
+        body[data-ratio="4:5"] .list-item-square { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
     </style>
     <script>
         function setRatio(ratio) {
