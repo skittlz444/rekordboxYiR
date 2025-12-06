@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "deploy": "npm run build:client && wrangler deploy",
-    "dev": "npm run build:client && wrangler dev --port 8789",
-    "start": "npm run build:client && wrangler dev --port 8789",
-    "build:client": "vite build",
+    "deploy": "npm run build && wrangler deploy",
+    "dev": "npm run build && wrangler dev --port 8789",
+    "start": "npm run build && wrangler dev --port 8789",
+    "build": "vite build",
     "dev:client": "vite"
   },
   "devDependencies": {
