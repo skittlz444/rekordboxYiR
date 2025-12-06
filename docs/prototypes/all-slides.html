@@ -65,8 +65,18 @@
         body[data-ratio="1:1"] .slide-chart-inner { width: 5rem !important; height: 5rem !important; }
 
         /* Summary Grid Layout */
-        body[data-ratio="1:1"] .summary-grid-square { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 1rem !important; }
+        body[data-ratio="1:1"] .summary-grid-square { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0.5rem !important; }
         body[data-ratio="1:1"] .summary-col-span-2 { grid-column: span 2; }
+
+        /* Text Sizing Overrides for Square */
+        body[data-ratio="1:1"] .text-huge-square { font-size: 2.5rem !important; line-height: 1 !important; }
+        body[data-ratio="1:1"] .text-big-square { font-size: 1.75rem !important; line-height: 1 !important; }
+        
+        /* Card Padding Overrides */
+        body[data-ratio="1:1"] .card-p-square { padding: 0.75rem !important; }
+        
+        /* List Item Compactness */
+        body[data-ratio="1:1"] .list-item-square { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
     </style>
     <script>
         function setRatio(ratio) {
@@ -100,7 +110,7 @@
         <!-- 1. The Opener -->
         <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col justify-center items-center p-8 text-pastel-text slide-p-square">
             <div class="text-xl font-bold mb-4 opacity-70 slide-mt-square-sm">REKORDBOX</div>
-            <h1 class="text-6xl font-black mb-6 text-center leading-tight slide-text-square-sm">YOUR<br><span class="text-pastel-accent2">2025</span><br>IN MUSIC</h1>
+            <h1 class="text-6xl font-black mb-6 text-center leading-tight slide-text-square-sm text-huge-square">YOUR<br><span class="text-pastel-accent2">2025</span><br>IN MUSIC</h1>
             <p class="text-lg font-medium text-center mb-12 slide-mt-square-sm">Ready to see what you played?</p>
             <div class="glass-panel px-6 py-3 rounded-full font-mono text-sm font-bold">
                 DJ SKITTLZ
@@ -114,7 +124,7 @@
             
             <div class="flex-1 flex flex-col justify-center gap-4 slide-gap-square">
                 <!-- Artist 1 -->
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4 list-item-square">
                     <div class="w-12 h-12 rounded-full bg-pastel-accent2 flex items-center justify-center text-white font-black text-xl">1</div>
                     <div class="flex-1">
                         <div class="font-bold text-2xl truncate">Fred again..</div>
@@ -122,7 +132,7 @@
                     </div>
                 </div>
                 <!-- Artist 2 -->
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4 list-item-square">
                     <div class="w-10 h-10 rounded-full bg-pastel-accent1 flex items-center justify-center text-white font-bold text-lg">2</div>
                     <div class="flex-1">
                         <div class="font-bold text-xl truncate">Skrillex</div>
@@ -130,7 +140,7 @@
                     </div>
                 </div>
                 <!-- Artist 3 -->
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4 list-item-square">
                     <div class="w-10 h-10 rounded-full bg-slate-300 flex items-center justify-center text-white font-bold text-lg">3</div>
                     <div class="flex-1">
                         <div class="font-bold text-xl truncate">Four Tet</div>
@@ -138,14 +148,14 @@
                     </div>
                 </div>
                 <!-- Artist 4 -->
-                <div class="flex items-center gap-4 hide-on-square">
+                <div class="flex items-center gap-4 hide-on-square list-item-square">
                     <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm">4</div>
                     <div class="flex-1">
                         <div class="font-bold text-lg truncate">Overmono</div>
                     </div>
                 </div>
                 <!-- Artist 5 -->
-                <div class="flex items-center gap-4 hide-on-square">
+                <div class="flex items-center gap-4 hide-on-square list-item-square">
                     <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm">5</div>
                     <div class="flex-1">
                         <div class="font-bold text-lg truncate">Bicep</div>
@@ -161,7 +171,7 @@
             
             <div class="flex-1 flex flex-col justify-center gap-6 slide-gap-square">
                 <!-- Track 1 -->
-                <div class="glass-panel p-4 rounded-xl border-l-4 border-pastel-accent2 flex justify-between items-center">
+                <div class="glass-panel p-4 rounded-xl border-l-4 border-pastel-accent2 flex justify-between items-center card-p-square">
                     <div>
                         <div class="text-xs font-mono font-bold text-pastel-accent2 mb-1">MOST PLAYED</div>
                         <div class="font-bold text-xl leading-tight mb-1">Rumble</div>
@@ -174,7 +184,7 @@
                 </div>
                 
                 <!-- Track 2 -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 list-item-square">
                     <div class="font-mono font-bold text-pastel-accent1 text-xl">02</div>
                     <div class="flex-1">
                         <div class="font-bold text-lg">Baby again..</div>
@@ -186,7 +196,7 @@
                 </div>
 
                 <!-- Track 3 -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 list-item-square">
                     <div class="font-mono font-bold text-slate-400 text-xl">03</div>
                     <div class="flex-1">
                         <div class="font-bold text-lg">Leavemealone</div>
@@ -198,7 +208,7 @@
                 </div>
 
                  <!-- Track 4 -->
-                 <div class="flex items-center gap-3 hide-on-square">
+                 <div class="flex items-center gap-3 hide-on-square list-item-square">
                     <div class="font-mono font-bold text-slate-400 text-xl">04</div>
                     <div class="flex-1">
                         <div class="font-bold text-lg">Strong</div>
@@ -210,7 +220,7 @@
                 </div>
 
                  <!-- Track 5 -->
-                 <div class="flex items-center gap-3 hide-on-square">
+                 <div class="flex items-center gap-3 hide-on-square list-item-square">
                     <div class="font-mono font-bold text-slate-400 text-xl">05</div>
                     <div class="flex-1">
                         <div class="font-bold text-lg">Miracle Maker</div>
@@ -283,15 +293,15 @@
             
             <div class="flex-1 flex flex-col justify-center gap-8 slide-gap-square grid-cols-square-2">
                 
-                <div class="glass-panel p-6 rounded-2xl">
+                <div class="glass-panel p-6 rounded-2xl card-p-square">
                     <div class="text-sm font-bold uppercase tracking-wider opacity-60 mb-2">Busiest Month</div>
-                    <div class="text-5xl font-black text-pastel-accent2">JULY</div>
+                    <div class="text-5xl font-black text-pastel-accent2 text-huge-square">JULY</div>
                     <div class="mt-2 font-mono text-sm">342 Tracks Played</div>
                 </div>
 
-                <div class="glass-panel p-6 rounded-2xl">
+                <div class="glass-panel p-6 rounded-2xl card-p-square">
                     <div class="text-sm font-bold uppercase tracking-wider opacity-60 mb-2">Longest Session</div>
-                    <div class="text-5xl font-black text-pastel-accent1">6h 12m</div>
+                    <div class="text-5xl font-black text-pastel-accent1 text-huge-square">6h 12m</div>
                     <div class="mt-2 font-mono text-sm">October 14th</div>
                 </div>
 
@@ -306,32 +316,32 @@
             <div class="flex-1 flex flex-col justify-center gap-6 slide-gap-square grid-cols-square-2">
                 
                 <!-- Stat 1 -->
-                <div class="glass-panel p-5 rounded-xl">
+                <div class="glass-panel p-5 rounded-xl card-p-square">
                     <div class="flex justify-between items-end mb-2">
                         <div class="text-sm font-bold opacity-60">TOTAL PLAYS</div>
                         <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+12%</div>
                     </div>
-                    <div class="text-4xl font-black">2,451</div>
+                    <div class="text-4xl font-black text-big-square">2,451</div>
                     <div class="text-xs opacity-50 mt-1">vs 2,180 in 2024</div>
                 </div>
 
                 <!-- Stat 2 -->
-                <div class="glass-panel p-5 rounded-xl">
+                <div class="glass-panel p-5 rounded-xl card-p-square">
                     <div class="flex justify-between items-end mb-2">
                         <div class="text-sm font-bold opacity-60">PLAYTIME</div>
                         <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+15%</div>
                     </div>
-                    <div class="text-4xl font-black">172h</div>
+                    <div class="text-4xl font-black text-big-square">172h</div>
                     <div class="text-xs opacity-50 mt-1">vs 150h in 2024</div>
                 </div>
 
                  <!-- Stat 3 -->
-                 <div class="glass-panel p-5 rounded-xl">
+                 <div class="glass-panel p-5 rounded-xl card-p-square">
                     <div class="flex justify-between items-end mb-2">
                         <div class="text-sm font-bold opacity-60">LONGEST SET</div>
                         <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+2h</div>
                     </div>
-                    <div class="text-4xl font-black">6h 12m</div>
+                    <div class="text-4xl font-black text-big-square">6h 12m</div>
                     <div class="text-xs opacity-50 mt-1">vs 4h 05m in 2024</div>
                 </div>
 
@@ -346,22 +356,22 @@
             <div class="flex-1 flex flex-col justify-center gap-8 slide-gap-square grid-cols-square-2">
                 
                 <!-- Stat 1 -->
-                <div class="glass-panel p-6 rounded-xl">
+                <div class="glass-panel p-6 rounded-xl card-p-square">
                     <div class="flex justify-between items-end mb-2">
                         <div class="text-sm font-bold opacity-60">TOTAL PLAYS</div>
                         <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+12%</div>
                     </div>
-                    <div class="text-5xl font-black">2,451</div>
+                    <div class="text-5xl font-black text-huge-square">2,451</div>
                     <div class="text-sm opacity-50 mt-2">vs 2,180 in 2024</div>
                 </div>
 
                 <!-- Stat 2 -->
-                <div class="glass-panel p-6 rounded-xl">
+                <div class="glass-panel p-6 rounded-xl card-p-square">
                     <div class="flex justify-between items-end mb-2">
                         <div class="text-sm font-bold opacity-60">PLAYTIME</div>
                         <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+15%</div>
                     </div>
-                    <div class="text-5xl font-black">172h</div>
+                    <div class="text-5xl font-black text-huge-square">172h</div>
                     <div class="text-sm opacity-50 mt-2">vs 150h in 2024</div>
                 </div>
 
@@ -375,9 +385,9 @@
             
             <div class="flex-1 flex flex-col justify-center">
                 
-                <div class="glass-panel p-8 rounded-2xl text-center">
+                <div class="glass-panel p-8 rounded-2xl text-center card-p-square">
                     <div class="text-lg font-bold opacity-60 mb-4">TOTAL PLAYS</div>
-                    <div class="text-7xl font-black text-pastel-accent2 mb-4">2,451</div>
+                    <div class="text-7xl font-black text-pastel-accent2 mb-4 text-huge-square">2,451</div>
                     <div class="inline-block bg-green-200 text-green-800 font-mono font-bold px-4 py-2 rounded-full text-lg mb-4">+12%</div>
                     <div class="text-lg opacity-50">vs 2,180 in 2024</div>
                 </div>
@@ -439,7 +449,7 @@
             <div class="flex-1 flex flex-col justify-center gap-6 slide-gap-square">
                 
                 <!-- Biggest Increase -->
-                <div class="glass-panel p-5 rounded-xl border-l-4 border-green-400">
+                <div class="glass-panel p-5 rounded-xl border-l-4 border-green-400 card-p-square">
                     <div class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">Biggest Obsession</div>
                     <div class="text-2xl font-black mb-1">Peggy Gou</div>
                     <div class="flex items-center gap-2 text-sm font-mono">
@@ -449,7 +459,7 @@
                 </div>
 
                 <!-- Rank Change -->
-                <div class="glass-panel p-5 rounded-xl border-l-4 border-pastel-accent2">
+                <div class="glass-panel p-5 rounded-xl border-l-4 border-pastel-accent2 card-p-square">
                     <div class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">Rank Climber</div>
                     <div class="text-2xl font-black mb-1">Disclosure</div>
                     <div class="flex items-center gap-2 text-sm font-mono">
@@ -460,7 +470,7 @@
                 </div>
 
                 <!-- New Entry -->
-                <div class="glass-panel p-5 rounded-xl border-l-4 border-pastel-accent1 hide-on-square">
+                <div class="glass-panel p-5 rounded-xl border-l-4 border-pastel-accent1 hide-on-square card-p-square">
                     <div class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">New Favorite</div>
                     <div class="text-2xl font-black mb-1">Sammy Virji</div>
                     <div class="text-sm opacity-60">From 0 plays to Top 10</div>
@@ -476,15 +486,15 @@
             
             <div class="flex-1 flex flex-col justify-center gap-8 slide-gap-square grid-cols-square-2">
                 
-                <div class="glass-panel p-6 rounded-2xl text-center">
+                <div class="glass-panel p-6 rounded-2xl text-center card-p-square">
                     <div class="text-sm font-bold uppercase tracking-wider opacity-60 mb-2">New Tracks Added</div>
-                    <div class="text-6xl font-black text-pastel-accent2">420</div>
+                    <div class="text-6xl font-black text-pastel-accent2 text-huge-square">420</div>
                     <div class="mt-2 font-mono text-sm opacity-70">That's 1.1 tracks per day!</div>
                 </div>
 
-                <div class="glass-panel p-6 rounded-2xl text-center">
+                <div class="glass-panel p-6 rounded-2xl text-center card-p-square">
                     <div class="text-sm font-bold uppercase tracking-wider opacity-60 mb-2">Total Library Size</div>
-                    <div class="text-4xl font-black text-pastel-accent1">12,450</div>
+                    <div class="text-4xl font-black text-pastel-accent1 text-huge-square">12,450</div>
                     <div class="mt-2 font-mono text-sm opacity-70">Tracks</div>
                 </div>
 
@@ -498,7 +508,7 @@
                 <h2 class="text-3xl font-black text-pastel-accent2">2025 WRAPPED</h2>
             </div>
             
-            <div class="glass-panel flex-1 rounded-2xl p-6 flex flex-col justify-center gap-5 slide-gap-square summary-grid-square">
+            <div class="glass-panel flex-1 rounded-2xl p-6 flex flex-col justify-center gap-5 slide-gap-square summary-grid-square card-p-square">
                 
                 <div>
                     <div class="text-xs opacity-60 font-bold mb-1">TOP ARTIST</div>
@@ -525,11 +535,11 @@
                 <div class="grid grid-cols-2 gap-4 summary-col-span-2">
                     <div>
                         <div class="text-xs opacity-60 font-bold mb-1">TOTAL PLAYS</div>
-                        <div class="font-mono font-bold text-2xl">2,451</div>
+                        <div class="font-mono font-bold text-2xl text-big-square">2,451</div>
                     </div>
                     <div>
                         <div class="text-xs opacity-60 font-bold mb-1">SETS PLAYED</div>
-                        <div class="font-mono font-bold text-2xl">42</div>
+                        <div class="font-mono font-bold text-2xl text-big-square">42</div>
                     </div>
                 </div>
 
@@ -537,7 +547,7 @@
 
                 <div class="summary-col-span-2">
                     <div class="text-xs opacity-60 font-bold mb-1">BUSIEST MONTH</div>
-                    <div class="font-mono font-bold text-2xl">July</div>
+                    <div class="font-mono font-bold text-2xl text-big-square">July</div>
                 </div>
 
             </div>
