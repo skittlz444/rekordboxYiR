@@ -1,6 +1,7 @@
-name = "rekordbox-year-in-review-2"
+name = "rekordbox-yir"
 compatibility_date = "2024-02-08"
 main = "src/index.ts"
+preview_urls = true
 
 [vars]
 # REKORDBOX_KEY will be set via .env or secrets

@@ -18,7 +18,7 @@
     "react-dom": "^19.2.1",
     "typescript": "^5.3.3",
     "vite": "^7.2.6",
-    "wrangler": "^3.28.1"
+    "wrangler": "^4.53.0"
   },
   "dependencies": {
     "@7mind.io/sqlcipher-wasm": "^1.0.11",
