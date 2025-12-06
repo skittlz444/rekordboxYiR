@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
 import { useFileUpload } from './useFileUpload';
 
 describe('useFileUpload', () => {
@@ -67,7 +67,7 @@ describe('useFileUpload', () => {
     const file = new File(['dummy content'], 'master.db', { type: 'application/x-sqlite3' });
     const mockResponse = { success: true };
 
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -90,7 +90,7 @@ describe('useFileUpload', () => {
     const { result } = renderHook(() => useFileUpload());
     const file = new File(['dummy content'], 'master.db', { type: 'application/x-sqlite3' });
 
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as Mock).mockResolvedValue({
       ok: false,
       status: 500,
       statusText: 'Internal Server Error',
@@ -103,7 +103,7 @@ describe('useFileUpload', () => {
     await act(async () => {
       try {
         await result.current.uploadFile('2023', { unknownArtist: false, unknownGenre: false });
-      } catch (e) {
+      } catch {
         // Expected error
       }
     });

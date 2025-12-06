@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react';
+import { StatsResponse } from '@/shared/types';
 
 interface UseFileUploadReturn {
   file: File | null;
   error: string | null;
   isUploading: boolean;
   handleFileSelect: (selectedFile: File) => void;
-  uploadFile: (year: string, options: { unknownArtist: boolean; unknownGenre: boolean }, comparisonYear?: string) => Promise<any>;
+  uploadFile: (year: string, options: { unknownArtist: boolean; unknownGenre: boolean }, comparisonYear?: string) => Promise<StatsResponse>;
   reset: () => void;
 }
 

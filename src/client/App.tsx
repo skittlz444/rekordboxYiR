@@ -7,7 +7,7 @@ import { UploadContainer } from './features/upload/UploadContainer'
 function App() {
   const [results, setResults] = useState<StatsResponse | null>(null)
 
-  const getRankChange = (item: any, currentRank: number, comparisonList: any[], key: string) => {
+  const getRankChange = <T,>(item: T, currentRank: number, comparisonList: T[], key: keyof T) => {
     if (!comparisonList) return null;
     const prevIndex = comparisonList.findIndex((prevItem) => prevItem[key] === item[key]);
     if (prevIndex === -1) return null;

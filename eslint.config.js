@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', '.wrangler', 'worker-configuration.d.ts'] },
+  { ignores: ['dist', 'node_modules', '.wrangler', 'worker-configuration.d.ts', 'coverage'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -27,6 +27,7 @@ export default tseslint.config(
       ],
       ...react.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
     },
     settings: {
       react: {

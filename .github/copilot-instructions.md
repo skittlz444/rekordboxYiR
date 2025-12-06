@@ -36,3 +36,4 @@ When asked to implement a feature:
 3.  [ ] Implement the code following `04_coding_standards.md`.
 4.  [ ] Add tests (Vitest/Playwright).
 5.  [ ] **CRITICAL:** If you edit `wrangler.toml`, you **MUST** run `npx wrangler types` immediately to update the worker types.
+6.  [ ] Run `npm run lint` to ensure code quality and fix any issues.

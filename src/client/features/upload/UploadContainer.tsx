@@ -5,9 +5,10 @@ import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Label } from '../../components/ui/label';
 import { Input } from '../../components/ui/input';
+import { StatsResponse } from '@/shared/types';
 
 interface UploadContainerProps {
-  onUploadSuccess: (data: any) => void;
+  onUploadSuccess: (data: StatsResponse) => void;
 }
 
 export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
@@ -25,7 +26,7 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
       if (data) {
         onUploadSuccess(data);
       }
-    } catch (e) {
+    } catch {
       // Error is handled in hook
     }
   };
