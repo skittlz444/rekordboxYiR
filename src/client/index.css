@@ -135,6 +135,13 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
 
+  /* Theme-aware glass panel for dark backgrounds */
+  .theme-club .glass-panel,
+  .theme-dark .glass-panel {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
   /* Hide elements on square/portrait ratios */
   [data-ratio="1:1"] .hide-on-square,
   [data-ratio="4:5"] .hide-on-square {

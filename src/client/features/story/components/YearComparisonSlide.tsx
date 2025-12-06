@@ -65,19 +65,19 @@ export function YearComparisonSlide({
           </div>
         ) : (
           // 2-3 metrics - larger cards
-          <div className={`flex-1 flex flex-col justify-center gap-${metricCount === 2 ? '8' : '6'} slide-gap-square grid-cols-square-2`}>
+          <div className={`flex-1 flex flex-col justify-center ${metricCount === 2 ? 'gap-8' : 'gap-6'} slide-gap-square grid-cols-square-2`}>
             {metrics.map((metric, index) => (
-              <div key={index} className={`glass-panel p-${metricCount === 2 ? '6' : '5'} rounded-xl card-p-square`}>
+              <div key={index} className={`glass-panel ${metricCount === 2 ? 'p-6' : 'p-5'} rounded-xl card-p-square`}>
                 <div className="flex justify-between items-end mb-2">
                   <div className="text-sm font-bold opacity-60">{metric.label}</div>
                   <div className="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">
                     {metric.change}
                   </div>
                 </div>
-                <div className={`text-${metricCount === 2 ? '5xl' : '4xl'} font-black ${metricCount === 2 ? 'text-huge-square' : 'text-big-square'}`}>
+                <div className={`${metricCount === 2 ? 'text-5xl text-huge-square' : 'text-4xl text-big-square'} font-black`}>
                   {metric.current}
                 </div>
-                <div className={`text-${metricCount === 2 ? 'sm' : 'xs'} opacity-50 mt-${metricCount === 2 ? '2' : '1'}`}>
+                <div className={`${metricCount === 2 ? 'text-sm mt-2' : 'text-xs mt-1'} opacity-50`}>
                   vs {metric.previous} in {comparisonYear}
                 </div>
               </div>

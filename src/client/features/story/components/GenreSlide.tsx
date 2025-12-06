@@ -53,7 +53,7 @@ export function GenreSlide({ genres, aspectRatio = '9:16' }: GenreSlideProps) {
             style={{ background: conicGradient }}
           >
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-32 h-32 bg-white/30 backdrop-blur-sm rounded-full slide-chart-inner"></div>
+              <div className="w-32 h-32 rounded-full slide-chart-inner" style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(4px)' }}></div>
             </div>
           </div>
 

@@ -3,9 +3,11 @@ import './index.css'
 import './App.css'
 import { StatsResponse, TrackStat, ArtistStat, GenreStat, BPMStat } from '@/shared/types'
 import { UploadContainer } from './features/upload/UploadContainer'
+import { StoryDemo } from './features/story/StoryDemo'
 
 function App() {
   const [results, setResults] = useState<StatsResponse | null>(null)
+  const [showStoryDemo, setShowStoryDemo] = useState<boolean>(false)
 
   const getRankChange = <T,>(item: T, currentRank: number, comparisonList: T[], key: keyof T) => {
     if (!comparisonList) return null;
@@ -31,7 +33,19 @@ function App() {
     <div className="container mx-auto min-h-screen bg-background text-foreground">
       <h1 className="text-4xl font-bold text-center py-8">Rekordbox Year in Review</h1>
       
-      {!results ? (
+      {/* Story Demo Link */}
+      <div className="text-center mb-4">
+        <button
+          onClick={() => setShowStoryDemo(!showStoryDemo)}
+          className="text-primary hover:underline text-sm"
+        >
+          {showStoryDemo ? 'Back to Upload' : 'View Story Slide Demo →'}
+        </button>
+      </div>
+
+      {showStoryDemo ? (
+        <StoryDemo />
+      ) : !results ? (
         <UploadContainer onUploadSuccess={setResults} />
       ) : (
         <div className="results p-4 space-y-8">
