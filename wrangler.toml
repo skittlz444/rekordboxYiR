@@ -1,6 +1,6 @@
 name = "rekordbox-yir"
 compatibility_date = "2025-12-06"
-main = "src/index.ts"
+main = "src/worker/index.ts"
 preview_urls = true
 
 [vars]

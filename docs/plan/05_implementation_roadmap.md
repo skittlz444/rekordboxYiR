@@ -1,20 +1,20 @@
 # Implementation Roadmap
 
 ## Phase 1: Project Setup & Infrastructure
-- [ ] **Task 1.1: Initialize Project Structure**
-    - [ ] **Refactor:** Move `src/index.ts` to `src/worker/index.ts`.
-    - [ ] **Refactor:** Create `src/shared` and move types there.
-    - [ ] Install Tailwind CSS & Shadcn/UI in `client`.
-    - [ ] Configure ESLint, Prettier, and Vitest for both environments.
+- [x] **Task 1.1: Initialize Project Structure**
+    - [x] **Refactor:** Move `src/index.ts` to `src/worker/index.ts`.
+    - [x] **Refactor:** Create `src/shared` and move types there.
+    - [x] Install Tailwind CSS & Shadcn/UI in `client`.
+    - [x] Configure ESLint, Prettier, and Vitest for both environments.
 - [x] **Task 1.2: Cloudflare Worker Setup**
     - [x] Initialize Hono server.
     - [x] Configure `wrangler.toml`.
     - [x] Set up SQLCipher WASM in the Worker environment.
     - [x] Create a "Hello World" endpoint (Implemented `/upload` endpoint).
 
-- [ ] **Task 1.3: CI/CD Pipeline (Tests)**
-    - [ ] Configure GitHub Actions to run Linting (ESLint) and Tests (Vitest) on PRs.
-    - [ ] Ensure workflow fails if tests fail.
+- [x] **Task 1.3: CI/CD Pipeline (Tests)**
+    - [x] Configure GitHub Actions to run Linting (ESLint) and Tests (Vitest) on PRs.
+    - [x] Ensure workflow fails if tests fail.
 
 ## Phase 2: Core Data Processing
 - [ ] **Task 2.1: Database Upload Component**
