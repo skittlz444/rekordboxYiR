@@ -17,11 +17,11 @@
     - [x] Ensure workflow fails if tests fail.
 
 ## Phase 2: Core Data Processing
-- [ ] **Task 2.1: Database Upload Component**
+- [x] **Task 2.1: Database Upload Component**
     - [x] Create basic file input in React.
     - [x] Implement `POST` request to Worker.
-    - [ ] **Update:** Refactor UI to use Shadcn/UI Drag-and-Drop zone.
-    - [ ] **Update:** Add file validation (check extension, size warning).
+    - [x] **Update:** Refactor UI to use Shadcn/UI Drag-and-Drop zone.
+    - [x] **Update:** Add file validation (check extension, size warning).
 - [x] **Task 2.2: Server-Side Decryption Logic**
     - [x] Implement `master.db` decryption using the secret key.
     - [x] Handle memory limits (basic try/catch implemented).

@@ -19,7 +19,8 @@ app.post('/upload', async (c) => {
     const body = await c.req.parseBody();
     const file = body['file'];
     const year = body['year'] as string || new Date().getFullYear().toString();
-    const excludeUnknown = body['excludeUnknown'] === 'true';
+    const includeUnknownArtist = body['unknownArtist'] === 'true';
+    const includeUnknownGenre = body['unknownGenre'] === 'true';
 
     if (!(file instanceof File)) {
       return c.json({ error: 'No file uploaded' }, 400);
@@ -73,10 +74,14 @@ app.post('/upload', async (c) => {
       const yearFilter = `${year}%`;
       
       // Helper to add exclusion clause
-      const excludeClause = (field: string, isNumeric = false) => {
-        if (!excludeUnknown) return '';
-        if (isNumeric) return `AND ${field} != 0 AND ${field} IS NOT NULL`;
-        return `AND ${field} IS NOT NULL AND ${field} != '' AND ${field} != 'Unknown Artist' AND ${field} != 'Unknown Genre'`;
+      const excludeArtistClause = (field: string) => {
+        if (includeUnknownArtist) return '';
+        return `AND ${field} IS NOT NULL AND ${field} != '' AND ${field} != 'Unknown Artist'`;
+      };
+
+      const excludeGenreClause = (field: string) => {
+        if (includeUnknownGenre) return '';
+        return `AND ${field} IS NOT NULL AND ${field} != '' AND ${field} != 'Unknown Genre'`;
       };
 
       // 1. Top 10 Tracks
@@ -87,8 +92,8 @@ app.post('/upload', async (c) => {
         JOIN djmdContent c ON sh.ContentID = c.ID
         LEFT JOIN djmdArtist a ON c.ArtistID = a.ID
         WHERE h.DateCreated LIKE '${yearFilter}'
-        ${excludeClause('c.Title')}
-        ${excludeClause('a.Name')}
+        AND c.Title IS NOT NULL AND c.Title != ''
+        ${excludeArtistClause('a.Name')}
         GROUP BY c.ID
         ORDER BY count DESC
         LIMIT 10
@@ -102,7 +107,7 @@ app.post('/upload', async (c) => {
         JOIN djmdContent c ON sh.ContentID = c.ID
         LEFT JOIN djmdArtist a ON c.ArtistID = a.ID
         WHERE h.DateCreated LIKE '${yearFilter}'
-        ${excludeClause('a.Name')}
+        ${excludeArtistClause('a.Name')}
         GROUP BY a.ID
         ORDER BY count DESC
         LIMIT 10
@@ -116,7 +121,7 @@ app.post('/upload', async (c) => {
         JOIN djmdContent c ON sh.ContentID = c.ID
         LEFT JOIN djmdGenre g ON c.GenreID = g.ID
         WHERE h.DateCreated LIKE '${yearFilter}'
-        ${excludeClause('g.Name')}
+        ${excludeGenreClause('g.Name')}
         GROUP BY g.ID
         ORDER BY count DESC
         LIMIT 10
@@ -129,7 +134,7 @@ app.post('/upload', async (c) => {
         JOIN djmdHistory h ON sh.HistoryID = h.ID
         JOIN djmdContent c ON sh.ContentID = c.ID
         WHERE h.DateCreated LIKE '${yearFilter}'
-        ${excludeClause('c.BPM', true)}
+        AND c.BPM != 0 AND c.BPM IS NOT NULL
         GROUP BY c.BPM
         ORDER BY count DESC
         LIMIT 10

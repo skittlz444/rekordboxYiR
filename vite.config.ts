@@ -6,6 +6,9 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    include: ['react-dropzone', 'file-selector', 'tslib'],
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
