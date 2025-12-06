@@ -1,0 +1,15 @@
+name = "rekordbox-year-in-review-2"
+compatibility_date = "2024-02-08"
+main = "src/index.ts"
+
+[vars]
+# REKORDBOX_KEY will be set via .env or secrets
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[rules]]
+type = "CompiledWasm"
+globs = ["**/*.wasm"]
+fallthrough = false

@@ -1,0 +1,27 @@
+{
+  "name": "rekordbox-year-in-review-2",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "deploy": "npm run build:client && wrangler deploy",
+    "dev": "npm run build:client && wrangler dev --port 8789",
+    "start": "npm run build:client && wrangler dev --port 8789",
+    "build:client": "vite build",
+    "dev:client": "vite"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^7.2.6",
+    "wrangler": "^3.28.1"
+  },
+  "dependencies": {
+    "@7mind.io/sqlcipher-wasm": "^1.0.11",
+    "hono": "^4.0.8"
+  }
+}
