@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekordbox Year in Review - Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Hide scrollbar for story container */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-slate-800 h-screen flex items-center justify-center overflow-hidden">
+
+    <!-- Desktop Container (Simulates Mobile View) -->
+    <div class="relative w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl overflow-hidden flex flex-col">
+        
+        <!-- Progress Bar -->
+        <div class="absolute top-0 left-0 w-full p-2 z-20 flex gap-1">
+            <div class="h-1 flex-1 bg-slate-800/10 rounded-full overflow-hidden">
+                <div class="h-full bg-slate-800 w-full"></div>
+            </div>
+            <div class="h-1 flex-1 bg-slate-800/10 rounded-full overflow-hidden">
+                <div class="h-full bg-slate-800 w-1/3"></div>
+            </div>
+            <div class="h-1 flex-1 bg-slate-800/10 rounded-full overflow-hidden">
+                <div class="h-full bg-slate-800/0"></div>
+            </div>
+        </div>
+
+        <!-- Slide Content: Top Artist -->
+        <div class="flex-1 relative flex flex-col p-6 bg-gradient-to-br from-teal-50 via-white to-blue-100">
+            
+            <!-- Header -->
+            <div class="mt-8 mb-4">
+                <h2 class="text-xl font-bold text-teal-600 uppercase tracking-widest">Top Artist</h2>
+                <p class="text-sm text-slate-500">You couldn't get enough of...</p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 flex flex-col items-center justify-center text-center z-10">
+                <div class="w-48 h-48 rounded-full bg-white border-4 border-teal-300 mb-6 overflow-hidden relative shadow-[0_10px_30px_rgba(20,184,166,0.2)]">
+                    <img src="https://placehold.co/400x400/f3f4f6/1e293b?text=Artist" alt="Artist" class="w-full h-full object-cover">
+                </div>
+                
+                <h1 class="text-5xl font-black mb-2 leading-tight text-slate-900">Fred again..</h1>
+                
+                <div class="mt-4 bg-white/60 backdrop-blur-md rounded-xl p-4 border border-white/50 shadow-sm">
+                    <p class="text-xs uppercase tracking-wider text-slate-500 mb-1">Total Plays</p>
+                    <p class="text-3xl font-mono font-bold text-blue-600">1,243</p>
+                </div>
+            </div>
+
+            <!-- Decorative Elements -->
+            <div class="absolute top-1/4 left-0 w-64 h-64 bg-teal-200 rounded-full mix-blend-multiply filter blur-[80px] opacity-40 pointer-events-none"></div>
+            <div class="absolute bottom-1/4 right-0 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-[80px] opacity-40 pointer-events-none"></div>
+
+            <!-- Footer / DJ Name -->
+            <div class="mt-auto pt-6 flex justify-between items-end z-10">
+                <div>
+                    <p class="text-xs text-slate-400 uppercase">Rekordbox Year in Review</p>
+                    <p class="font-bold text-lg text-slate-800">DJ SKITTLZ</p>
+                </div>
+                <button class="bg-slate-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-slate-700 transition shadow-lg">
+                    Share
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls (Prototype Only) -->
+    <div class="absolute bottom-8 flex gap-4 text-gray-400 text-sm">
+        <span>← Prev</span>
+        <span>Next →</span>
+    </div>
+
+</body>
+</html>
