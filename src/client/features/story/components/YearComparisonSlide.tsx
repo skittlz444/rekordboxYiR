@@ -20,7 +20,14 @@ export function YearComparisonSlide({
   aspectRatio = '9:16',
 }: YearComparisonSlideProps) {
   const metricCount = metrics.length
-  const title = metricCount === 1 ? 'ONE BIG\nWIN' : metricCount === 2 ? 'LEVELING\nUP?' : metricCount >= 4 ? 'FULL\nGROWTH' : 'LEVELING\nUP?'
+  
+  // Determine title based on metric count
+  const getTitle = () => {
+    if (metricCount === 1) return 'ONE BIG\nWIN'
+    if (metricCount >= 4) return 'FULL\nGROWTH'
+    return 'LEVELING\nUP?'
+  }
+  const title = getTitle()
   
   // Determine layout based on count
   const isCompact = metricCount >= 4
