@@ -40,7 +40,6 @@ export function useFileUpload(): UseFileUploadReturn {
 
   const uploadFile = useCallback(async (year: string, options: { unknownArtist: boolean; unknownGenre: boolean }, comparisonYear?: string): Promise<StatsResponse> => {
     if (!file) {
-      setError('No file selected.');
       throw new Error('No file selected.');
     }
 
