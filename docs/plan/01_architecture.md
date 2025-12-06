@@ -31,6 +31,7 @@ Rekordbox Year In Review is a web application that analyzes a user's Rekordbox l
     *   The Worker initializes the SQLCipher WASM instance.
     *   The Worker decrypts the database using the secure Rekordbox Key (stored in Cloudflare Secrets).
     *   SQL queries are executed to extract metrics (Top Tracks, Artists, Play Counts, etc.).
+    *   **CRITICAL:** Always consult `docs/REKORDBOX_SCHEMA.md` for the correct table and column names before writing or modifying SQL queries.
     *   *Constraint Check:* The Worker monitors memory usage. If the DB is too large for the 128MB limit, we may need to implement a chunked upload or stream processing strategy (or advise the user to use a smaller export).
 4.  **Response:** The Worker returns a JSON object containing the calculated statistics. **The original database file is discarded and never stored persistently.**
 5.  **Visualization:** The React frontend receives the JSON data and renders the "Year in Review" story slides.

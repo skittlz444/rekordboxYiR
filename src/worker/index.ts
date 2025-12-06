@@ -70,130 +70,167 @@ app.post('/upload', async (c) => {
       
       console.log(`Opening DB with key length: ${key.length}, File size: ${u8.length}`);
       
-      // Run queries
-      const yearFilter = `${year}%`;
-      
       // Helper to add exclusion clause
-      const excludeArtistClause = (field: string) => {
+      const getExcludeArtistClause = (includeUnknownArtist: boolean, field: string) => {
         if (includeUnknownArtist) return '';
         return `AND ${field} IS NOT NULL AND ${field} != '' AND ${field} != 'Unknown Artist'`;
       };
 
-      const excludeGenreClause = (field: string) => {
+      const getExcludeGenreClause = (includeUnknownGenre: boolean, field: string) => {
         if (includeUnknownGenre) return '';
         return `AND ${field} IS NOT NULL AND ${field} != '' AND ${field} != 'Unknown Genre'`;
       };
 
-      // 1. Top 10 Tracks
-      const topTracks = db.query(`
-        SELECT c.Title, a.Name as Artist, COUNT(*) as count
-        FROM djmdSongHistory sh
-        JOIN djmdHistory h ON sh.HistoryID = h.ID
-        JOIN djmdContent c ON sh.ContentID = c.ID
-        LEFT JOIN djmdArtist a ON c.ArtistID = a.ID
-        WHERE h.DateCreated LIKE '${yearFilter}'
-        AND c.Title IS NOT NULL AND c.Title != ''
-        ${excludeArtistClause('a.Name')}
-        GROUP BY c.ID
-        ORDER BY count DESC
-        LIMIT 10
-      `);
+      const getYearStats = (targetYear: string) => {
+        const yearFilter = `${targetYear}%`;
+        const excludeArtistClause = (field: string) => getExcludeArtistClause(includeUnknownArtist, field);
+        const excludeGenreClause = (field: string) => getExcludeGenreClause(includeUnknownGenre, field);
 
-      // 2. Top 10 Artists
-      const topArtists = db.query(`
-        SELECT a.Name, COUNT(*) as count
-        FROM djmdSongHistory sh
-        JOIN djmdHistory h ON sh.HistoryID = h.ID
-        JOIN djmdContent c ON sh.ContentID = c.ID
-        LEFT JOIN djmdArtist a ON c.ArtistID = a.ID
-        WHERE h.DateCreated LIKE '${yearFilter}'
-        ${excludeArtistClause('a.Name')}
-        GROUP BY a.ID
-        ORDER BY count DESC
-        LIMIT 10
-      `);
+        // 0. Basic Stats (Total Tracks, Total Playtime)
+        const totalTracksResult = db.query(`
+          SELECT COUNT(*) as count
+          FROM djmdSongHistory sh
+          JOIN djmdHistory h ON sh.HistoryID = h.ID
+          WHERE h.DateCreated LIKE '${yearFilter}'
+        `);
+        const totalTracks = totalTracksResult[0]?.count || 0;
 
-      // 3. Top 10 Genres
-      const topGenres = db.query(`
-        SELECT g.Name, COUNT(*) as count
-        FROM djmdSongHistory sh
-        JOIN djmdHistory h ON sh.HistoryID = h.ID
-        JOIN djmdContent c ON sh.ContentID = c.ID
-        LEFT JOIN djmdGenre g ON c.GenreID = g.ID
-        WHERE h.DateCreated LIKE '${yearFilter}'
-        ${excludeGenreClause('g.Name')}
-        GROUP BY g.ID
-        ORDER BY count DESC
-        LIMIT 10
-      `);
+        const totalPlaytimeResult = db.query(`
+          SELECT SUM(c.Length) as total_seconds
+          FROM djmdSongHistory sh
+          JOIN djmdHistory h ON sh.HistoryID = h.ID
+          JOIN djmdContent c ON sh.ContentID = c.ID
+          WHERE h.DateCreated LIKE '${yearFilter}'
+        `);
+        const totalPlaytimeSeconds = totalPlaytimeResult[0]?.total_seconds || 0;
 
-      // 4. Top 10 BPMs
-      const topBPMs = db.query(`
-        SELECT c.BPM, COUNT(*) as count
-        FROM djmdSongHistory sh
-        JOIN djmdHistory h ON sh.HistoryID = h.ID
-        JOIN djmdContent c ON sh.ContentID = c.ID
-        WHERE h.DateCreated LIKE '${yearFilter}'
-        AND c.BPM != 0 AND c.BPM IS NOT NULL
-        GROUP BY c.BPM
-        ORDER BY count DESC
-        LIMIT 10
-      `);
+        // 1. Top 10 Tracks
+        const topTracks = db.query(`
+          SELECT c.Title, a.Name as Artist, COUNT(*) as count
+          FROM djmdSongHistory sh
+          JOIN djmdHistory h ON sh.HistoryID = h.ID
+          JOIN djmdContent c ON sh.ContentID = c.ID
+          LEFT JOIN djmdArtist a ON c.ArtistID = a.ID
+          WHERE h.DateCreated LIKE '${yearFilter}'
+          AND c.Title IS NOT NULL AND c.Title != ''
+          ${excludeArtistClause('a.Name')}
+          GROUP BY c.ID
+          ORDER BY count DESC
+          LIMIT 10
+        `);
 
-      // 5. Most songs in a session
-      const mostSongsSession = db.query(`
-        SELECT h.DateCreated, COUNT(sh.ID) as song_count
-        FROM djmdHistory h
-        JOIN djmdSongHistory sh ON h.ID = sh.HistoryID
-        WHERE h.DateCreated LIKE '${yearFilter}'
-        GROUP BY h.ID
-        ORDER BY song_count DESC
-        LIMIT 1
-      `);
+        // 2. Top 10 Artists
+        const topArtists = db.query(`
+          SELECT a.Name, COUNT(*) as count
+          FROM djmdSongHistory sh
+          JOIN djmdHistory h ON sh.HistoryID = h.ID
+          JOIN djmdContent c ON sh.ContentID = c.ID
+          LEFT JOIN djmdArtist a ON c.ArtistID = a.ID
+          WHERE h.DateCreated LIKE '${yearFilter}'
+          ${excludeArtistClause('a.Name')}
+          GROUP BY a.ID
+          ORDER BY count DESC
+          LIMIT 10
+        `);
 
-      // 6. Most active month by song count
-      const mostActiveMonthSongs = db.query(`
-        SELECT substr(h.DateCreated, 1, 7) as month, COUNT(sh.ID) as song_count
-        FROM djmdHistory h
-        JOIN djmdSongHistory sh ON h.ID = sh.HistoryID
-        WHERE h.DateCreated LIKE '${yearFilter}'
-        GROUP BY month
-        ORDER BY song_count DESC
-        LIMIT 1
-      `);
+        // 3. Top 10 Genres
+        const topGenres = db.query(`
+          SELECT g.Name, COUNT(*) as count
+          FROM djmdSongHistory sh
+          JOIN djmdHistory h ON sh.HistoryID = h.ID
+          JOIN djmdContent c ON sh.ContentID = c.ID
+          LEFT JOIN djmdGenre g ON c.GenreID = g.ID
+          WHERE h.DateCreated LIKE '${yearFilter}'
+          ${excludeGenreClause('g.Name')}
+          GROUP BY g.ID
+          ORDER BY count DESC
+          LIMIT 10
+        `);
 
-      // 7. Most active month by session count
-      const mostActiveMonthSessions = db.query(`
-        SELECT substr(h.DateCreated, 1, 7) as month, COUNT(h.ID) as session_count
-        FROM djmdHistory h
-        WHERE h.DateCreated LIKE '${yearFilter}'
-        GROUP BY month
-        ORDER BY session_count DESC
-        LIMIT 1
-      `);
+        // 4. Top 10 BPMs
+        const topBPMs = db.query(`
+          SELECT c.BPM, COUNT(*) as count
+          FROM djmdSongHistory sh
+          JOIN djmdHistory h ON sh.HistoryID = h.ID
+          JOIN djmdContent c ON sh.ContentID = c.ID
+          WHERE h.DateCreated LIKE '${yearFilter}'
+          AND c.BPM != 0 AND c.BPM IS NOT NULL
+          GROUP BY c.BPM
+          ORDER BY count DESC
+          LIMIT 10
+        `);
 
-      // 8. Average session length
-      const avgSessionLength = db.query(`
-        SELECT AVG(song_count) as avg_length
-        FROM (
-            SELECT COUNT(sh.ID) as song_count
-            FROM djmdHistory h
-            JOIN djmdSongHistory sh ON h.ID = sh.HistoryID
-            WHERE h.DateCreated LIKE '${yearFilter}'
-            GROUP BY h.ID
-        )
-      `);
+        // 5. Most songs in a session
+        const mostSongsSession = db.query(`
+          SELECT h.DateCreated, COUNT(sh.ID) as song_count
+          FROM djmdHistory h
+          JOIN djmdSongHistory sh ON h.ID = sh.HistoryID
+          WHERE h.DateCreated LIKE '${yearFilter}'
+          GROUP BY h.ID
+          ORDER BY song_count DESC
+          LIMIT 1
+        `);
+
+        // 6. Most active month by song count
+        const mostActiveMonthSongs = db.query(`
+          SELECT substr(h.DateCreated, 1, 7) as month, COUNT(sh.ID) as song_count
+          FROM djmdHistory h
+          JOIN djmdSongHistory sh ON h.ID = sh.HistoryID
+          WHERE h.DateCreated LIKE '${yearFilter}'
+          GROUP BY month
+          ORDER BY song_count DESC
+          LIMIT 1
+        `);
+
+        return {
+          totalTracks,
+          totalPlaytimeSeconds,
+          longestSession: {
+            date: mostSongsSession[0]?.DateCreated || '',
+            count: mostSongsSession[0]?.song_count || 0
+          },
+          busiestMonth: {
+            month: mostActiveMonthSongs[0]?.month || '',
+            count: mostActiveMonthSongs[0]?.song_count || 0
+          },
+          topTracks,
+          topArtists,
+          topGenres,
+          topBPMs
+        };
+      };
+
+      // Get stats for the main year
+      const mainStats = getYearStats(year);
+      
+      // Handle comparison if requested
+      let comparisonData = undefined;
+      const comparisonYear = body['comparisonYear'] as string;
+      
+      if (comparisonYear && comparisonYear !== year) {
+        const compStats = getYearStats(comparisonYear);
+        
+        // Calculate diffs
+        const calculateDiff = (current: number, previous: number) => {
+          if (previous === 0) return current > 0 ? 100 : 0;
+          return Math.round(((current - previous) / previous) * 100);
+        };
+
+        comparisonData = {
+          year: comparisonYear,
+          stats: compStats,
+          diffs: {
+            tracksPercentage: calculateDiff(mainStats.totalTracks, compStats.totalTracks),
+            playtimePercentage: calculateDiff(mainStats.totalPlaytimeSeconds, compStats.totalPlaytimeSeconds),
+            sessionPercentage: calculateDiff(mainStats.longestSession.count, compStats.longestSession.count)
+          }
+        };
+      }
 
       return c.json({
         year,
-        topTracks,
-        topArtists,
-        topGenres,
-        topBPMs,
-        mostSongsSession: mostSongsSession[0] || null,
-        mostActiveMonthSongs: mostActiveMonthSongs[0] || null,
-        mostActiveMonthSessions: mostActiveMonthSessions[0] || null,
-        avgSessionLength: avgSessionLength[0]?.avg_length || 0
+        stats: mainStats,
+        comparison: comparisonData
       });
 
     } finally {

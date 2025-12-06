@@ -24,10 +24,34 @@ export interface BPMStat {
   count: number;
 }
 
-export interface StatsResponse {
-  year: string;
+export interface YearStats {
+  totalTracks: number;
+  totalPlaytimeSeconds: number;
+  longestSession: {
+    date: string;
+    count: number;
+    durationSeconds?: number;
+  };
+  busiestMonth: {
+    month: string;
+    count: number;
+  };
   topTracks: TrackStat[];
   topArtists: ArtistStat[];
   topGenres: GenreStat[];
   topBPMs: BPMStat[];
+}
+
+export interface StatsResponse {
+  year: string;
+  stats: YearStats;
+  comparison?: {
+    year: string;
+    stats: YearStats;
+    diffs: {
+      tracksPercentage: number;
+      playtimePercentage: number;
+      sessionPercentage: number;
+    }
+  };
 }

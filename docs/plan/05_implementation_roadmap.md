@@ -25,12 +25,12 @@
 - [x] **Task 2.2: Server-Side Decryption Logic**
     - [x] Implement `master.db` decryption using the secret key.
     - [x] Handle memory limits (basic try/catch implemented).
-- [ ] **Task 2.3: SQL Query Implementation**
+- [x] **Task 2.3: SQL Query Implementation**
     - [x] Write SQL queries for Top Artists, Tracks, Genres.
     - [x] Write SQL queries for Session stats (Song count based).
     - [x] Parameterize queries to filter by a specific year.
-    - [ ] **Update:** Implement comparison logic (fetch stats for Year A and Year B).
-    - [ ] **Update:** Return structured JSON response with comparison data.
+    - [x] **Update:** Implement comparison logic (fetch stats for Year A and Year B).
+    - [x] **Update:** Return structured JSON response with comparison data.
 
 ## Phase 3: UI/UX Implementation
 - [ ] **Task 3.1: Story Slide Components**

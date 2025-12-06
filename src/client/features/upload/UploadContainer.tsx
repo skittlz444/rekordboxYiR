@@ -13,6 +13,7 @@ interface UploadContainerProps {
 export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
   const { file, error, isUploading, handleFileSelect, uploadFile, reset } = useFileUpload();
   const [year, setYear] = useState(new Date().getFullYear().toString());
+  const [comparisonYear, setComparisonYear] = useState((new Date().getFullYear() - 1).toString());
   const [options, setOptions] = useState({
     unknownArtist: false,
     unknownGenre: false,
@@ -20,7 +21,7 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
 
   const handleUpload = async () => {
     try {
-      const data = await uploadFile(year, options);
+      const data = await uploadFile(year, options, comparisonYear);
       if (data) {
         onUploadSuccess(data);
       }
@@ -56,6 +57,16 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
                   type="number"
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
+                  disabled={isUploading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="comparisonYear">Comparison Year</Label>
+                <Input
+                  id="comparisonYear"
+                  type="number"
+                  value={comparisonYear}
+                  onChange={(e) => setComparisonYear(e.target.value)}
                   disabled={isUploading}
                 />
               </div>
