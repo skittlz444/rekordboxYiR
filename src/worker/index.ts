@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import initSqlcipher from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs';
 import { SQLiteAPI } from '@7mind.io/sqlcipher-wasm';
-// @ts-ignore
+// @ts-expect-error - wasm import
 import wasmBinary from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.wasm';
 
 type Bindings = {
@@ -30,7 +30,7 @@ app.post('/upload', async (c) => {
 
     // Initialize SQLCipher
     const module = await initSqlcipher({
-      instantiateWasm: function(imports: any, successCallback: any) {
+      instantiateWasm: function(imports: WebAssembly.Imports, successCallback: (instance: WebAssembly.Instance) => void) {
         WebAssembly.instantiate(wasmBinary, imports).then(function(instance) {
           successCallback(instance);
         });
@@ -198,9 +198,10 @@ app.post('/upload', async (c) => {
       try { module.FS.unlink(dbPath); } catch(e) { console.error(e); }
     }
 
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error(e);
-    return c.json({ error: e.message, stack: e.stack }, 500);
+    const error = e as Error;
+    return c.json({ error: error.message, stack: error.stack }, 500);
   }
 });
 

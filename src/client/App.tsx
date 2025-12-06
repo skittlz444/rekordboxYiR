@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import './index.css'
 import './App.css'
+import { StatsResponse, TrackStat, ArtistStat, GenreStat, BPMStat } from '../../shared/types'
 
 function App() {
   const [file, setFile] = useState<File | null>(null)
   const [year, setYear] = useState<string>(new Date().getFullYear().toString())
   const [excludeUnknown, setExcludeUnknown] = useState<boolean>(false)
   const [status, setStatus] = useState<string>('')
-  const [results, setResults] = useState<any>(null)
+  const [results, setResults] = useState<StatsResponse | null>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -90,7 +91,7 @@ function App() {
             <div className="stat-card">
               <h3>Top Tracks</h3>
               <ol>
-                {results.topTracks?.map((t: any, i: number) => (
+                {results.topTracks?.map((t: TrackStat, i: number) => (
                   <li key={i}>
                     <strong>{t.Title || 'Unknown Track'}</strong> by {t.Artist || 'Unknown Artist'}
                     <br/>
@@ -103,7 +104,7 @@ function App() {
             <div className="stat-card">
               <h3>Top Artists</h3>
               <ol>
-                {results.topArtists?.map((a: any, i: number) => (
+                {results.topArtists?.map((a: ArtistStat, i: number) => (
                   <li key={i}>
                     <strong>{a.Name || 'Unknown Artist'}</strong>
                     <br/>
@@ -116,7 +117,7 @@ function App() {
             <div className="stat-card">
               <h3>Top Genres</h3>
               <ol>
-                {results.topGenres?.map((g: any, i: number) => (
+                {results.topGenres?.map((g: GenreStat, i: number) => (
                   <li key={i}>
                     <strong>{g.Name || 'Unknown Genre'}</strong>
                     <br/>
@@ -129,7 +130,7 @@ function App() {
             <div className="stat-card">
               <h3>Top BPMs</h3>
               <ol>
-                {results.topBPMs?.map((b: any, i: number) => (
+                {results.topBPMs?.map((b: BPMStat, i: number) => (
                   <li key={i}>
                     <strong>{Math.round(b.BPM / 100)} BPM</strong>
                     <br/>

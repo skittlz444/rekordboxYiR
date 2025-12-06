@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run Linting
+      run: npm run lint
+
+    - name: Run Tests with Coverage
+      run: npm run test:coverage
+
+    - name: Upload coverage reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports
+        path: coverage/
+        retention-days: 30
+
+    - name: Report Coverage
+      if: always()
+      uses: davelosert/vitest-coverage-report-action@v2
+      with:
+        json-summary-path: ./coverage/coverage-summary.json
+        json-final-path: ./coverage/coverage-final.json
+
+    - name: Publish Test Results
+      if: always()
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      with:
+        files: |
+          test-results/**/*.xml
+        check_name: Test Results
