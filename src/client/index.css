@@ -24,6 +24,18 @@
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
     --radius: 0.5rem;
+
+    /* Story Theme Colors - Default (Pastel) */
+    --bg-start: #F0F9FF;
+    --bg-end: #ECFCCB;
+    --text: #1E293B;
+    --accent-1: #14B8A6;
+    --accent-2: #6366F1;
+    --chart-1: #6366F1;
+    --chart-2: #14B8A6;
+    --chart-3: #F472B6;
+    --chart-4: #FBBF24;
+    --chart-5: #CBD5E1;
   }
  
   .dark {
@@ -47,6 +59,62 @@
     --input: 240 3.7% 15.3%;
     --ring: 240 4.9% 83.9%;
   }
+
+  /* Story Theme: Pastel (Default) */
+  .theme-pastel {
+    --bg-start: #F0F9FF;
+    --bg-end: #ECFCCB;
+    --text: #1E293B;
+    --accent-1: #14B8A6;
+    --accent-2: #6366F1;
+    --chart-1: #6366F1;
+    --chart-2: #14B8A6;
+    --chart-3: #F472B6;
+    --chart-4: #FBBF24;
+    --chart-5: #CBD5E1;
+  }
+
+  /* Story Theme: Club */
+  .theme-club {
+    --bg-start: #2E0249;
+    --bg-end: #000000;
+    --text: #FFFFFF;
+    --accent-1: #FF00FF;
+    --accent-2: #00FFFF;
+    --chart-1: #FF00FF;
+    --chart-2: #00FFFF;
+    --chart-3: #FFFF00;
+    --chart-4: #00FF00;
+    --chart-5: #FFFFFF;
+  }
+
+  /* Story Theme: Clean */
+  .theme-clean {
+    --bg-start: #F9FAFB;
+    --bg-end: #F3F4F6;
+    --text: #1F2937;
+    --accent-1: #000000;
+    --accent-2: #FF4500;
+    --chart-1: #000000;
+    --chart-2: #FF4500;
+    --chart-3: #6B7280;
+    --chart-4: #9CA3AF;
+    --chart-5: #D1D5DB;
+  }
+
+  /* Story Theme: Dark (Booth) */
+  .theme-dark {
+    --bg-start: #000000;
+    --bg-end: #1a1a1a;
+    --text: #FFFFFF;
+    --accent-1: #EF4444;
+    --accent-2: #F87171;
+    --chart-1: #EF4444;
+    --chart-2: #DC2626;
+    --chart-3: #B91C1C;
+    --chart-4: #991B1B;
+    --chart-5: #FFFFFF;
+  }
 }
  
 @layer base {
@@ -55,5 +123,133 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Story Slide Aspect Ratio Adaptations */
+@layer utilities {
+  /* Glass panel effect */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* Hide elements on square/portrait ratios */
+  [data-ratio="1:1"] .hide-on-square,
+  [data-ratio="4:5"] .hide-on-square {
+    display: none !important;
+  }
+
+  [data-ratio="1:1"] .show-on-square,
+  [data-ratio="4:5"] .show-on-square {
+    display: block !important;
+  }
+
+  /* Compact spacing for square/portrait */
+  [data-ratio="1:1"] .slide-p-square,
+  [data-ratio="4:5"] .slide-p-square {
+    padding: 1.5rem !important;
+  }
+
+  [data-ratio="1:1"] .slide-gap-square,
+  [data-ratio="4:5"] .slide-gap-square {
+    gap: 0.5rem !important;
+  }
+
+  [data-ratio="1:1"] .slide-text-square-sm,
+  [data-ratio="4:5"] .slide-text-square-sm {
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+  }
+
+  [data-ratio="1:1"] .slide-mt-square-sm,
+  [data-ratio="4:5"] .slide-mt-square-sm {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Specific Layout shifts */
+  [data-ratio="1:1"] .flex-row-square,
+  [data-ratio="4:5"] .flex-row-square {
+    flex-direction: row !important;
+    align-items: stretch !important;
+  }
+
+  [data-ratio="1:1"] .grid-cols-square-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    display: grid !important;
+  }
+
+  [data-ratio="4:5"] .grid-cols-square-2 {
+    grid-template-columns: 1fr !important;
+    display: grid !important;
+  }
+
+  [data-ratio="1:1"] .h-auto-square,
+  [data-ratio="4:5"] .h-auto-square {
+    height: auto !important;
+  }
+
+  /* Hashtag Positioning */
+  [data-ratio="1:1"] .slide-tag,
+  [data-ratio="4:5"] .slide-tag {
+    left: auto !important;
+    right: 2rem !important;
+    text-align: right;
+  }
+
+  /* Genre Chart Sizing */
+  [data-ratio="1:1"] .slide-chart-square,
+  [data-ratio="4:5"] .slide-chart-square {
+    width: 8rem !important;
+    height: 8rem !important;
+    margin-bottom: 0 !important;
+    margin-right: 1rem !important;
+  }
+
+  [data-ratio="1:1"] .slide-chart-inner,
+  [data-ratio="4:5"] .slide-chart-inner {
+    width: 5rem !important;
+    height: 5rem !important;
+  }
+
+  /* Summary Grid Layout */
+  [data-ratio="1:1"] .summary-grid-square,
+  [data-ratio="4:5"] .summary-grid-square {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  [data-ratio="1:1"] .summary-col-span-2,
+  [data-ratio="4:5"] .summary-col-span-2 {
+    grid-column: span 2;
+  }
+
+  /* Text Sizing Overrides for Square/Portrait */
+  [data-ratio="1:1"] .text-huge-square,
+  [data-ratio="4:5"] .text-huge-square {
+    font-size: 2.5rem !important;
+    line-height: 1 !important;
+  }
+
+  [data-ratio="1:1"] .text-big-square,
+  [data-ratio="4:5"] .text-big-square {
+    font-size: 1.75rem !important;
+    line-height: 1 !important;
+  }
+
+  /* Card Padding Overrides */
+  [data-ratio="1:1"] .card-p-square,
+  [data-ratio="4:5"] .card-p-square {
+    padding: 0.75rem !important;
+  }
+
+  /* List Item Compactness */
+  [data-ratio="1:1"] .list-item-square,
+  [data-ratio="4:5"] .list-item-square {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
   }
 }

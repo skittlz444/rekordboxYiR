@@ -51,11 +51,27 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        theme: {
+          bgStart: 'var(--bg-start)',
+          bgEnd: 'var(--bg-end)',
+          text: 'var(--text)',
+          accent1: 'var(--accent-1)',
+          accent2: 'var(--accent-2)',
+          chart1: 'var(--chart-1)',
+          chart2: 'var(--chart-2)',
+          chart3: 'var(--chart-3)',
+          chart4: 'var(--chart-4)',
+          chart5: 'var(--chart-5)',
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       keyframes: {
         "accordion-down": {
