@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './index.css'
 import './App.css'
-import { StatsResponse, TrackStat, ArtistStat, GenreStat, BPMStat } from '../../shared/types'
+import { StatsResponse, TrackStat, ArtistStat, GenreStat, BPMStat } from '@/shared/types'
 
 function App() {
   const [file, setFile] = useState<File | null>(null)
