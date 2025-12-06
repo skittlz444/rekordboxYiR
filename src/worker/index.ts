@@ -91,8 +91,8 @@ app.post('/upload', async (c) => {
           SELECT COUNT(*) as count
           FROM djmdSongHistory sh
           JOIN djmdHistory h ON sh.HistoryID = h.ID
-          WHERE h.DateCreated LIKE '${yearFilter}'
-        `);
+          WHERE h.DateCreated LIKE ?
+        `, [yearFilter]);
         const totalTracks = totalTracksResult[0]?.count || 0;
 
         const totalPlaytimeResult = db.query(`
@@ -100,8 +100,8 @@ app.post('/upload', async (c) => {
           FROM djmdSongHistory sh
           JOIN djmdHistory h ON sh.HistoryID = h.ID
           JOIN djmdContent c ON sh.ContentID = c.ID
-          WHERE h.DateCreated LIKE '${yearFilter}'
-        `);
+          WHERE h.DateCreated LIKE ?
+        `, [yearFilter]);
         const totalPlaytimeSeconds = totalPlaytimeResult[0]?.total_seconds || 0;
 
         // 1. Top 10 Tracks
@@ -111,13 +111,13 @@ app.post('/upload', async (c) => {
           JOIN djmdHistory h ON sh.HistoryID = h.ID
           JOIN djmdContent c ON sh.ContentID = c.ID
           LEFT JOIN djmdArtist a ON c.ArtistID = a.ID
-          WHERE h.DateCreated LIKE '${yearFilter}'
+          WHERE h.DateCreated LIKE ?
           AND c.Title IS NOT NULL AND c.Title != ''
           ${excludeArtistClause('a.Name')}
           GROUP BY c.ID
           ORDER BY count DESC
           LIMIT 10
-        `);
+        `, [yearFilter]);
 
         // 2. Top 10 Artists
         const topArtists = db.query(`
@@ -126,12 +126,12 @@ app.post('/upload', async (c) => {
           JOIN djmdHistory h ON sh.HistoryID = h.ID
           JOIN djmdContent c ON sh.ContentID = c.ID
           LEFT JOIN djmdArtist a ON c.ArtistID = a.ID
-          WHERE h.DateCreated LIKE '${yearFilter}'
+          WHERE h.DateCreated LIKE ?
           ${excludeArtistClause('a.Name')}
           GROUP BY a.ID
           ORDER BY count DESC
           LIMIT 10
-        `);
+        `, [yearFilter]);
 
         // 3. Top 10 Genres
         const topGenres = db.query(`
@@ -140,12 +140,12 @@ app.post('/upload', async (c) => {
           JOIN djmdHistory h ON sh.HistoryID = h.ID
           JOIN djmdContent c ON sh.ContentID = c.ID
           LEFT JOIN djmdGenre g ON c.GenreID = g.ID
-          WHERE h.DateCreated LIKE '${yearFilter}'
+          WHERE h.DateCreated LIKE ?
           ${excludeGenreClause('g.Name')}
           GROUP BY g.ID
           ORDER BY count DESC
           LIMIT 10
-        `);
+        `, [yearFilter]);
 
         // 4. Top 10 BPMs
         const topBPMs = db.query(`
@@ -153,34 +153,34 @@ app.post('/upload', async (c) => {
           FROM djmdSongHistory sh
           JOIN djmdHistory h ON sh.HistoryID = h.ID
           JOIN djmdContent c ON sh.ContentID = c.ID
-          WHERE h.DateCreated LIKE '${yearFilter}'
+          WHERE h.DateCreated LIKE ?
           AND c.BPM != 0 AND c.BPM IS NOT NULL
           GROUP BY c.BPM
           ORDER BY count DESC
           LIMIT 10
-        `);
+        `, [yearFilter]);
 
         // 5. Most songs in a session
         const mostSongsSession = db.query(`
           SELECT h.DateCreated, COUNT(sh.ID) as song_count
           FROM djmdHistory h
           JOIN djmdSongHistory sh ON h.ID = sh.HistoryID
-          WHERE h.DateCreated LIKE '${yearFilter}'
+          WHERE h.DateCreated LIKE ?
           GROUP BY h.ID
           ORDER BY song_count DESC
           LIMIT 1
-        `);
+        `, [yearFilter]);
 
         // 6. Most active month by song count
         const mostActiveMonthSongs = db.query(`
           SELECT substr(h.DateCreated, 1, 7) as month, COUNT(sh.ID) as song_count
           FROM djmdHistory h
           JOIN djmdSongHistory sh ON h.ID = sh.HistoryID
-          WHERE h.DateCreated LIKE '${yearFilter}'
+          WHERE h.DateCreated LIKE ?
           GROUP BY month
           ORDER BY song_count DESC
           LIMIT 1
-        `);
+        `, [yearFilter]);
 
         return {
           totalTracks,
