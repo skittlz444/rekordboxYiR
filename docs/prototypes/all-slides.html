@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekordbox Year in Review - Slide Prototypes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        pastel: {
+                            bgStart: '#F0F9FF', // sky-50
+                            bgEnd: '#ECFCCB',   // lime-100
+                            text: '#1E293B',    // slate-800
+                            accent1: '#14B8A6', // teal-500
+                            accent2: '#6366F1', // indigo-500
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .slide-container {
+            width: 360px;
+            height: 640px; /* 9:16 Aspect Ratio */
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: height 0.3s ease;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Aspect Ratio Adaptations */
+        body[data-ratio="1:1"] .hide-on-square { display: none !important; }
+        body[data-ratio="1:1"] .show-on-square { display: block !important; }
+        
+        /* Compact spacing for square */
+        body[data-ratio="1:1"] .slide-p-square { padding: 1.5rem !important; }
+        body[data-ratio="1:1"] .slide-gap-square { gap: 0.5rem !important; }
+        body[data-ratio="1:1"] .slide-text-square-sm { font-size: 1.5rem !important; line-height: 1.2 !important; }
+        body[data-ratio="1:1"] .slide-mt-square-sm { margin-top: 1rem !important; margin-bottom: 1rem !important; }
+        
+        /* Specific Layout shifts */
+        body[data-ratio="1:1"] .flex-row-square { flex-direction: row !important; align-items: stretch !important; }
+        body[data-ratio="1:1"] .grid-cols-square-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; display: grid !important; }
+        body[data-ratio="1:1"] .h-auto-square { height: auto !important; }
+
+        /* Hashtag Positioning */
+        body[data-ratio="1:1"] .slide-tag { left: auto !important; right: 2rem !important; text-align: right; }
+
+        /* Genre Chart Sizing */
+        body[data-ratio="1:1"] .slide-chart-square { width: 8rem !important; height: 8rem !important; margin-bottom: 0 !important; margin-right: 1rem !important; }
+        body[data-ratio="1:1"] .slide-chart-inner { width: 5rem !important; height: 5rem !important; }
+
+        /* Summary Grid Layout */
+        body[data-ratio="1:1"] .summary-grid-square { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 1rem !important; }
+        body[data-ratio="1:1"] .summary-col-span-2 { grid-column: span 2; }
+    </style>
+    <script>
+        function setRatio(ratio) {
+            document.body.setAttribute('data-ratio', ratio);
+            const slides = document.querySelectorAll('.slide-container');
+            slides.forEach(slide => {
+                if (ratio === '9:16') {
+                    slide.style.height = '640px';
+                } else if (ratio === '4:5') {
+                    slide.style.height = '450px';
+                } else if (ratio === '1:1') {
+                    slide.style.height = '360px';
+                }
+            });
+        }
+    </script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-3xl font-bold mb-8 text-center text-slate-800">Story Slide Prototypes (Pastel Theme)</h1>
+    
+    <div class="flex justify-center gap-4 mb-8 sticky top-4 z-50">
+        <div class="bg-white/80 backdrop-blur p-2 rounded-xl shadow-lg flex gap-2">
+            <button onclick="setRatio('9:16')" class="px-4 py-2 bg-slate-800 text-white rounded-lg font-bold hover:bg-slate-700 transition text-sm">9:16 (Story)</button>
+            <button onclick="setRatio('4:5')" class="px-4 py-2 bg-slate-800 text-white rounded-lg font-bold hover:bg-slate-700 transition text-sm">4:5 (Portrait)</button>
+            <button onclick="setRatio('1:1')" class="px-4 py-2 bg-slate-800 text-white rounded-lg font-bold hover:bg-slate-700 transition text-sm">1:1 (Square)</button>
+        </div>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-8">
+
+        <!-- 1. The Opener -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col justify-center items-center p-8 text-pastel-text slide-p-square">
+            <div class="text-xl font-bold mb-4 opacity-70 slide-mt-square-sm">REKORDBOX</div>
+            <h1 class="text-6xl font-black mb-6 text-center leading-tight slide-text-square-sm">YOUR<br><span class="text-pastel-accent2">2025</span><br>IN MUSIC</h1>
+            <p class="text-lg font-medium text-center mb-12 slide-mt-square-sm">Ready to see what you played?</p>
+            <div class="glass-panel px-6 py-3 rounded-full font-mono text-sm font-bold">
+                DJ SKITTLZ
+            </div>
+        </div>
+
+        <!-- 2. Top Artists -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#TOPARTISTS</div>
+            <h2 class="text-4xl font-black mt-12 mb-8 leading-none slide-text-square-sm slide-mt-square-sm">THE ONES<br>YOU LOVED<br>MOST</h2>
+            
+            <div class="flex-1 flex flex-col justify-center gap-4 slide-gap-square">
+                <!-- Artist 1 -->
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-pastel-accent2 flex items-center justify-center text-white font-black text-xl">1</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-2xl truncate">Fred again..</div>
+                        <div class="text-xs font-mono opacity-70">142 PLAYS</div>
+                    </div>
+                </div>
+                <!-- Artist 2 -->
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-pastel-accent1 flex items-center justify-center text-white font-bold text-lg">2</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-xl truncate">Skrillex</div>
+                        <div class="text-xs font-mono opacity-70">98 PLAYS</div>
+                    </div>
+                </div>
+                <!-- Artist 3 -->
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-slate-300 flex items-center justify-center text-white font-bold text-lg">3</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-xl truncate">Four Tet</div>
+                        <div class="text-xs font-mono opacity-70">85 PLAYS</div>
+                    </div>
+                </div>
+                <!-- Artist 4 -->
+                <div class="flex items-center gap-4 hide-on-square">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm">4</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-lg truncate">Overmono</div>
+                    </div>
+                </div>
+                <!-- Artist 5 -->
+                <div class="flex items-center gap-4 hide-on-square">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm">5</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-lg truncate">Bicep</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Top Tracks -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#TOPTRACKS</div>
+            <h2 class="text-4xl font-black mt-12 mb-8 leading-none slide-text-square-sm slide-mt-square-sm">YOUR<br>ANTHEMS</h2>
+            
+            <div class="flex-1 flex flex-col justify-center gap-6 slide-gap-square">
+                <!-- Track 1 -->
+                <div class="glass-panel p-4 rounded-xl border-l-4 border-pastel-accent2 flex justify-between items-center">
+                    <div>
+                        <div class="text-xs font-mono font-bold text-pastel-accent2 mb-1">MOST PLAYED</div>
+                        <div class="font-bold text-xl leading-tight mb-1">Rumble</div>
+                        <div class="text-sm opacity-70">Skrillex, Fred again..</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-2xl font-black">84</div>
+                        <div class="text-[10px] font-mono opacity-60 uppercase">Plays</div>
+                    </div>
+                </div>
+                
+                <!-- Track 2 -->
+                <div class="flex items-center gap-3">
+                    <div class="font-mono font-bold text-pastel-accent1 text-xl">02</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-lg">Baby again..</div>
+                        <div class="text-xs opacity-60">Fred again.., Skrillex, Four Tet</div>
+                    </div>
+                    <div class="text-right opacity-70">
+                        <div class="font-mono font-bold text-sm">62</div>
+                    </div>
+                </div>
+
+                <!-- Track 3 -->
+                <div class="flex items-center gap-3">
+                    <div class="font-mono font-bold text-slate-400 text-xl">03</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-lg">Leavemealone</div>
+                        <div class="text-xs opacity-60">Fred again.., Baby Keem</div>
+                    </div>
+                    <div class="text-right opacity-70">
+                        <div class="font-mono font-bold text-sm">58</div>
+                    </div>
+                </div>
+
+                 <!-- Track 4 -->
+                 <div class="flex items-center gap-3 hide-on-square">
+                    <div class="font-mono font-bold text-slate-400 text-xl">04</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-lg">Strong</div>
+                        <div class="text-xs opacity-60">Romy, Fred again..</div>
+                    </div>
+                    <div class="text-right opacity-70">
+                        <div class="font-mono font-bold text-sm">45</div>
+                    </div>
+                </div>
+
+                 <!-- Track 5 -->
+                 <div class="flex items-center gap-3 hide-on-square">
+                    <div class="font-mono font-bold text-slate-400 text-xl">05</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-lg">Miracle Maker</div>
+                        <div class="text-xs opacity-60">Dom Dolla</div>
+                    </div>
+                    <div class="text-right opacity-70">
+                        <div class="font-mono font-bold text-sm">42</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Top Genres -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#TOPGENRES</div>
+            <h2 class="text-4xl font-black mt-12 mb-4 leading-none slide-text-square-sm slide-mt-square-sm">THE<br>VIBE<br>CHECK</h2>
+            
+            <div class="flex-1 flex flex-col items-center justify-center flex-row-square">
+                <!-- CSS Pie Chart -->
+                <div class="w-48 h-48 rounded-full relative mb-8 slide-mt-square-sm slide-chart-square" style="background: conic-gradient(#6366F1 0% 35%, #14B8A6 35% 60%, #F472B6 60% 80%, #FBBF24 80% 90%, #CBD5E1 90% 100%);">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-32 h-32 bg-white/30 backdrop-blur-sm rounded-full slide-chart-inner"></div>
+                    </div>
+                </div>
+
+                <div class="w-full space-y-2 slide-gap-square">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-pastel-accent2"></div>
+                            <span class="font-bold">House</span>
+                        </div>
+                        <span class="font-mono font-bold">35%</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-pastel-accent1"></div>
+                            <span class="font-bold">Techno</span>
+                        </div>
+                        <span class="font-mono font-bold">25%</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-pink-400"></div>
+                            <span class="font-bold">Garage</span>
+                        </div>
+                        <span class="font-mono font-bold">20%</span>
+                    </div>
+                    <div class="flex items-center justify-between hide-on-square">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                            <span class="font-bold">Drum & Bass</span>
+                        </div>
+                        <span class="font-mono font-bold">10%</span>
+                    </div>
+                    <div class="flex items-center justify-between hide-on-square">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-slate-300"></div>
+                            <span class="font-bold">Other</span>
+                        </div>
+                        <span class="font-mono font-bold">10%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Busiest Stats -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#BUSIEST</div>
+            <h2 class="text-4xl font-black mt-12 mb-8 leading-none slide-text-square-sm slide-mt-square-sm">WHEN YOU<br>WENT<br>HARD</h2>
+            
+            <div class="flex-1 flex flex-col justify-center gap-8 slide-gap-square grid-cols-square-2">
+                
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="text-sm font-bold uppercase tracking-wider opacity-60 mb-2">Busiest Month</div>
+                    <div class="text-5xl font-black text-pastel-accent2">JULY</div>
+                    <div class="mt-2 font-mono text-sm">342 Tracks Played</div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="text-sm font-bold uppercase tracking-wider opacity-60 mb-2">Longest Session</div>
+                    <div class="text-5xl font-black text-pastel-accent1">6h 12m</div>
+                    <div class="mt-2 font-mono text-sm">October 14th</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 6. Year Comparison (General) -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#VS2024</div>
+            <h2 class="text-4xl font-black mt-12 mb-8 leading-none slide-text-square-sm slide-mt-square-sm">LEVELING<br>UP?</h2>
+            
+            <div class="flex-1 flex flex-col justify-center gap-6 slide-gap-square grid-cols-square-2">
+                
+                <!-- Stat 1 -->
+                <div class="glass-panel p-5 rounded-xl">
+                    <div class="flex justify-between items-end mb-2">
+                        <div class="text-sm font-bold opacity-60">TOTAL PLAYS</div>
+                        <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+12%</div>
+                    </div>
+                    <div class="text-4xl font-black">2,451</div>
+                    <div class="text-xs opacity-50 mt-1">vs 2,180 in 2024</div>
+                </div>
+
+                <!-- Stat 2 -->
+                <div class="glass-panel p-5 rounded-xl">
+                    <div class="flex justify-between items-end mb-2">
+                        <div class="text-sm font-bold opacity-60">PLAYTIME</div>
+                        <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+15%</div>
+                    </div>
+                    <div class="text-4xl font-black">172h</div>
+                    <div class="text-xs opacity-50 mt-1">vs 150h in 2024</div>
+                </div>
+
+                 <!-- Stat 3 -->
+                 <div class="glass-panel p-5 rounded-xl">
+                    <div class="flex justify-between items-end mb-2">
+                        <div class="text-sm font-bold opacity-60">LONGEST SET</div>
+                        <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+2h</div>
+                    </div>
+                    <div class="text-4xl font-black">6h 12m</div>
+                    <div class="text-xs opacity-50 mt-1">vs 4h 05m in 2024</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 6b. Year Comparison (2 Stats) -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#VS2024</div>
+            <h2 class="text-4xl font-black mt-12 mb-8 leading-none slide-text-square-sm slide-mt-square-sm">LEVELING<br>UP?</h2>
+            
+            <div class="flex-1 flex flex-col justify-center gap-8 slide-gap-square grid-cols-square-2">
+                
+                <!-- Stat 1 -->
+                <div class="glass-panel p-6 rounded-xl">
+                    <div class="flex justify-between items-end mb-2">
+                        <div class="text-sm font-bold opacity-60">TOTAL PLAYS</div>
+                        <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+12%</div>
+                    </div>
+                    <div class="text-5xl font-black">2,451</div>
+                    <div class="text-sm opacity-50 mt-2">vs 2,180 in 2024</div>
+                </div>
+
+                <!-- Stat 2 -->
+                <div class="glass-panel p-6 rounded-xl">
+                    <div class="flex justify-between items-end mb-2">
+                        <div class="text-sm font-bold opacity-60">PLAYTIME</div>
+                        <div class="text-xs font-mono bg-green-200 text-green-800 px-2 py-1 rounded">+15%</div>
+                    </div>
+                    <div class="text-5xl font-black">172h</div>
+                    <div class="text-sm opacity-50 mt-2">vs 150h in 2024</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 6c. Year Comparison (1 Stat) -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#VS2024</div>
+            <h2 class="text-4xl font-black mt-12 mb-8 leading-none slide-text-square-sm slide-mt-square-sm">ONE BIG<br>WIN</h2>
+            
+            <div class="flex-1 flex flex-col justify-center">
+                
+                <div class="glass-panel p-8 rounded-2xl text-center">
+                    <div class="text-lg font-bold opacity-60 mb-4">TOTAL PLAYS</div>
+                    <div class="text-7xl font-black text-pastel-accent2 mb-4">2,451</div>
+                    <div class="inline-block bg-green-200 text-green-800 font-mono font-bold px-4 py-2 rounded-full text-lg mb-4">+12%</div>
+                    <div class="text-lg opacity-50">vs 2,180 in 2024</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 6d. Year Comparison (4 Stats) -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#VS2024</div>
+            <h2 class="text-4xl font-black mt-12 mb-8 leading-none slide-text-square-sm slide-mt-square-sm">FULL<br>GROWTH</h2>
+            
+            <div class="flex-1 grid grid-cols-2 gap-4 content-center slide-gap-square">
+                
+                <!-- Stat 1 -->
+                <div class="glass-panel p-4 rounded-xl flex flex-col justify-between h-32 h-auto-square">
+                    <div class="text-xs font-bold opacity-60">TOTAL PLAYS</div>
+                    <div>
+                        <div class="text-2xl font-black">2,451</div>
+                        <div class="text-xs text-green-600 font-bold">+12%</div>
+                    </div>
+                </div>
+
+                <!-- Stat 2 -->
+                <div class="glass-panel p-4 rounded-xl flex flex-col justify-between h-32 h-auto-square">
+                    <div class="text-xs font-bold opacity-60">PLAYTIME</div>
+                    <div>
+                        <div class="text-2xl font-black">172h</div>
+                        <div class="text-xs text-green-600 font-bold">+15%</div>
+                    </div>
+                </div>
+
+                 <!-- Stat 3 -->
+                 <div class="glass-panel p-4 rounded-xl flex flex-col justify-between h-32 h-auto-square">
+                    <div class="text-xs font-bold opacity-60">LONGEST SET</div>
+                    <div>
+                        <div class="text-2xl font-black">6h 12m</div>
+                        <div class="text-xs text-green-600 font-bold">+2h</div>
+                    </div>
+                </div>
+
+                <!-- Stat 4 -->
+                 <div class="glass-panel p-4 rounded-xl flex flex-col justify-between h-32 h-auto-square">
+                    <div class="text-xs font-bold opacity-60">SETS PLAYED</div>
+                    <div>
+                        <div class="text-2xl font-black">42</div>
+                        <div class="text-xs text-green-600 font-bold">+5</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 7. Year Comparison (Trends/Changes) -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#TRENDS</div>
+            <h2 class="text-4xl font-black mt-12 mb-8 leading-none slide-text-square-sm slide-mt-square-sm">MOVING<br>ON UP</h2>
+            
+            <div class="flex-1 flex flex-col justify-center gap-6 slide-gap-square">
+                
+                <!-- Biggest Increase -->
+                <div class="glass-panel p-5 rounded-xl border-l-4 border-green-400">
+                    <div class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">Biggest Obsession</div>
+                    <div class="text-2xl font-black mb-1">Peggy Gou</div>
+                    <div class="flex items-center gap-2 text-sm font-mono">
+                        <span class="text-green-600 font-bold">▲ +450%</span>
+                        <span class="opacity-50">plays vs 2024</span>
+                    </div>
+                </div>
+
+                <!-- Rank Change -->
+                <div class="glass-panel p-5 rounded-xl border-l-4 border-pastel-accent2">
+                    <div class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">Rank Climber</div>
+                    <div class="text-2xl font-black mb-1">Disclosure</div>
+                    <div class="flex items-center gap-2 text-sm font-mono">
+                        <span class="bg-pastel-accent2 text-white px-1.5 rounded text-xs">#12</span>
+                        <span class="opacity-50">→</span>
+                        <span class="bg-pastel-accent2 text-white px-1.5 rounded text-xs">#3</span>
+                    </div>
+                </div>
+
+                <!-- New Entry -->
+                <div class="glass-panel p-5 rounded-xl border-l-4 border-pastel-accent1 hide-on-square">
+                    <div class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">New Favorite</div>
+                    <div class="text-2xl font-black mb-1">Sammy Virji</div>
+                    <div class="text-sm opacity-60">From 0 plays to Top 10</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 8. Library Growth -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">#LIBRARY</div>
+            <h2 class="text-4xl font-black mt-12 mb-8 leading-none slide-text-square-sm slide-mt-square-sm">THE<br>COLLECTION<br>GREW</h2>
+            
+            <div class="flex-1 flex flex-col justify-center gap-8 slide-gap-square grid-cols-square-2">
+                
+                <div class="glass-panel p-6 rounded-2xl text-center">
+                    <div class="text-sm font-bold uppercase tracking-wider opacity-60 mb-2">New Tracks Added</div>
+                    <div class="text-6xl font-black text-pastel-accent2">420</div>
+                    <div class="mt-2 font-mono text-sm opacity-70">That's 1.1 tracks per day!</div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl text-center">
+                    <div class="text-sm font-bold uppercase tracking-wider opacity-60 mb-2">Total Library Size</div>
+                    <div class="text-4xl font-black text-pastel-accent1">12,450</div>
+                    <div class="mt-2 font-mono text-sm opacity-70">Tracks</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 9. Summary -->
+        <div class="slide-container bg-gradient-to-br from-pastel-bgStart to-pastel-bgEnd flex flex-col p-8 text-pastel-text relative slide-p-square">
+            <div class="text-center mt-8 mb-6 slide-mt-square-sm">
+                <div class="text-sm font-bold opacity-50">REKORDBOX YEAR IN REVIEW</div>
+                <h2 class="text-3xl font-black text-pastel-accent2">2025 WRAPPED</h2>
+            </div>
+            
+            <div class="glass-panel flex-1 rounded-2xl p-6 flex flex-col justify-center gap-5 slide-gap-square summary-grid-square">
+                
+                <div>
+                    <div class="text-xs opacity-60 font-bold mb-1">TOP ARTIST</div>
+                    <div class="font-bold text-2xl truncate">Fred again..</div>
+                </div>
+
+                <div class="h-px bg-slate-300 opacity-50 hide-on-square"></div>
+
+                <div>
+                    <div class="text-xs opacity-60 font-bold mb-1">TOP GENRE</div>
+                    <div class="font-bold text-2xl truncate">House</div>
+                </div>
+
+                <div class="h-px bg-slate-300 opacity-50 hide-on-square"></div>
+
+                <div>
+                    <div class="text-xs opacity-60 font-bold mb-1">TOP TRACK</div>
+                    <div class="font-bold text-xl leading-tight">Rumble</div>
+                    <div class="text-xs opacity-60">Skrillex, Fred again..</div>
+                </div>
+
+                <div class="h-px bg-slate-300 opacity-50 hide-on-square"></div>
+
+                <div class="grid grid-cols-2 gap-4 summary-col-span-2">
+                    <div>
+                        <div class="text-xs opacity-60 font-bold mb-1">TOTAL PLAYS</div>
+                        <div class="font-mono font-bold text-2xl">2,451</div>
+                    </div>
+                    <div>
+                        <div class="text-xs opacity-60 font-bold mb-1">SETS PLAYED</div>
+                        <div class="font-mono font-bold text-2xl">42</div>
+                    </div>
+                </div>
+
+                <div class="h-px bg-slate-300 opacity-50 hide-on-square"></div>
+
+                <div class="summary-col-span-2">
+                    <div class="text-xs opacity-60 font-bold mb-1">BUSIEST MONTH</div>
+                    <div class="font-mono font-bold text-2xl">July</div>
+                </div>
+
+            </div>
+            
+            <div class="mt-6 text-center hide-on-square">
+                <div class="font-mono font-bold text-sm">DJ SKITTLZ</div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

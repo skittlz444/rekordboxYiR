@@ -34,9 +34,19 @@
 
 ## Phase 3: UI/UX Implementation
 - [ ] **Task 3.1: Story Slide Components**
-    - [ ] Create a generic `StorySlide` layout component.
-    - [ ] **Update:** Implement dynamic container sizing for 9:16, 4:5, and 1:1 aspect ratios.
-    - [ ] Implement specific slide types: `ArtistSlide`, `TrackSlide`, `SummarySlide`.
+    - [ ] **Prototype:** Create HTML/Tailwind prototypes for all slides with responsive logic (9:16, 4:5, 1:1).
+    - [ ] Create a generic `StorySlide` layout component (React).
+    - [ ] **Update:** Implement dynamic container sizing for 9:16, 4:5, and 1:1 aspect ratios (React).
+    - [ ] Implement specific slide types (React):
+        - [ ] `OpenerSlide` (Welcome message)
+        - [ ] `ArtistSlide` (Top Artists)
+        - [ ] `TrackSlide` (Top Tracks)
+        - [ ] `GenreSlide` (Top Genres)
+        - [ ] `BusiestDaySlide` (Busiest Month/Longest Session)
+        - [ ] `LibraryGrowthSlide` (New tracks added)
+        - [ ] `YearComparisonSlide` (General stats comparison)
+        - [ ] `YearComparisonTrendsSlide` (Biggest increases, rank changes, new favorites)
+        - [ ] `SummarySlide` (Cheatsheet)
     - [ ] **Note:** Use CSS patterns/icons for placeholders. Do not implement image fetching.
     - [ ] **Update:** Implement Theme System (Pastel [Default], Club, Clean, Booth).
 - [ ] **Task 3.2: Dashboard & Navigation**
@@ -46,6 +56,8 @@
     - [ ] Set up Zustand store for user preferences.
     - [ ] **Update:** Add state for `targetYear`, `comparisonYear`, `djName`.
     - [ ] **Update:** Add toggles for `unknownArtistFilter`, `unknownGenreFilter`.
+    - [ ] **Update:** Add state for `averageTrackPlayedPercent` (number, default 0.75).
+    - [ ] **Update:** Implement UI controls for all configuration options (Year, Filters, Playtime Estimation).
     - [ ] Connect settings UI to the store.
 
 ## Phase 4: Sharing & Polish
