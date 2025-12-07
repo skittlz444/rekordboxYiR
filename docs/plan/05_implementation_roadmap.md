@@ -71,6 +71,7 @@
     - [ ] Set up Zustand store for user preferences.
     - [ ] **Update:** Add state for `targetYear`, `comparisonYear`, `djName`.
     - [ ] **Update:** Add toggles for `unknownArtistFilter`, `unknownGenreFilter`.
+    - [ ] **Update:** Add toggle to disable genres in `YearComparisonTrendsSlide` (show only artists).
     - [ ] **Update:** Add state for `averageTrackPlayedPercent` (number, default 0.75).
     - [ ] **Update:** Implement UI controls for all configuration options (Year, Filters, Playtime Estimation).
     - [ ] Connect settings UI to the store.
