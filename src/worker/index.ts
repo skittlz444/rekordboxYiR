@@ -104,6 +104,22 @@ app.post('/upload', async (c) => {
         `, [yearFilter]);
         const totalPlaytimeSeconds = totalPlaytimeResult[0]?.total_seconds || 0;
 
+        // 0.5 Library Growth
+        const nextYear = (parseInt(targetYear) + 1).toString();
+        const libraryTotalResult = db.query(`
+          SELECT COUNT(*) as count 
+          FROM djmdContent 
+          WHERE DateCreated < ?
+        `, [nextYear]);
+        const libraryTotal = libraryTotalResult[0]?.count || 0;
+
+        const libraryAddedResult = db.query(`
+          SELECT COUNT(*) as count 
+          FROM djmdContent 
+          WHERE DateCreated LIKE ?
+        `, [yearFilter]);
+        const libraryAdded = libraryAddedResult[0]?.count || 0;
+
         // 1. Top 10 Tracks
         const topTracks = db.query(`
           SELECT c.Title, a.Name as Artist, COUNT(*) as count
@@ -185,6 +201,10 @@ app.post('/upload', async (c) => {
         return {
           totalTracks,
           totalPlaytimeSeconds,
+          libraryGrowth: {
+            total: libraryTotal,
+            added: libraryAdded
+          },
           longestSession: {
             date: mostSongsSession[0]?.DateCreated || '',
             count: mostSongsSession[0]?.song_count || 0
