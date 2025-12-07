@@ -200,7 +200,7 @@ export function StoryDemo() {
             },
             totalPlays: 2451,
             setsPlayed: 42,
-            busiestMonth: '2023-07',
+            busiestMonth: '2025-07',
             djName: 'DJ SKITTLZ',
           }}
           aspectRatio={aspectRatio}
