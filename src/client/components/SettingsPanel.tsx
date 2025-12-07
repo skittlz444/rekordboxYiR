@@ -40,7 +40,10 @@ export function SettingsPanel({ className = '' }: SettingsPanelProps) {
             id="settings-year"
             type="number"
             value={targetYear}
-            onChange={(e) => setTargetYear(parseInt(e.target.value))}
+            onChange={(e) => {
+              const value = parseInt(e.target.value);
+              setTargetYear(isNaN(value) ? targetYear : value);
+            }}
           />
         </div>
         <div className="space-y-2">
@@ -64,7 +67,12 @@ export function SettingsPanel({ className = '' }: SettingsPanelProps) {
           min="0"
           max="1"
           value={averageTrackPlayedPercent}
-          onChange={(e) => setAverageTrackPlayedPercent(parseFloat(e.target.value))}
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            if (!isNaN(value) && value >= 0 && value <= 1) {
+              setAverageTrackPlayedPercent(value);
+            }
+          }}
         />
         <p className="text-xs text-muted-foreground">
           Adjust how much of each track is played on average (default: 0.75 = 75%)

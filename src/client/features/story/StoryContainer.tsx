@@ -148,7 +148,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
       </div>
 
       <div className="flex flex-wrap justify-center gap-8 pb-20">
-        <OpenerSlide year={year} djName={djName} aspectRatio={aspectRatio} />
+        <OpenerSlide year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />
         
         <ArtistSlide artists={stats.topArtists} aspectRatio={aspectRatio} />
         

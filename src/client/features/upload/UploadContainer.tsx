@@ -76,7 +76,7 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
                   id="year"
                   type="number"
                   value={targetYear}
-                  onChange={(e) => setTargetYear(parseInt(e.target.value))}
+                  onChange={(e) => setTargetYear(parseInt(e.target.value) || targetYear)}
                   disabled={isUploading}
                 />
               </div>
