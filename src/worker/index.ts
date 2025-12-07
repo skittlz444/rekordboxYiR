@@ -1,6 +1,8 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+// @ts-ignore
 import initSqlcipher from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs';
+// @ts-ignore
 import { SQLiteAPI } from '@7mind.io/sqlcipher-wasm';
 // @ts-expect-error - wasm import
 import wasmBinary from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.wasm';
@@ -45,7 +47,7 @@ app.post('/upload', async (c) => {
     module.FS.writeFile(dbPath, u8);
 
     // Open DB
-    let db;
+    let db: any;
     try {
       // Open without key first
       db = sqlite.open(dbPath);
@@ -93,7 +95,7 @@ app.post('/upload', async (c) => {
           JOIN djmdHistory h ON sh.HistoryID = h.ID
           WHERE h.DateCreated LIKE ?
         `, [yearFilter]);
-        const totalTracks = totalTracksResult[0]?.count || 0;
+        const totalTracks = Number(totalTracksResult[0]?.count || 0);
 
         const totalPlaytimeResult = db.query(`
           SELECT SUM(c.Length) as total_seconds
@@ -102,7 +104,14 @@ app.post('/upload', async (c) => {
           JOIN djmdContent c ON sh.ContentID = c.ID
           WHERE h.DateCreated LIKE ?
         `, [yearFilter]);
-        const totalPlaytimeSeconds = totalPlaytimeResult[0]?.total_seconds || 0;
+        const totalPlaytimeSeconds = Number(totalPlaytimeResult[0]?.total_seconds || 0);
+
+        const totalSessionsResult = db.query(`
+          SELECT COUNT(*) as count
+          FROM djmdHistory
+          WHERE DateCreated LIKE ?
+        `, [yearFilter]);
+        const totalSessions = Number(totalSessionsResult[0]?.count || 0);
 
         // 0.5 Library Growth
         const nextYear = (parseInt(targetYear) + 1).toString();
@@ -111,17 +120,17 @@ app.post('/upload', async (c) => {
           FROM djmdContent 
           WHERE DateCreated < ?
         `, [nextYear]);
-        const libraryTotal = libraryTotalResult[0]?.count || 0;
+        const libraryTotal = Number(libraryTotalResult[0]?.count || 0);
 
         const libraryAddedResult = db.query(`
           SELECT COUNT(*) as count 
           FROM djmdContent 
           WHERE DateCreated LIKE ?
         `, [yearFilter]);
-        const libraryAdded = libraryAddedResult[0]?.count || 0;
+        const libraryAdded = Number(libraryAddedResult[0]?.count || 0);
 
         // 1. Top 10 Tracks
-        const topTracks = db.query(`
+        const topTracksRaw = db.query(`
           SELECT c.Title, a.Name as Artist, COUNT(*) as count
           FROM djmdSongHistory sh
           JOIN djmdHistory h ON sh.HistoryID = h.ID
@@ -134,9 +143,10 @@ app.post('/upload', async (c) => {
           ORDER BY count DESC
           LIMIT 10
         `, [yearFilter]);
+        const topTracks = topTracksRaw.map((t: any) => ({ ...t, count: Number(t.count) }));
 
         // 2. Top 10 Artists
-        const topArtists = db.query(`
+        const topArtistsRaw = db.query(`
           SELECT a.Name, COUNT(*) as count
           FROM djmdSongHistory sh
           JOIN djmdHistory h ON sh.HistoryID = h.ID
@@ -148,9 +158,10 @@ app.post('/upload', async (c) => {
           ORDER BY count DESC
           LIMIT 10
         `, [yearFilter]);
+        const topArtists = topArtistsRaw.map((t: any) => ({ ...t, count: Number(t.count) }));
 
         // 3. Top 10 Genres
-        const topGenres = db.query(`
+        const topGenresRaw = db.query(`
           SELECT g.Name, COUNT(*) as count
           FROM djmdSongHistory sh
           JOIN djmdHistory h ON sh.HistoryID = h.ID
@@ -162,9 +173,10 @@ app.post('/upload', async (c) => {
           ORDER BY count DESC
           LIMIT 10
         `, [yearFilter]);
+        const topGenres = topGenresRaw.map((t: any) => ({ ...t, count: Number(t.count) }));
 
         // 4. Top 10 BPMs
-        const topBPMs = db.query(`
+        const topBPMsRaw = db.query(`
           SELECT c.BPM, COUNT(*) as count
           FROM djmdSongHistory sh
           JOIN djmdHistory h ON sh.HistoryID = h.ID
@@ -175,10 +187,11 @@ app.post('/upload', async (c) => {
           ORDER BY count DESC
           LIMIT 10
         `, [yearFilter]);
+        const topBPMs = topBPMsRaw.map((t: any) => ({ ...t, count: Number(t.count) }));
 
         // 5. Most songs in a session
         const mostSongsSession = db.query(`
-          SELECT h.DateCreated, COUNT(sh.ID) as song_count
+          SELECT h.ID, h.DateCreated, COUNT(sh.ID) as song_count
           FROM djmdHistory h
           JOIN djmdSongHistory sh ON h.ID = sh.HistoryID
           WHERE h.DateCreated LIKE ?
@@ -186,6 +199,18 @@ app.post('/upload', async (c) => {
           ORDER BY song_count DESC
           LIMIT 1
         `, [yearFilter]);
+
+        let longestSessionDuration = 0;
+        if (mostSongsSession.length > 0) {
+             const historyId = mostSongsSession[0].ID;
+             const durationResult = db.query(`
+                SELECT SUM(c.Length) as total_duration
+                FROM djmdSongHistory sh
+                JOIN djmdContent c ON sh.ContentID = c.ID
+                WHERE sh.HistoryID = ?
+             `, [historyId]);
+             longestSessionDuration = Number(durationResult[0]?.total_duration || 0);
+        }
 
         // 6. Most active month by song count
         const mostActiveMonthSongs = db.query(`
@@ -201,17 +226,19 @@ app.post('/upload', async (c) => {
         return {
           totalTracks,
           totalPlaytimeSeconds,
+          totalSessions,
           libraryGrowth: {
             total: libraryTotal,
             added: libraryAdded
           },
           longestSession: {
             date: mostSongsSession[0]?.DateCreated || '',
-            count: mostSongsSession[0]?.song_count || 0
+            count: Number(mostSongsSession[0]?.song_count || 0),
+            durationSeconds: longestSessionDuration
           },
           busiestMonth: {
             month: mostActiveMonthSongs[0]?.month || '',
-            count: mostActiveMonthSongs[0]?.song_count || 0
+            count: Number(mostActiveMonthSongs[0]?.song_count || 0)
           },
           topTracks,
           topArtists,
@@ -242,7 +269,8 @@ app.post('/upload', async (c) => {
           diffs: {
             tracksPercentage: calculateDiff(mainStats.totalTracks, compStats.totalTracks),
             playtimePercentage: calculateDiff(mainStats.totalPlaytimeSeconds, compStats.totalPlaytimeSeconds),
-            sessionPercentage: calculateDiff(mainStats.longestSession.count, compStats.longestSession.count)
+            sessionPercentage: calculateDiff(mainStats.longestSession.count, compStats.longestSession.count),
+            totalSessionsPercentage: calculateDiff(mainStats.totalSessions, compStats.totalSessions)
           }
         };
       }

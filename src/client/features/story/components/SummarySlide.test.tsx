@@ -13,7 +13,7 @@ describe('SummarySlide', () => {
     },
     totalPlays: 2451,
     setsPlayed: 42,
-    busiestMonth: 'July',
+    busiestMonth: '2023-07',
     djName: 'DJ SKITTLZ',
   }
 
@@ -50,7 +50,7 @@ describe('SummarySlide', () => {
 
   it('displays busiest month correctly', () => {
     render(<SummarySlide data={mockData} />)
-    expect(screen.getByText('July')).toBeInTheDocument()
+    expect(screen.getByText('JULY')).toBeInTheDocument()
   })
 
   it('displays DJ name correctly', () => {

@@ -24,6 +24,18 @@ export function BusiestDaySlide({
   longestSession,
   aspectRatio = '9:16',
 }: BusiestDaySlideProps) {
+  const monthName = busiestMonth.month
+    ? new Date(`${busiestMonth.month}-01`).toLocaleString('default', { month: 'long' })
+    : 'N/A'
+
+  const sessionDate = longestSession.date
+    ? new Date(longestSession.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+    : 'N/A'
+
   return (
     <StorySlide aspectRatio={aspectRatio}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col p-8 text-theme-text relative slide-p-square h-full">
@@ -44,7 +56,7 @@ export function BusiestDaySlide({
               Busiest Month
             </div>
             <div className="text-5xl font-black text-theme-accent2 text-huge-square">
-              {busiestMonth.month.toUpperCase()}
+              {monthName.toUpperCase()}
             </div>
             <div className="mt-2 font-mono text-sm">{busiestMonth.count} Tracks Played</div>
           </div>
@@ -56,7 +68,7 @@ export function BusiestDaySlide({
             <div className="text-5xl font-black text-theme-accent1 text-huge-square">
               {formatDuration(longestSession.durationSeconds)}
             </div>
-            <div className="mt-2 font-mono text-sm">{longestSession.date}</div>
+            <div className="mt-2 font-mono text-sm">{sessionDate}</div>
           </div>
         </div>
       </div>

@@ -35,17 +35,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
       artist: stats.topTracks[0]?.Artist || 'Unknown',
     },
     totalPlays: stats.totalTracks || 0,
-    setsPlayed: stats.longestSession?.count || 0, // Note: This might need adjustment if "setsPlayed" means something else, but using session count for now or total tracks if session count is per session. Actually longestSession.count is max songs in a session. 
-    // Wait, SummarySlide expects "setsPlayed". Let's check the interface again.
-    // The interface says "setsPlayed". The backend returns "longestSession" and "busiestMonth".
-    // It seems we don't have a "total sets" metric in the backend yet. 
-    // I will use totalTracks for now or 0 if not available, but let's look at what we have.
-    // We have totalTracks, totalPlaytimeSeconds.
-    // Let's just use totalTracks for "totalPlays" and maybe omit setsPlayed or put a placeholder.
-    // Actually, looking at SummarySlide.tsx (which I read partially), let's see what it displays.
-    // It displays "SETS PLAYED".
-    // The backend doesn't seem to return total session count.
-    // I'll use 0 or a calculated value if possible, but for now let's map what we can.
+    setsPlayed: stats.totalSessions || 0,
     busiestMonth: stats.busiestMonth.month,
     djName: 'DJ', // We don't have this in the upload yet
   }
@@ -78,6 +68,15 @@ export function StoryContainer({ data }: StoryContainerProps) {
         previous: comparison.stats.longestSession.count,
         change: `+${comparison.diffs.sessionPercentage}%`,
         changePercentage: comparison.diffs.sessionPercentage
+      })
+    }
+    if (comparison.diffs.totalSessionsPercentage > 0) {
+      comparisonMetrics.push({
+        label: 'SETS PLAYED',
+        current: stats.totalSessions,
+        previous: comparison.stats.totalSessions,
+        change: `+${comparison.diffs.totalSessionsPercentage}%`,
+        changePercentage: comparison.diffs.totalSessionsPercentage
       })
     }
   }
@@ -133,6 +132,18 @@ export function StoryContainer({ data }: StoryContainerProps) {
             }
         }
     })
+
+    // Check Genres
+    stats.topGenres.forEach(genre => {
+        const prev = findItem(comparison.stats.topGenres, genre.Name, 'Name')
+        if (prev && prev.count > 0) {
+            const increase = ((genre.count - prev.count) / prev.count) * 100
+            if (increase > maxIncrease) {
+                maxIncrease = increase
+                obsession = { name: genre.Name, percentageIncrease: Math.round(increase) }
+            }
+        }
+    })
     
     if (obsession) trends.biggestObsession = obsession
 
@@ -149,6 +160,20 @@ export function StoryContainer({ data }: StoryContainerProps) {
             if (climb > maxClimb) {
                 maxClimb = climb
                 climber = { name: artist.Name, previousRank: prevRank, currentRank: currentRank }
+            }
+        }
+    })
+
+    // Check Genres for Rank Climber
+    stats.topGenres.forEach((genre, index) => {
+        const currentRank = index + 1
+        const prevIndex = comparison.stats.topGenres.findIndex(g => g.Name === genre.Name)
+        if (prevIndex !== -1) {
+            const prevRank = prevIndex + 1
+            const climb = prevRank - currentRank
+            if (climb > maxClimb) {
+                maxClimb = climb
+                climber = { name: genre.Name, previousRank: prevRank, currentRank: currentRank }
             }
         }
     })
@@ -214,6 +239,16 @@ export function StoryContainer({ data }: StoryContainerProps) {
             }`}
           >
             Club
+          </button>
+          <button
+            onClick={() => setTheme('theme-clean')}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
+              theme === 'theme-clean'
+                ? 'bg-gray-100 text-gray-800 border-2 border-slate-400'
+                : 'bg-gray-100 text-gray-800 border border-slate-200 hover:border-slate-400'
+            }`}
+          >
+            Clean
           </button>
           <button
             onClick={() => setTheme('theme-dark')}

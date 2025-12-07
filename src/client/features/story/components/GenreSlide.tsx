@@ -8,10 +8,10 @@ export interface GenreSlideProps {
 
 export function GenreSlide({ genres, aspectRatio = '9:16' }: GenreSlideProps) {
   // Calculate percentages
-  const total = genres.reduce((sum, genre) => sum + genre.count, 0)
+  const total = genres.reduce((sum, genre) => sum + Number(genre.count), 0)
   const genresWithPercentages = genres.map((genre) => ({
     ...genre,
-    percentage: total > 0 ? (genre.count / total) * 100 : 0,
+    percentage: total > 0 ? (Number(genre.count) / total) * 100 : 0,
   }))
 
   // Take top 5 genres

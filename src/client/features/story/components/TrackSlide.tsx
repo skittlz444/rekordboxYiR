@@ -28,10 +28,10 @@ export function TrackSlide({ tracks, aspectRatio = '9:16' }: TrackSlideProps) {
           <div className="glass-panel p-4 rounded-xl border-l-4 border-theme-accent2 flex justify-between items-center card-p-square">
             <div>
               <div className="text-xs font-mono font-bold text-theme-accent2 mb-1">MOST PLAYED</div>
-              <div className="font-bold text-xl leading-tight mb-1">
+              <div className="font-bold text-xl leading-tight mb-1 line-clamp-2">
                 {topTrack.Title || 'Unknown Track'}
               </div>
-              <div className="text-sm opacity-70">{topTrack.Artist || 'Unknown Artist'}</div>
+              <div className="text-sm opacity-70 line-clamp-1">{topTrack.Artist || 'Unknown Artist'}</div>
             </div>
             <div className="text-right">
               <div className="text-2xl font-black">{topTrack.count}</div>
@@ -48,9 +48,9 @@ export function TrackSlide({ tracks, aspectRatio = '9:16' }: TrackSlideProps) {
               <div className={`font-mono font-bold text-xl ${index === 0 ? 'text-theme-accent1' : 'text-slate-400'}`}>
                 {String(index + 2).padStart(2, '0')}
               </div>
-              <div className="flex-1">
-                <div className="font-bold text-lg">{track.Title || 'Unknown Track'}</div>
-                <div className="text-xs opacity-60">{track.Artist || 'Unknown Artist'}</div>
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-lg line-clamp-1">{track.Title || 'Unknown Track'}</div>
+                <div className="text-xs opacity-60 line-clamp-1">{track.Artist || 'Unknown Artist'}</div>
               </div>
               <div className="text-right opacity-70">
                 <div className="font-mono font-bold text-sm">{track.count}</div>

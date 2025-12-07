@@ -39,31 +39,31 @@
     - [x] **Update:** Implement dynamic container sizing for 9:16, 4:5, and 1:1 aspect ratios (React).
     - [x] Implement specific slide types (React):
         - [x] `OpenerSlide` (Welcome message)
-        - [ ] `ArtistSlide` (Top Artists)
-            - [ ] Fix formatting for long artist names
-        - [ ] `TrackSlide` (Top Tracks)
-            - [ ] Fix formatting for long track names
-        - [ ] `GenreSlide` (Top Genres)
-            - [ ] Fix stats not populating
-        - [ ] `BusiestDaySlide` (Busiest Month/Longest Session)
-            - [ ] Change month to show month name or short name
-            - [ ] Fix longest session to correctly get and display the time rather than N/A - default to 100% play estimation for track lengths
-            - [ ] Change date time format for longest session to be more readable
+        - [x] `ArtistSlide` (Top Artists)
+            - [x] Fix formatting for long artist names
+        - [x] `TrackSlide` (Top Tracks)
+            - [x] Fix formatting for long track names
+        - [x] `GenreSlide` (Top Genres)
+            - [x] Fix stats not populating
+        - [x] `BusiestDaySlide` (Busiest Month/Longest Session)
+            - [x] Change month to show month name or short name
+            - [x] Fix longest session to correctly get and display the time rather than N/A - default to 100% play estimation for track lengths
+            - [x] Change date time format for longest session to be more readable
         - [x] `LibraryGrowthSlide` (New tracks added)
             - *Note: If collection size decreased, change messaging to "You cleaned up your library" or similar.*
-        - [ ] `YearComparisonSlide` (General stats comparison)
+        - [x] `YearComparisonSlide` (General stats comparison)
             - *Note: Only show if a comparison year exists AND there are metrics with positive growth. Only display metrics that have increased.*
-            - [ ] Add sets played metric
-        - [ ] `YearComparisonTrendsSlide` (Biggest increases, rank changes, new favorites)
+            - [x] Add sets played metric
+        - [x] `YearComparisonTrendsSlide` (Biggest increases, rank changes, new favorites)
             - *Biggest Obsession: Artist/Genre with highest % increase in plays vs comparison year (regardless of rank).*
             - *Rank Climber: Artist/Genre with largest rank change from outside Top 10 to inside Top 10 (Top 3 for genre).*
             - *New Favorite: Artist/Genre with 0 plays in comparison year to highest current rank. Show "From 0 plays to Top X" (Artist X: 5, 10, 15, 20, 30; Genre X: 3, 5, 10).*
-            - [ ] Add Rank Climber metric
-        - [ ] `SummarySlide` (Cheatsheet)
-            - [ ] Change month format to show month name or short name
+            - [x] Add Rank Climber metric
+        - [x] `SummarySlide` (Cheatsheet)
+            - [x] Change month format to show month name or short name
     - [x] **Note:** Use CSS patterns/icons for placeholders. Do not implement image fetching.
-    - [ ] **Update:** Implement Theme System (Pastel [Default], Club, Clean, Booth).
-        - [ ] Implement clean theme
+    - [x] **Update:** Implement Theme System (Pastel [Default], Club, Clean, Booth).
+        - [x] Implement clean theme
 - [ ] **Task 3.2: Dashboard & Navigation**
     - [ ] Create the main view to display stats before "Story Mode".
     - [ ] Implement "Play Story" overlay.

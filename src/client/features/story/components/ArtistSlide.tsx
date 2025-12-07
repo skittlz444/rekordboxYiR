@@ -56,8 +56,8 @@ export function ArtistSlide({ artists, aspectRatio = '9:16' }: ArtistSlideProps)
                 <div className={`${circleSize} rounded-full ${circleBg} flex items-center justify-center ${circleText}`}>
                   {index + 1}
                 </div>
-                <div className="flex-1">
-                  <div className={`font-bold ${nameSize} truncate`}>
+                <div className="flex-1 min-w-0">
+                  <div className={`font-bold ${nameSize} line-clamp-2 leading-tight break-words`}>
                     {artist.Name || 'Unknown Artist'}
                   </div>
                   <div className="text-xs font-mono opacity-70">{artist.count} PLAYS</div>
