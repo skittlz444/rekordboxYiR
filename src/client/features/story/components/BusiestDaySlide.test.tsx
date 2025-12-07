@@ -23,8 +23,8 @@ describe('BusiestDaySlide', () => {
     render(<BusiestDaySlide {...mockProps} />)
     // 22320 seconds = 6 hours 12 minutes
     expect(screen.getByText('6h 12m')).toBeInTheDocument()
-    // Date formatting depends on locale, but usually includes Oct 14
-    expect(screen.getByText('Oct 14, 2023')).toBeInTheDocument()
+    // Date formatted without year since it's clear from context
+    expect(screen.getByText('Oct 14')).toBeInTheDocument()
   })
 
   it('handles missing duration gracefully', () => {

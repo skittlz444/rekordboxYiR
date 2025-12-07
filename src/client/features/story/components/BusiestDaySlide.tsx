@@ -29,10 +29,9 @@ export function BusiestDaySlide({
     ? new Date(`${busiestMonth.month}-01`).toLocaleString('default', { month: 'long' })
     : 'N/A'
 
-  // Format date to readable format (e.g., "2023-10-14" -> "Oct 14, 2023")
+  // Format date to readable format (e.g., "2023-10-14" -> "Oct 14")
   const sessionDate = longestSession.date
     ? new Date(longestSession.date).toLocaleDateString('en-US', {
-        year: 'numeric',
         month: 'short',
         day: 'numeric',
       })
