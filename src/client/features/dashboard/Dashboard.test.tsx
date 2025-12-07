@@ -54,7 +54,7 @@ describe('Dashboard', () => {
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
-    expect(screen.getByText('Your most played artists')).toBeInTheDocument()
+    expect(screen.getByText('Top 10 Artists')).toBeInTheDocument()
     expect(screen.getByText('100 plays')).toBeInTheDocument()
   })
 
@@ -64,7 +64,7 @@ describe('Dashboard', () => {
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
     expect(screen.getByText('Best Track Ever')).toBeInTheDocument()
-    expect(screen.getByText(/Top Artist/i)).toBeInTheDocument()
+    expect(screen.getByText('50 plays')).toBeInTheDocument()
   })
 
   it('should display play story button', () => {
