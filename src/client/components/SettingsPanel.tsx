@@ -10,16 +10,12 @@ interface SettingsPanelProps {
 export function SettingsPanel({ className = '' }: SettingsPanelProps) {
   const targetYear = useConfigStore((state) => state.targetYear)
   const comparisonYear = useConfigStore((state) => state.comparisonYear)
-  const unknownArtistFilter = useConfigStore((state) => state.unknownArtistFilter)
-  const unknownGenreFilter = useConfigStore((state) => state.unknownGenreFilter)
   const djName = useConfigStore((state) => state.djName)
   const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
   const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
   
   const setTargetYear = useConfigStore((state) => state.setTargetYear)
   const setComparisonYear = useConfigStore((state) => state.setComparisonYear)
-  const setUnknownArtistFilter = useConfigStore((state) => state.setUnknownArtistFilter)
-  const setUnknownGenreFilter = useConfigStore((state) => state.setUnknownGenreFilter)
   const setDjName = useConfigStore((state) => state.setDjName)
   const setAverageTrackPlayedPercent = useConfigStore((state) => state.setAverageTrackPlayedPercent)
   const setDisableGenresInTrends = useConfigStore((state) => state.setDisableGenresInTrends)
@@ -71,33 +67,11 @@ export function SettingsPanel({ className = '' }: SettingsPanelProps) {
           onChange={(e) => setAverageTrackPlayedPercent(parseFloat(e.target.value))}
         />
         <p className="text-xs text-muted-foreground">
-          For playtime estimation (default: 0.75)
+          Adjust how much of each track is played on average (default: 0.75 = 75%)
         </p>
       </div>
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="settings-unknownArtist" className="cursor-pointer">
-            Include Unknown Artists
-          </Label>
-          <Switch
-            id="settings-unknownArtist"
-            checked={unknownArtistFilter}
-            onCheckedChange={setUnknownArtistFilter}
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <Label htmlFor="settings-unknownGenre" className="cursor-pointer">
-            Include Unknown Genres
-          </Label>
-          <Switch
-            id="settings-unknownGenre"
-            checked={unknownGenreFilter}
-            onCheckedChange={setUnknownGenreFilter}
-          />
-        </div>
-
         <div className="flex items-center justify-between">
           <Label htmlFor="settings-disableGenres" className="cursor-pointer">
             Hide Genres in Trends Slide

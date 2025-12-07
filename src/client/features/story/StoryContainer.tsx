@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { Settings } from 'lucide-react'
 import { useConfigStore } from '@/client/lib/store'
+import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
 
 interface StoryContainerProps {
   data: StatsResponse
@@ -32,9 +33,18 @@ export function StoryContainer({ data }: StoryContainerProps) {
   // Get configuration from store
   const djName = useConfigStore((state) => state.djName)
   const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
+  const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
 
   // Use shared utility to transform data
   const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends)
+  
+  // Adjust playtime for longest session
+  const adjustedLongestSession = {
+    ...stats.longestSession,
+    durationSeconds: stats.longestSession.durationSeconds 
+      ? applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent)
+      : undefined
+  }
 
   return (
     <div className={`min-h-screen bg-gray-100 p-8 ${theme}`} data-ratio={aspectRatio}>
@@ -148,7 +158,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
         
         <BusiestDaySlide 
           busiestMonth={stats.busiestMonth} 
-          longestSession={stats.longestSession} 
+          longestSession={adjustedLongestSession} 
           aspectRatio={aspectRatio} 
         />
         

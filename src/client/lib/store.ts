@@ -9,10 +9,6 @@ export interface ConfigurationState {
   // User preferences
   djName: string
   
-  // Filter toggles
-  unknownArtistFilter: boolean
-  unknownGenreFilter: boolean
-  
   // Trend slide configuration
   disableGenresInTrends: boolean
   
@@ -23,8 +19,6 @@ export interface ConfigurationState {
   setTargetYear: (year: number) => void
   setComparisonYear: (year: number | null) => void
   setDjName: (name: string) => void
-  setUnknownArtistFilter: (value: boolean) => void
-  setUnknownGenreFilter: (value: boolean) => void
   setDisableGenresInTrends: (value: boolean) => void
   setAverageTrackPlayedPercent: (value: number) => void
   resetToDefaults: () => void
@@ -36,8 +30,6 @@ const defaultState = {
   targetYear: currentYear,
   comparisonYear: currentYear - 1,
   djName: '',
-  unknownArtistFilter: false,
-  unknownGenreFilter: false,
   disableGenresInTrends: false,
   averageTrackPlayedPercent: 0.75,
 }
@@ -50,8 +42,6 @@ export const useConfigStore = create<ConfigurationState>()(
       setTargetYear: (year) => set({ targetYear: year }),
       setComparisonYear: (year) => set({ comparisonYear: year }),
       setDjName: (name) => set({ djName: name }),
-      setUnknownArtistFilter: (value) => set({ unknownArtistFilter: value }),
-      setUnknownGenreFilter: (value) => set({ unknownGenreFilter: value }),
       setDisableGenresInTrends: (value) => set({ disableGenresInTrends: value }),
       setAverageTrackPlayedPercent: (value) => set({ averageTrackPlayedPercent: value }),
       resetToDefaults: () => set(defaultState),

@@ -14,8 +14,6 @@ describe('Configuration Store', () => {
     expect(state.targetYear).toBe(currentYear)
     expect(state.comparisonYear).toBe(currentYear - 1)
     expect(state.djName).toBe('')
-    expect(state.unknownArtistFilter).toBe(false)
-    expect(state.unknownGenreFilter).toBe(false)
     expect(state.disableGenresInTrends).toBe(false)
     expect(state.averageTrackPlayedPercent).toBe(0.75)
   })
@@ -44,22 +42,6 @@ describe('Configuration Store', () => {
     expect(useConfigStore.getState().djName).toBe('DJ Test')
   })
 
-  it('should toggle unknown artist filter', () => {
-    const { setUnknownArtistFilter } = useConfigStore.getState()
-    setUnknownArtistFilter(true)
-    expect(useConfigStore.getState().unknownArtistFilter).toBe(true)
-    setUnknownArtistFilter(false)
-    expect(useConfigStore.getState().unknownArtistFilter).toBe(false)
-  })
-
-  it('should toggle unknown genre filter', () => {
-    const { setUnknownGenreFilter } = useConfigStore.getState()
-    setUnknownGenreFilter(true)
-    expect(useConfigStore.getState().unknownGenreFilter).toBe(true)
-    setUnknownGenreFilter(false)
-    expect(useConfigStore.getState().unknownGenreFilter).toBe(false)
-  })
-
   it('should toggle disable genres in trends', () => {
     const { setDisableGenresInTrends } = useConfigStore.getState()
     setDisableGenresInTrends(true)
@@ -82,8 +64,6 @@ describe('Configuration Store', () => {
     store.setTargetYear(2020)
     store.setComparisonYear(2019)
     store.setDjName('Test')
-    store.setUnknownArtistFilter(true)
-    store.setUnknownGenreFilter(true)
     store.setDisableGenresInTrends(true)
     store.setAverageTrackPlayedPercent(0.5)
     
@@ -94,8 +74,6 @@ describe('Configuration Store', () => {
     expect(state.targetYear).toBe(currentYear)
     expect(state.comparisonYear).toBe(currentYear - 1)
     expect(state.djName).toBe('')
-    expect(state.unknownArtistFilter).toBe(false)
-    expect(state.unknownGenreFilter).toBe(false)
     expect(state.disableGenresInTrends).toBe(false)
     expect(state.averageTrackPlayedPercent).toBe(0.75)
   })

@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
 import { useConfigStore } from '@/client/lib/store'
+import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
 
 interface StoryModeOverlayProps {
   data: StatsResponse
@@ -34,9 +35,18 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   // Get configuration from store
   const djName = useConfigStore((state) => state.djName)
   const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
+  const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
 
   // Use shared utility to transform data
   const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends)
+  
+  // Adjust playtime for longest session
+  const adjustedLongestSession = {
+    ...stats.longestSession,
+    durationSeconds: stats.longestSession.durationSeconds 
+      ? applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent)
+      : undefined
+  }
 
   // Build slides array
   const slides = [
@@ -47,7 +57,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
     <BusiestDaySlide 
       key="busiest" 
       busiestMonth={stats.busiestMonth} 
-      longestSession={stats.longestSession} 
+      longestSession={adjustedLongestSession} 
       aspectRatio={aspectRatio} 
     />,
     <LibraryGrowthSlide 

@@ -4,6 +4,8 @@ import { Button } from '@/client/components/ui/button'
 import { Play, Music, Disc, Users, Calendar, TrendingUp, TrendingDown, Grid3x3, Settings } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
 import { SettingsPanel } from '@/client/components/SettingsPanel'
+import { useConfigStore } from '@/client/lib/store'
+import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
 
 interface DashboardProps {
   data: StatsResponse
@@ -13,10 +15,14 @@ interface DashboardProps {
 
 export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps) {
   const { stats, year, comparison } = data
+  
+  // Get playtime percentage from store
+  const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
 
-  // Calculate some summary stats
-  const totalHours = Math.round(stats.totalPlaytimeSeconds / 3600)
-  const totalMinutes = Math.round(stats.totalPlaytimeSeconds / 60)
+  // Calculate some summary stats with playtime adjustment
+  const adjustedPlaytimeSeconds = applyPlaytimePercentage(stats.totalPlaytimeSeconds, averageTrackPlayedPercent)
+  const totalHours = Math.round(adjustedPlaytimeSeconds / 3600)
+  const totalMinutes = Math.round(adjustedPlaytimeSeconds / 60)
   const avgSessionLength = stats.totalSessions > 0 
     ? Math.round(stats.totalTracks / stats.totalSessions) 
     : 0
@@ -183,7 +189,7 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
             </div>
             {stats.longestSession.durationSeconds && (
               <div className="text-sm text-muted-foreground mt-1">
-                {Math.round(stats.longestSession.durationSeconds / 3600)}h {Math.round((stats.longestSession.durationSeconds % 3600) / 60)}m
+                {Math.round(applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent) / 3600)}h {Math.round((applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent) % 3600) / 60)}m
               </div>
             )}
           </CardContent>
@@ -197,7 +203,11 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
             <Users className="w-6 h-6" />
             Top 10 Artists
           </CardTitle>
-          <CardDescription>Your most played artists of {year}</CardDescription>
+          <CardDescription>
+            Your most played artists of {year}
+            <br />
+            <span className="text-xs italic">Note: Tracks with no artist in Rekordbox are excluded from this list</span>
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -258,7 +268,11 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
             <Disc className="w-6 h-6" />
             Top 10 Genres
           </CardTitle>
-          <CardDescription>Your favorite genres of {year}</CardDescription>
+          <CardDescription>
+            Your favorite genres of {year}
+            <br />
+            <span className="text-xs italic">Note: Tracks with no genre in Rekordbox are excluded from this list</span>
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">

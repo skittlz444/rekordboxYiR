@@ -6,7 +6,7 @@ interface UseFileUploadReturn {
   error: string | null;
   isUploading: boolean;
   handleFileSelect: (selectedFile: File) => void;
-  uploadFile: (year: string, options: { unknownArtist: boolean; unknownGenre: boolean }, comparisonYear?: string) => Promise<StatsResponse>;
+  uploadFile: (year: string, comparisonYear?: string) => Promise<StatsResponse>;
   reset: () => void;
 }
 
@@ -38,7 +38,7 @@ export function useFileUpload(): UseFileUploadReturn {
     setFile(selectedFile);
   }, []);
 
-  const uploadFile = useCallback(async (year: string, options: { unknownArtist: boolean; unknownGenre: boolean }, comparisonYear?: string): Promise<StatsResponse> => {
+  const uploadFile = useCallback(async (year: string, comparisonYear?: string): Promise<StatsResponse> => {
     if (!file) {
       throw new Error('No file selected.');
     }
@@ -50,8 +50,6 @@ export function useFileUpload(): UseFileUploadReturn {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('year', year);
-      formData.append('unknownArtist', String(options.unknownArtist));
-      formData.append('unknownGenre', String(options.unknownGenre));
       if (comparisonYear) {
         formData.append('comparisonYear', comparisonYear);
       }

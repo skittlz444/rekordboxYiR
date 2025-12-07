@@ -132,12 +132,12 @@ describe('Dashboard', () => {
     expect(screen.getByText('+200')).toBeInTheDocument()
   })
 
-  it('should calculate total playtime in hours', () => {
+  it('should calculate total playtime in hours with percentage adjustment', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
-    // 54000 seconds = 15 hours
-    expect(screen.getByText('15h')).toBeInTheDocument()
+    // 54000 seconds * 0.75 (default percentage) = 40500 seconds = 11.25 hours => 11h
+    expect(screen.getByText('11h')).toBeInTheDocument()
   })
 })

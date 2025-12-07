@@ -17,26 +17,17 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
   // Use configuration store
   const targetYear = useConfigStore((state) => state.targetYear);
   const comparisonYear = useConfigStore((state) => state.comparisonYear);
-  const unknownArtistFilter = useConfigStore((state) => state.unknownArtistFilter);
-  const unknownGenreFilter = useConfigStore((state) => state.unknownGenreFilter);
   const djName = useConfigStore((state) => state.djName);
   const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent);
   const setTargetYear = useConfigStore((state) => state.setTargetYear);
   const setComparisonYear = useConfigStore((state) => state.setComparisonYear);
-  const setUnknownArtistFilter = useConfigStore((state) => state.setUnknownArtistFilter);
-  const setUnknownGenreFilter = useConfigStore((state) => state.setUnknownGenreFilter);
   const setDjName = useConfigStore((state) => state.setDjName);
   const setAverageTrackPlayedPercent = useConfigStore((state) => state.setAverageTrackPlayedPercent);
 
   const handleUpload = async () => {
     try {
-      const options = {
-        unknownArtist: unknownArtistFilter,
-        unknownGenre: unknownGenreFilter,
-      };
       const data = await uploadFile(
         targetYear.toString(), 
-        options, 
         comparisonYear?.toString() || ''
       );
       if (data) {
@@ -103,7 +94,7 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="averageTrackPercent">Average Track Played % (for playtime estimation)</Label>
+              <Label htmlFor="averageTrackPercent">Average Track Played %</Label>
               <Input
                 id="averageTrackPercent"
                 type="number"
@@ -115,32 +106,8 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
                 disabled={isUploading}
               />
               <p className="text-xs text-muted-foreground">
-                Default: 0.75 (75% of each track played on average)
+                Adjust how much of each track is played on average (default: 0.75 = 75%)
               </p>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="unknownArtist"
-                className="rounded border-gray-300 text-primary focus:ring-primary"
-                checked={unknownArtistFilter}
-                onChange={(e) => setUnknownArtistFilter(e.target.checked)}
-                disabled={isUploading}
-              />
-              <Label htmlFor="unknownArtist">Include Unknown Artists</Label>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="unknownGenre"
-                className="rounded border-gray-300 text-primary focus:ring-primary"
-                checked={unknownGenreFilter}
-                onChange={(e) => setUnknownGenreFilter(e.target.checked)}
-                disabled={isUploading}
-              />
-              <Label htmlFor="unknownGenre">Include Unknown Genres</Label>
             </div>
           </div>
 
