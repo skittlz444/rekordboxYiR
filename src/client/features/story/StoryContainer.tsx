@@ -17,6 +17,7 @@ import { Button } from '@/client/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
 import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { Settings } from 'lucide-react'
+import { useConfigStore } from '@/client/lib/store'
 
 interface StoryContainerProps {
   data: StatsResponse
@@ -27,9 +28,13 @@ export function StoryContainer({ data }: StoryContainerProps) {
   const [theme, setTheme] = useState<string>('theme-pastel')
 
   const { stats, year, comparison } = data
+  
+  // Get configuration from store
+  const djName = useConfigStore((state) => state.djName)
+  const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
 
   // Use shared utility to transform data
-  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data)
+  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends)
 
   return (
     <div className={`min-h-screen bg-gray-100 p-8 ${theme}`} data-ratio={aspectRatio}>
@@ -133,7 +138,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
       </div>
 
       <div className="flex flex-wrap justify-center gap-8 pb-20">
-        <OpenerSlide year={year} aspectRatio={aspectRatio} />
+        <OpenerSlide year={year} djName={djName} aspectRatio={aspectRatio} />
         
         <ArtistSlide artists={stats.topArtists} aspectRatio={aspectRatio} />
         

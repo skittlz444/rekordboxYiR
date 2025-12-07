@@ -25,9 +25,15 @@ export interface StoryData {
 /**
  * Transforms StatsResponse into StoryData format for slide components
  * @param data - The stats response from the API
+ * @param djName - The DJ name from configuration (optional)
+ * @param disableGenresInTrends - Whether to exclude genres from trends calculation
  * @returns Object containing summary data, comparison metrics, and trends
  */
-export function transformStatsToStoryData(data: StatsResponse): StoryData {
+export function transformStatsToStoryData(
+  data: StatsResponse, 
+  djName: string = '',
+  disableGenresInTrends: boolean = false
+): StoryData {
   const { stats, year, comparison } = data
 
   // Construct summary data
@@ -42,7 +48,7 @@ export function transformStatsToStoryData(data: StatsResponse): StoryData {
     totalPlays: stats.totalTracks || 0,
     setsPlayed: stats.totalSessions || 0,
     busiestMonth: stats.busiestMonth.month,
-    djName: 'DJ', // We don't have this in the upload yet
+    djName: djName || 'DJ',
   }
 
   // Construct comparison metrics
@@ -105,14 +111,16 @@ export function transformStatsToStoryData(data: StatsResponse): StoryData {
       }
     }
     
-    // Check Genres
+    // Check Genres (only if not disabled)
     let newFavoriteGenre = null
-    for (let i = 0; i < stats.topGenres.length; i++) {
-      const genre = stats.topGenres[i]
-      const prevGenre = findItem(comparison.stats.topGenres, genre.Name, 'Name')
-      if (!prevGenre || prevGenre.count === 0) {
-        newFavoriteGenre = { name: genre.Name, currentRank: i + 1, type: 'Genre' as const }
-        break 
+    if (!disableGenresInTrends) {
+      for (let i = 0; i < stats.topGenres.length; i++) {
+        const genre = stats.topGenres[i]
+        const prevGenre = findItem(comparison.stats.topGenres, genre.Name, 'Name')
+        if (!prevGenre || prevGenre.count === 0) {
+          newFavoriteGenre = { name: genre.Name, currentRank: i + 1, type: 'Genre' as const }
+          break 
+        }
       }
     }
     
@@ -140,17 +148,19 @@ export function transformStatsToStoryData(data: StatsResponse): StoryData {
         }
     })
 
-    // Check Genres
-    stats.topGenres.forEach(genre => {
-        const prev = findItem(comparison.stats.topGenres, genre.Name, 'Name')
-        if (prev && prev.count > 0) {
-            const increase = ((genre.count - prev.count) / prev.count) * 100
-            if (increase >= MIN_OBSESSION_INCREASE && increase > maxIncrease) {
-                maxIncrease = increase
-                obsession = { name: genre.Name, percentageIncrease: Math.round(increase) }
-            }
-        }
-    })
+    // Check Genres (only if not disabled)
+    if (!disableGenresInTrends) {
+      stats.topGenres.forEach(genre => {
+          const prev = findItem(comparison.stats.topGenres, genre.Name, 'Name')
+          if (prev && prev.count > 0) {
+              const increase = ((genre.count - prev.count) / prev.count) * 100
+              if (increase >= MIN_OBSESSION_INCREASE && increase > maxIncrease) {
+                  maxIncrease = increase
+                  obsession = { name: genre.Name, percentageIncrease: Math.round(increase) }
+              }
+          }
+      })
+    }
     
     if (obsession) trends.biggestObsession = obsession
 
@@ -171,19 +181,21 @@ export function transformStatsToStoryData(data: StatsResponse): StoryData {
         }
     })
 
-    // Check Genres for Rank Climber
-    stats.topGenres.forEach((genre, index) => {
-        const currentRank = index + 1
-        const prevIndex = comparison.stats.topGenres.findIndex(g => g.Name === genre.Name)
-        if (prevIndex !== -1) {
-            const prevRank = prevIndex + 1
-            const climb = prevRank - currentRank
-            if (climb > maxClimb) {
-                maxClimb = climb
-                climber = { name: genre.Name, previousRank: prevRank, currentRank: currentRank }
-            }
-        }
-    })
+    // Check Genres for Rank Climber (only if not disabled)
+    if (!disableGenresInTrends) {
+      stats.topGenres.forEach((genre, index) => {
+          const currentRank = index + 1
+          const prevIndex = comparison.stats.topGenres.findIndex(g => g.Name === genre.Name)
+          if (prevIndex !== -1) {
+              const prevRank = prevIndex + 1
+              const climb = prevRank - currentRank
+              if (climb > maxClimb) {
+                  maxClimb = climb
+                  climber = { name: genre.Name, previousRank: prevRank, currentRank: currentRank }
+              }
+          }
+      })
+    }
     
     if (climber) trends.rankClimber = climber
   }

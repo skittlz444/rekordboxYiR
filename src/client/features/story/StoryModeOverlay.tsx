@@ -17,6 +17,7 @@ import { Button } from '@/client/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
 import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
+import { useConfigStore } from '@/client/lib/store'
 
 interface StoryModeOverlayProps {
   data: StatsResponse
@@ -29,13 +30,17 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const [theme, setTheme] = useState<string>('theme-pastel')
 
   const { stats, year, comparison } = data
+  
+  // Get configuration from store
+  const djName = useConfigStore((state) => state.djName)
+  const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
 
   // Use shared utility to transform data
-  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data)
+  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends)
 
   // Build slides array
   const slides = [
-    <OpenerSlide key="opener" year={year} aspectRatio={aspectRatio} />,
+    <OpenerSlide key="opener" year={year} djName={djName} aspectRatio={aspectRatio} />,
     <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />,
     <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />,
     <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} />,
