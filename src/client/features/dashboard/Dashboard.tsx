@@ -1,7 +1,7 @@
 import { StatsResponse } from '@/shared/types'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui/card'
 import { Button } from '@/client/components/ui/button'
-import { Play, Music, Disc, Users, Calendar, TrendingUp, Grid3x3 } from 'lucide-react'
+import { Play, Music, Disc, Users, Calendar, TrendingUp, TrendingDown, Grid3x3 } from 'lucide-react'
 
 interface DashboardProps {
   data: StatsResponse
@@ -63,10 +63,21 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{stats.totalTracks.toLocaleString()}</div>
-            {comparison && comparison.diffs.tracksPercentage > 0 && (
-              <div className="text-sm text-green-600 flex items-center gap-1 mt-2">
-                <TrendingUp className="w-4 h-4" />
-                +{comparison.diffs.tracksPercentage}% from {comparison.year}
+            {comparison && comparison.diffs.tracksPercentage !== 0 && (
+              <div className={`text-sm flex items-center gap-1 mt-2 ${
+                comparison.diffs.tracksPercentage > 0 ? 'text-green-600' : 'text-red-600'
+              }`}>
+                {comparison.diffs.tracksPercentage > 0 ? (
+                  <>
+                    <TrendingUp className="w-4 h-4" />
+                    +{comparison.diffs.tracksPercentage}% from {comparison.year}
+                  </>
+                ) : (
+                  <>
+                    <TrendingDown className="w-4 h-4" />
+                    {comparison.diffs.tracksPercentage}% from {comparison.year}
+                  </>
+                )}
               </div>
             )}
           </CardContent>
@@ -86,10 +97,21 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
             <div className="text-sm text-muted-foreground mt-1">
               {totalMinutes.toLocaleString()} minutes
             </div>
-            {comparison && comparison.diffs.playtimePercentage > 0 && (
-              <div className="text-sm text-green-600 flex items-center gap-1 mt-2">
-                <TrendingUp className="w-4 h-4" />
-                +{comparison.diffs.playtimePercentage}% from {comparison.year}
+            {comparison && comparison.diffs.playtimePercentage !== 0 && (
+              <div className={`text-sm flex items-center gap-1 mt-2 ${
+                comparison.diffs.playtimePercentage > 0 ? 'text-green-600' : 'text-red-600'
+              }`}>
+                {comparison.diffs.playtimePercentage > 0 ? (
+                  <>
+                    <TrendingUp className="w-4 h-4" />
+                    +{comparison.diffs.playtimePercentage}% from {comparison.year}
+                  </>
+                ) : (
+                  <>
+                    <TrendingDown className="w-4 h-4" />
+                    {comparison.diffs.playtimePercentage}% from {comparison.year}
+                  </>
+                )}
               </div>
             )}
           </CardContent>
@@ -109,10 +131,21 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
             <div className="text-sm text-muted-foreground mt-1">
               Avg {avgSessionLength} tracks/set
             </div>
-            {comparison && comparison.diffs.totalSessionsPercentage > 0 && (
-              <div className="text-sm text-green-600 flex items-center gap-1 mt-2">
-                <TrendingUp className="w-4 h-4" />
-                +{comparison.diffs.totalSessionsPercentage}% from {comparison.year}
+            {comparison && comparison.diffs.totalSessionsPercentage !== 0 && (
+              <div className={`text-sm flex items-center gap-1 mt-2 ${
+                comparison.diffs.totalSessionsPercentage > 0 ? 'text-green-600' : 'text-red-600'
+              }`}>
+                {comparison.diffs.totalSessionsPercentage > 0 ? (
+                  <>
+                    <TrendingUp className="w-4 h-4" />
+                    +{comparison.diffs.totalSessionsPercentage}% from {comparison.year}
+                  </>
+                ) : (
+                  <>
+                    <TrendingDown className="w-4 h-4" />
+                    {comparison.diffs.totalSessionsPercentage}% from {comparison.year}
+                  </>
+                )}
               </div>
             )}
           </CardContent>

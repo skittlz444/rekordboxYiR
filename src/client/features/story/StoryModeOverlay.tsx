@@ -249,8 +249,10 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowRight') {
+      e.preventDefault()
       goToNextSlide()
     } else if (e.key === 'ArrowLeft') {
+      e.preventDefault()
       goToPrevSlide()
     } else if (e.key === 'Escape') {
       onClose()
@@ -262,6 +264,9 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
       className={`fixed inset-0 bg-black z-50 flex flex-col ${theme}`}
       onKeyDown={handleKeyDown}
       tabIndex={0}
+      role="dialog"
+      aria-label="Story Mode"
+      aria-modal="true"
       data-ratio={aspectRatio}
     >
       {/* Header Controls */}
@@ -271,6 +276,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
           <div className="bg-white/10 backdrop-blur p-1 rounded-lg flex gap-1">
             <button
               onClick={() => setAspectRatio('9:16')}
+              aria-label="Set aspect ratio to 9:16"
               className={`px-3 py-1 rounded text-xs font-bold transition ${
                 aspectRatio === '9:16'
                   ? 'bg-white text-black'
@@ -281,6 +287,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
             </button>
             <button
               onClick={() => setAspectRatio('4:5')}
+              aria-label="Set aspect ratio to 4:5"
               className={`px-3 py-1 rounded text-xs font-bold transition ${
                 aspectRatio === '4:5'
                   ? 'bg-white text-black'
@@ -291,6 +298,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
             </button>
             <button
               onClick={() => setAspectRatio('1:1')}
+              aria-label="Set aspect ratio to 1:1"
               className={`px-3 py-1 rounded text-xs font-bold transition ${
                 aspectRatio === '1:1'
                   ? 'bg-white text-black'
@@ -305,6 +313,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
           <div className="bg-white/10 backdrop-blur p-1 rounded-lg flex gap-1">
             <button
               onClick={() => setTheme('theme-pastel')}
+              aria-label="Set theme to Pastel"
               className={`px-3 py-1 rounded text-xs font-bold transition ${
                 theme === 'theme-pastel'
                   ? 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800'
@@ -315,6 +324,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
             </button>
             <button
               onClick={() => setTheme('theme-club')}
+              aria-label="Set theme to Club"
               className={`px-3 py-1 rounded text-xs font-bold transition ${
                 theme === 'theme-club'
                   ? 'bg-gradient-to-r from-[#1a1a2e] to-[#16213e] text-white'
@@ -325,6 +335,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
             </button>
             <button
               onClick={() => setTheme('theme-clean')}
+              aria-label="Set theme to Clean"
               className={`px-3 py-1 rounded text-xs font-bold transition ${
                 theme === 'theme-clean'
                   ? 'bg-gray-100 text-gray-800'
@@ -335,6 +346,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
             </button>
             <button
               onClick={() => setTheme('theme-dark')}
+              aria-label="Set theme to Dark"
               className={`px-3 py-1 rounded text-xs font-bold transition ${
                 theme === 'theme-dark'
                   ? 'bg-slate-900 text-white'
@@ -351,6 +363,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
           size="icon"
           onClick={onClose}
           className="text-white hover:bg-white/20"
+          aria-label="Close story mode"
         >
           <X className="w-6 h-6" />
         </Button>
@@ -381,7 +394,9 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
           variant="ghost"
           size="icon"
           onClick={goToNextSlide}
-          className="text-white hover:bg-white/20"
+          disabled={currentSlide === slides.length - 1}
+          className="text-white hover:bg-white/20 disabled:opacity-30"
+          aria-label="Next slide"
         >
           <ChevronRight className="w-8 h-8" />
         </Button>
@@ -390,13 +405,13 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
       {/* Click areas for mobile navigation */}
       <div className="absolute inset-0 flex pointer-events-none">
         <div 
-          className="flex-1 pointer-events-auto cursor-pointer"
-          onClick={goToPrevSlide}
+          className={`flex-1 pointer-events-auto ${currentSlide === 0 ? 'cursor-default' : 'cursor-pointer'}`}
+          onClick={currentSlide > 0 ? goToPrevSlide : undefined}
           style={{ opacity: 0 }}
         />
         <div 
-          className="flex-1 pointer-events-auto cursor-pointer"
-          onClick={goToNextSlide}
+          className={`flex-1 pointer-events-auto ${currentSlide === slides.length - 1 ? 'cursor-default' : 'cursor-pointer'}`}
+          onClick={currentSlide < slides.length - 1 ? goToNextSlide : undefined}
           style={{ opacity: 0 }}
         />
       </div>
