@@ -293,10 +293,12 @@ export function StoryContainer({ data }: StoryContainerProps) {
                 aspectRatio={aspectRatio}
               />
             )}
-            <YearComparisonTrendsSlide 
-              trends={trends}
-              aspectRatio={aspectRatio}
-            />
+            {(trends.biggestObsession || trends.rankClimber || trends.newFavorite) && (
+              <YearComparisonTrendsSlide 
+                trends={trends}
+                aspectRatio={aspectRatio}
+              />
+            )}
           </>
         )}
 
