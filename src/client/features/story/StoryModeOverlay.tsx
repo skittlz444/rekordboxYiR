@@ -50,7 +50,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
   // Build slides array
   const slides = [
-    <OpenerSlide key="opener" year={year} djName={djName} aspectRatio={aspectRatio} />,
+    <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />,
     <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />,
     <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />,
     <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} />,
