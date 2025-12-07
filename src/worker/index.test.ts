@@ -77,6 +77,7 @@ describe('Worker API', () => {
 
     const res = await app.request(req, undefined, {
         REKORDBOX_KEY: 'test-key',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ASSETS: { fetch: vi.fn() } as any
     });
 
@@ -105,6 +106,7 @@ describe('Worker API', () => {
       
       const res = await app.request(req, undefined, {
         REKORDBOX_KEY: 'test-key',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ASSETS: { fetch: vi.fn() } as any
       });
       
@@ -126,6 +128,7 @@ describe('Worker API', () => {
 
     const res = await app.request(req, undefined, {
         REKORDBOX_KEY: 'test-key',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ASSETS: { fetch: vi.fn() } as any
     });
 

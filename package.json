@@ -1,6 +1,7 @@
 {
-  "name": "rekordbox-year-in-review-2",
+  "name": "rekordbox-year-in-review",
   "version": "0.0.1",
+  "type": "module",
   "private": true,
   "scripts": {
     "deploy": "npm run build && wrangler deploy",
