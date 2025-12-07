@@ -13,6 +13,12 @@ import {
 } from './components'
 import { StatsResponse } from '@/shared/types'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
+import { Button } from '@/client/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
+import { SettingsPanel } from '@/client/components/SettingsPanel'
+import { Settings } from 'lucide-react'
+import { useConfigStore } from '@/client/lib/store'
+import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
 
 interface StoryContainerProps {
   data: StatsResponse
@@ -23,9 +29,22 @@ export function StoryContainer({ data }: StoryContainerProps) {
   const [theme, setTheme] = useState<string>('theme-pastel')
 
   const { stats, year, comparison } = data
+  
+  // Get configuration from store
+  const djName = useConfigStore((state) => state.djName)
+  const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
+  const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
 
   // Use shared utility to transform data
-  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data)
+  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends, averageTrackPlayedPercent)
+  
+  // Adjust playtime for longest session
+  const adjustedLongestSession = {
+    ...stats.longestSession,
+    durationSeconds: stats.longestSession.durationSeconds 
+      ? applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent)
+      : undefined
+  }
 
   return (
     <div className={`min-h-screen bg-gray-100 p-8 ${theme}`} data-ratio={aspectRatio}>
@@ -107,10 +126,29 @@ export function StoryContainer({ data }: StoryContainerProps) {
             Dark
           </button>
         </div>
+
+        {/* Settings Button */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              className="bg-white/80 backdrop-blur shadow-lg"
+            >
+              <Settings className="w-5 h-5 mr-2" />
+              Settings
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Configuration Settings</DialogTitle>
+            </DialogHeader>
+            <SettingsPanel />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="flex flex-wrap justify-center gap-8 pb-20">
-        <OpenerSlide year={year} aspectRatio={aspectRatio} />
+        <OpenerSlide year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />
         
         <ArtistSlide artists={stats.topArtists} aspectRatio={aspectRatio} />
         
@@ -120,7 +158,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
         
         <BusiestDaySlide 
           busiestMonth={stats.busiestMonth} 
-          longestSession={stats.longestSession} 
+          longestSession={adjustedLongestSession} 
           aspectRatio={aspectRatio} 
         />
         

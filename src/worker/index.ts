@@ -21,8 +21,6 @@ app.post('/upload', async (c) => {
     const body = await c.req.parseBody();
     const file = body['file'];
     const year = body['year'] as string || new Date().getFullYear().toString();
-    const includeUnknownArtist = body['unknownArtist'] === 'true';
-    const includeUnknownGenre = body['unknownGenre'] === 'true';
 
     if (!(file instanceof File)) {
       return c.json({ error: 'No file uploaded' }, 400);
@@ -73,21 +71,20 @@ app.post('/upload', async (c) => {
       
       console.log(`Opening DB with key length: ${key.length}, File size: ${u8.length}`);
       
-      // Helper to add exclusion clause
-      const getExcludeArtistClause = (includeUnknownArtist: boolean, field: string) => {
-        if (includeUnknownArtist) return '';
+      // Helper to add exclusion clause for unknown artists
+      const getExcludeArtistClause = (field: string) => {
         return `AND ${field} IS NOT NULL AND ${field} != '' AND ${field} != 'Unknown Artist'`;
       };
 
-      const getExcludeGenreClause = (includeUnknownGenre: boolean, field: string) => {
-        if (includeUnknownGenre) return '';
+      // Helper to add exclusion clause for unknown genres
+      const getExcludeGenreClause = (field: string) => {
         return `AND ${field} IS NOT NULL AND ${field} != '' AND ${field} != 'Unknown Genre'`;
       };
 
       const getYearStats = (targetYear: string) => {
         const yearFilter = `${targetYear}%`;
-        const excludeArtistClause = (field: string) => getExcludeArtistClause(includeUnknownArtist, field);
-        const excludeGenreClause = (field: string) => getExcludeGenreClause(includeUnknownGenre, field);
+        const excludeArtistClause = (field: string) => getExcludeArtistClause(field);
+        const excludeGenreClause = (field: string) => getExcludeGenreClause(field);
 
         // 0. Basic Stats (Total Tracks, Total Playtime)
         const totalTracksResult = db.query(`

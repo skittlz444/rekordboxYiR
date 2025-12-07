@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Settings } from 'lucide-react'
 import {
   OpenerSlide,
   ArtistSlide,
@@ -14,7 +14,11 @@ import {
 } from '../story/components'
 import { StatsResponse } from '@/shared/types'
 import { Button } from '@/client/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
+import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
+import { useConfigStore } from '@/client/lib/store'
+import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
 
 interface StoryModeOverlayProps {
   data: StatsResponse
@@ -27,20 +31,33 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const [theme, setTheme] = useState<string>('theme-pastel')
 
   const { stats, year, comparison } = data
+  
+  // Get configuration from store
+  const djName = useConfigStore((state) => state.djName)
+  const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
+  const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
 
   // Use shared utility to transform data
-  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data)
+  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends, averageTrackPlayedPercent)
+  
+  // Adjust playtime for longest session
+  const adjustedLongestSession = {
+    ...stats.longestSession,
+    durationSeconds: stats.longestSession.durationSeconds 
+      ? applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent)
+      : undefined
+  }
 
   // Build slides array
   const slides = [
-    <OpenerSlide key="opener" year={year} aspectRatio={aspectRatio} />,
+    <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />,
     <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />,
     <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />,
     <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} />,
     <BusiestDaySlide 
       key="busiest" 
       busiestMonth={stats.busiestMonth} 
-      longestSession={stats.longestSession} 
+      longestSession={adjustedLongestSession} 
       aspectRatio={aspectRatio} 
     />,
     <LibraryGrowthSlide 
@@ -202,15 +219,36 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
           </div>
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="text-white hover:bg-white/20"
-          aria-label="Close story mode"
-        >
-          <X className="w-6 h-6" />
-        </Button>
+        <div className="flex gap-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/20"
+                aria-label="Settings"
+              >
+                <Settings className="w-6 h-6" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Configuration Settings</DialogTitle>
+              </DialogHeader>
+              <SettingsPanel />
+            </DialogContent>
+          </Dialog>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="text-white hover:bg-white/20"
+            aria-label="Close story mode"
+          >
+            <X className="w-6 h-6" />
+          </Button>
+        </div>
       </div>
 
       {/* Main Content Area */}
