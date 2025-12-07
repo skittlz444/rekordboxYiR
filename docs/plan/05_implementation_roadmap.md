@@ -73,7 +73,7 @@
     - [ ] **Update:** Add toggles for `unknownArtistFilter`, `unknownGenreFilter`.
     - [ ] **Update:** Add toggle to disable genres in `YearComparisonTrendsSlide` (show only artists).
     - [ ] **Update:** Add state for `averageTrackPlayedPercent` (number, default 0.75).
-    - [ ] **Update:** Implement UI controls for all configuration options (Year, Filters, Playtime Estimation).
+    - [ ] **Update:** Implement UI controls for all configuration options (Year, Filters, Playtime Estimation. DJ Name, etc) on the initial upload page, but also in the dashboard, story slides and view all slides pages.
     - [ ] Connect settings UI to the store.
 
 ## Phase 4: Sharing & Polish
