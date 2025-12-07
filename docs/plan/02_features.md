@@ -37,11 +37,12 @@ The application will generate a series of "Slides", each focusing on a specific 
 
 ### 4. Configuration
 *   **Year Selection:** Dropdown to select which year to analyze (defaults to current year).
-*   **Unknown Artist/Genre Filter:** Toggle to exclude tracks with "Unknown Artist/Genre" or empty artist/genre fields.
-*   **Metric Toggles:** Simple checkboxes to hide specific slides (e.g., "I don't want to show my Genres").
 *   **DJ Identity:** Input field for "DJ Name" which appears in the slides.
 *   **Computation Settings:**
-    *   **Playtime Estimation:** Allow user to set "Average % of song played" (default: 75%) to calculate total time, as Rekordbox history only stores track length, not actual duration played.
+    *   **Playtime Estimation:** Allow user to set "Average % of song played" (default: 75%) to estimate how much of each track was actually played. The SQL returns full track lengths, and this percentage is applied in the UI to calculate estimated playtime for all statistics (Total Playtime, Longest Session, etc.).
+*   **Trend Filters:** Toggle to hide genres from the Year Comparison Trends slide, showing only artist trends.
+
+**Note:** Tracks with no artist or no genre in Rekordbox are automatically excluded from the Top Artists and Top Genres lists respectively. This exclusion is applied at the database query level to ensure data quality.
 
 ## Future Enhancements (Post-MVP)
 
