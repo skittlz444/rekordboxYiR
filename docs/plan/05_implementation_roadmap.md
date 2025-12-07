@@ -64,9 +64,9 @@
     - [x] **Note:** Use CSS patterns/icons for placeholders. Do not implement image fetching.
     - [x] **Update:** Implement Theme System (Pastel [Default], Club, Clean, Booth).
         - [x] Implement clean theme
-- [ ] **Task 3.2: Dashboard & Navigation**
-    - [ ] Create the main view to display stats before "Story Mode".
-    - [ ] Implement "Play Story" overlay.
+- [x] **Task 3.2: Dashboard & Navigation**
+    - [x] Create the main view to display stats before "Story Mode".
+    - [x] Implement "Play Story" overlay.
 - [ ] **Task 3.3: Configuration State**
     - [ ] Set up Zustand store for user preferences.
     - [ ] **Update:** Add state for `targetYear`, `comparisonYear`, `djName`.
