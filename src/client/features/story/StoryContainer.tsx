@@ -118,7 +118,9 @@ export function StoryContainer({ data }: StoryContainerProps) {
     }
 
     // 2. Biggest Obsession (Highest % increase)
-    let maxIncrease = 0
+    // Only consider increases above 1% to avoid noise from rounding or small changes
+    const MIN_OBSESSION_INCREASE = 1
+    let maxIncrease = MIN_OBSESSION_INCREASE - 1
     let obsession = null
     
     // Check Artists
@@ -126,7 +128,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
         const prev = findItem(comparison.stats.topArtists, artist.Name, 'Name')
         if (prev && prev.count > 0) {
             const increase = ((artist.count - prev.count) / prev.count) * 100
-            if (increase > maxIncrease) {
+            if (increase >= MIN_OBSESSION_INCREASE && increase > maxIncrease) {
                 maxIncrease = increase
                 obsession = { name: artist.Name, percentageIncrease: Math.round(increase) }
             }
@@ -138,7 +140,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
         const prev = findItem(comparison.stats.topGenres, genre.Name, 'Name')
         if (prev && prev.count > 0) {
             const increase = ((genre.count - prev.count) / prev.count) * 100
-            if (increase > maxIncrease) {
+            if (increase >= MIN_OBSESSION_INCREASE && increase > maxIncrease) {
                 maxIncrease = increase
                 obsession = { name: genre.Name, percentageIncrease: Math.round(increase) }
             }
