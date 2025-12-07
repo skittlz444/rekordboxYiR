@@ -67,7 +67,7 @@
 - [x] **Task 3.2: Dashboard & Navigation**
     - [x] Create the main view to display stats before "Story Mode".
     - [x] Implement "Play Story" overlay.
-- [ ] **Task 3.3: Configuration State**
+- [x] **Task 3.3: Configuration State**
     - [x] Set up Zustand store for user preferences.
     - [x] **Update:** Add state for `targetYear`, `comparisonYear`, `djName`.
     - [x] **Update:** Add toggles for `unknownArtistFilter`, `unknownGenreFilter`.
