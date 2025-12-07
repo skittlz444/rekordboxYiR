@@ -1,0 +1,30 @@
+import { StorySlide, AspectRatio } from './StorySlide'
+
+export interface OpenerSlideProps {
+  year: string
+  djName?: string
+  aspectRatio?: AspectRatio
+}
+
+export function OpenerSlide({ year, djName = 'DJ', aspectRatio = '9:16' }: OpenerSlideProps) {
+  return (
+    <StorySlide aspectRatio={aspectRatio}>
+      <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col justify-center items-center p-8 text-theme-text slide-p-square h-full">
+        <div className="text-xl font-bold mb-4 opacity-70 slide-mt-square-sm">REKORDBOX</div>
+        <h1 className="text-6xl font-black mb-6 text-center leading-tight slide-text-square-sm text-huge-square">
+          YOUR
+          <br />
+          <span className="text-theme-accent2">{year}</span>
+          <br />
+          IN MUSIC
+        </h1>
+        <p className="text-lg font-medium text-center mb-12 slide-mt-square-sm">
+          Ready to see what you played?
+        </p>
+        <div className="glass-panel px-6 py-3 rounded-full font-mono text-sm font-bold">
+          {djName.toUpperCase()}
+        </div>
+      </div>
+    </StorySlide>
+  )
+}

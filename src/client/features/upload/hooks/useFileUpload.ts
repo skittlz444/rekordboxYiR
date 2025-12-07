@@ -66,7 +66,7 @@ export function useFileUpload(): UseFileUploadReturn {
       }
 
       const data = await response.json();
-      return data;
+      return data as StatsResponse;
     } catch (err) {
       console.error('Upload failed:', err);
       setError('Failed to upload file. Please try again.');
