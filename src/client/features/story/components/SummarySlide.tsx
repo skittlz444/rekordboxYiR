@@ -20,9 +20,8 @@ export interface SummarySlideProps {
 }
 
 export function SummarySlide({ data, aspectRatio = '9:16' }: SummarySlideProps) {
-  const monthName = data.busiestMonth
-    ? new Date(`${data.busiestMonth}-01`).toLocaleString('default', { month: 'long' })
-    : 'N/A'
+  // Accept month name directly (e.g., "July") or fallback to N/A
+  const monthName = data.busiestMonth || 'N/A'
 
   return (
     <StorySlide aspectRatio={aspectRatio}>
@@ -74,7 +73,7 @@ export function SummarySlide({ data, aspectRatio = '9:16' }: SummarySlideProps) 
 
           <div className="summary-col-span-2 hide-on-square">
             <div className="text-xs opacity-60 font-bold mb-1">BUSIEST MONTH</div>
-            <div className="font-mono font-bold text-2xl text-big-square">{monthName.toUpperCase()}</div>
+            <div className="font-mono font-bold text-2xl text-big-square">{monthName}</div>
           </div>
         </div>
 

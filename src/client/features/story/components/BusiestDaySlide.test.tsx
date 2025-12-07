@@ -4,8 +4,8 @@ import { BusiestDaySlide } from './BusiestDaySlide'
 
 describe('BusiestDaySlide', () => {
   const mockProps = {
-    busiestMonth: { month: '2023-07', count: 342 },
-    longestSession: { date: '2023-10-14', durationSeconds: 22320 },
+    busiestMonth: { month: 'July', count: 342 },
+    longestSession: { date: 'October 14th', durationSeconds: 22320 },
   }
 
   it('renders the hashtag correctly', () => {
@@ -23,14 +23,14 @@ describe('BusiestDaySlide', () => {
     render(<BusiestDaySlide {...mockProps} />)
     // 22320 seconds = 6 hours 12 minutes
     expect(screen.getByText('6h 12m')).toBeInTheDocument()
-    // Date formatting depends on locale, but usually includes Oct 14
-    expect(screen.getByText('Oct 14, 2023')).toBeInTheDocument()
+    // Date is displayed as-is
+    expect(screen.getByText('October 14th')).toBeInTheDocument()
   })
 
   it('handles missing duration gracefully', () => {
     const propsWithoutDuration = {
       ...mockProps,
-      longestSession: { date: '2023-10-14' },
+      longestSession: { date: 'October 14th' },
     }
     render(<BusiestDaySlide {...propsWithoutDuration} />)
     expect(screen.getByText('N/A')).toBeInTheDocument()
@@ -38,8 +38,8 @@ describe('BusiestDaySlide', () => {
 
   it('formats different durations correctly', () => {
     const props = {
-      busiestMonth: { month: '2023-07', count: 342 },
-      longestSession: { date: '2023-10-14', durationSeconds: 7260 }, // 2h 1m
+      busiestMonth: { month: 'July', count: 342 },
+      longestSession: { date: 'October 14th', durationSeconds: 7260 }, // 2h 1m
     }
     render(<BusiestDaySlide {...props} />)
     expect(screen.getByText('2h 1m')).toBeInTheDocument()
