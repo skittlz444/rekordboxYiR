@@ -50,7 +50,7 @@ export function BusiestDaySlide({
           HARD
         </h2>
 
-        <div className="flex-1 flex flex-col justify-center gap-8 slide-gap-square grid-cols-square-2">
+        <div className="flex-1 flex flex-col justify-center gap-8 slide-gap-square">
           <div className="glass-panel p-6 rounded-2xl card-p-square">
             <div className="text-sm font-bold uppercase tracking-wider opacity-60 mb-2">
               Busiest Month

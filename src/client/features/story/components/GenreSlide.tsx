@@ -49,7 +49,7 @@ export function GenreSlide({ genres, aspectRatio = '9:16' }: GenreSlideProps) {
         <div className="flex-1 flex flex-col items-center justify-center flex-row-square">
           {/* CSS Pie Chart */}
           <div
-            className="w-48 h-48 rounded-full relative mb-8 slide-mt-square-sm slide-chart-square"
+            className="w-48 h-48 rounded-full relative mb-8 slide-mt-square-sm slide-chart-square shrink-0"
             style={{ background: conicGradient }}
           >
             <div className="absolute inset-0 flex items-center justify-center">

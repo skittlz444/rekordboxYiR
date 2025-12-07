@@ -164,23 +164,29 @@
     gap: 0.5rem !important;
   }
 
-  [data-ratio="1:1"] .slide-text-square-sm,
   [data-ratio="4:5"] .slide-text-square-sm {
     font-size: 1.5rem !important;
     line-height: 1.2 !important;
   }
+  [data-ratio="1:1"] .slide-text-square-sm {
+    font-size: 1.25rem !important;
+    line-height: 1.1 !important;
+  }
 
-  [data-ratio="1:1"] .slide-mt-square-sm,
   [data-ratio="4:5"] .slide-mt-square-sm {
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
+  }
+  [data-ratio="1:1"] .slide-mt-square-sm {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
   }
 
   /* Specific Layout shifts */
   [data-ratio="1:1"] .flex-row-square,
   [data-ratio="4:5"] .flex-row-square {
     flex-direction: row !important;
-    align-items: stretch !important;
+    align-items: center !important;
   }
 
   [data-ratio="1:1"] .grid-cols-square-2 {
@@ -235,15 +241,21 @@
   }
 
   /* Text Sizing Overrides for Square/Portrait */
-  [data-ratio="1:1"] .text-huge-square,
   [data-ratio="4:5"] .text-huge-square {
     font-size: 2.5rem !important;
     line-height: 1 !important;
   }
+  [data-ratio="1:1"] .text-huge-square {
+    font-size: 2rem !important;
+    line-height: 1 !important;
+  }
 
-  [data-ratio="1:1"] .text-big-square,
   [data-ratio="4:5"] .text-big-square {
     font-size: 1.75rem !important;
+    line-height: 1 !important;
+  }
+  [data-ratio="1:1"] .text-big-square {
+    font-size: 1.5rem !important;
     line-height: 1 !important;
   }
 

@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-// @ts-ignore
+// @ts-expect-error - missing types
 import initSqlcipher from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs';
-// @ts-ignore
+// @ts-expect-error - missing types
 import { SQLiteAPI } from '@7mind.io/sqlcipher-wasm';
 // @ts-expect-error - wasm import
 import wasmBinary from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.wasm';
@@ -47,6 +47,7 @@ app.post('/upload', async (c) => {
     module.FS.writeFile(dbPath, u8);
 
     // Open DB
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let db: any;
     try {
       // Open without key first
@@ -143,6 +144,7 @@ app.post('/upload', async (c) => {
           ORDER BY count DESC
           LIMIT 10
         `, [yearFilter]);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const topTracks = topTracksRaw.map((t: any) => ({ ...t, count: Number(t.count) }));
 
         // 2. Top 10 Artists
@@ -158,6 +160,7 @@ app.post('/upload', async (c) => {
           ORDER BY count DESC
           LIMIT 10
         `, [yearFilter]);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const topArtists = topArtistsRaw.map((t: any) => ({ ...t, count: Number(t.count) }));
 
         // 3. Top 10 Genres
@@ -173,6 +176,7 @@ app.post('/upload', async (c) => {
           ORDER BY count DESC
           LIMIT 10
         `, [yearFilter]);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const topGenres = topGenresRaw.map((t: any) => ({ ...t, count: Number(t.count) }));
 
         // 4. Top 10 BPMs
@@ -187,6 +191,7 @@ app.post('/upload', async (c) => {
           ORDER BY count DESC
           LIMIT 10
         `, [yearFilter]);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const topBPMs = topBPMsRaw.map((t: any) => ({ ...t, count: Number(t.count) }));
 
         // 5. Most songs in a session
