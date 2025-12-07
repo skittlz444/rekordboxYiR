@@ -1,6 +1,7 @@
 import { StatsResponse } from '@/shared/types'
 import { ComparisonMetric } from '../components/YearComparisonSlide'
 import { TrendData } from '../components/YearComparisonTrendsSlide'
+import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
 
 export interface SummaryData {
   year: string
@@ -27,12 +28,14 @@ export interface StoryData {
  * @param data - The stats response from the API
  * @param djName - The DJ name from configuration (optional)
  * @param disableGenresInTrends - Whether to exclude genres from trends calculation
+ * @param averageTrackPlayedPercent - The percentage of track played (default 0.75)
  * @returns Object containing summary data, comparison metrics, and trends
  */
 export function transformStatsToStoryData(
   data: StatsResponse, 
   djName: string = '',
-  disableGenresInTrends: boolean = false
+  disableGenresInTrends: boolean = false,
+  averageTrackPlayedPercent: number = 0.75
 ): StoryData {
   const { stats, year, comparison } = data
 
@@ -64,10 +67,12 @@ export function transformStatsToStoryData(
       })
     }
     if (comparison.diffs.playtimePercentage > 0) {
+      const adjustedCurrentPlaytime = applyPlaytimePercentage(stats.totalPlaytimeSeconds, averageTrackPlayedPercent)
+      const adjustedPreviousPlaytime = applyPlaytimePercentage(comparison.stats.totalPlaytimeSeconds, averageTrackPlayedPercent)
       comparisonMetrics.push({
         label: 'PLAYTIME',
-        current: `${Math.round(stats.totalPlaytimeSeconds / 3600)}h`,
-        previous: `${Math.round(comparison.stats.totalPlaytimeSeconds / 3600)}h`,
+        current: `${Math.round(adjustedCurrentPlaytime / 3600)}h`,
+        previous: `${Math.round(adjustedPreviousPlaytime / 3600)}h`,
         change: `+${comparison.diffs.playtimePercentage}%`,
         changePercentage: comparison.diffs.playtimePercentage
       })

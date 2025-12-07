@@ -38,7 +38,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
 
   // Use shared utility to transform data
-  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends)
+  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends, averageTrackPlayedPercent)
   
   // Adjust playtime for longest session
   const adjustedLongestSession = {
