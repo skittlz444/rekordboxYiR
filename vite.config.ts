@@ -12,6 +12,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@7mind.io/sqlcipher-wasm/dist/sqlcipher.wasm": path.resolve(__dirname, "./src/worker/test/mocks/empty.ts"),
+      "@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs": path.resolve(__dirname, "./src/worker/test/mocks/empty.ts"),
     },
   },
   root: '.',

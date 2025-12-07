@@ -27,6 +27,11 @@ export interface BPMStat {
 export interface YearStats {
   totalTracks: number;
   totalPlaytimeSeconds: number;
+  totalSessions: number;
+  libraryGrowth: {
+    total: number;
+    added: number;
+  };
   longestSession: {
     date: string;
     count: number;
@@ -52,6 +57,7 @@ export interface StatsResponse {
       tracksPercentage: number;
       playtimePercentage: number;
       sessionPercentage: number;
+      totalSessionsPercentage: number;
     }
   };
 }

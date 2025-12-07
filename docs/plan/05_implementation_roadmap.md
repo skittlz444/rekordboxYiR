@@ -33,27 +33,37 @@
     - [x] **Update:** Return structured JSON response with comparison data.
 
 ## Phase 3: UI/UX Implementation
-- [ ] **Task 3.1: Story Slide Components**
+- [x] **Task 3.1: Story Slide Components**
     - [x] **Prototype:** Create HTML/Tailwind prototypes for all slides with responsive logic (9:16, 4:5, 1:1).
-    - [ ] Create a generic `StorySlide` layout component (React).
-    - [ ] **Update:** Implement dynamic container sizing for 9:16, 4:5, and 1:1 aspect ratios (React).
-    - [ ] Implement specific slide types (React):
-        - [ ] `OpenerSlide` (Welcome message)
-        - [ ] `ArtistSlide` (Top Artists)
-        - [ ] `TrackSlide` (Top Tracks)
-        - [ ] `GenreSlide` (Top Genres)
-        - [ ] `BusiestDaySlide` (Busiest Month/Longest Session)
-        - [ ] `LibraryGrowthSlide` (New tracks added)
+    - [x] Create a generic `StorySlide` layout component (React).
+    - [x] **Update:** Implement dynamic container sizing for 9:16, 4:5, and 1:1 aspect ratios (React).
+    - [x] Implement specific slide types (React):
+        - [x] `OpenerSlide` (Welcome message)
+        - [x] `ArtistSlide` (Top Artists)
+            - [x] Fix formatting for long artist names
+        - [x] `TrackSlide` (Top Tracks)
+            - [x] Fix formatting for long track names
+        - [x] `GenreSlide` (Top Genres)
+            - [x] Fix stats not populating
+        - [x] `BusiestDaySlide` (Busiest Month/Longest Session)
+            - [x] Change month to show month name or short name
+            - [x] Fix longest session to correctly get and display the time rather than N/A - default to 100% play estimation for track lengths
+            - [x] Change date time format for longest session to be more readable
+        - [x] `LibraryGrowthSlide` (New tracks added)
             - *Note: If collection size decreased, change messaging to "You cleaned up your library" or similar.*
-        - [ ] `YearComparisonSlide` (General stats comparison)
+        - [x] `YearComparisonSlide` (General stats comparison)
             - *Note: Only show if a comparison year exists AND there are metrics with positive growth. Only display metrics that have increased.*
-        - [ ] `YearComparisonTrendsSlide` (Biggest increases, rank changes, new favorites)
+            - [x] Add sets played metric
+        - [x] `YearComparisonTrendsSlide` (Biggest increases, rank changes, new favorites)
             - *Biggest Obsession: Artist/Genre with highest % increase in plays vs comparison year (regardless of rank).*
             - *Rank Climber: Artist/Genre with largest rank change from outside Top 10 to inside Top 10 (Top 3 for genre).*
             - *New Favorite: Artist/Genre with 0 plays in comparison year to highest current rank. Show "From 0 plays to Top X" (Artist X: 5, 10, 15, 20, 30; Genre X: 3, 5, 10).*
-        - [ ] `SummarySlide` (Cheatsheet)
-    - [ ] **Note:** Use CSS patterns/icons for placeholders. Do not implement image fetching.
-    - [ ] **Update:** Implement Theme System (Pastel [Default], Club, Clean, Booth).
+            - [x] Add Rank Climber metric
+        - [x] `SummarySlide` (Cheatsheet)
+            - [x] Change month format to show month name or short name
+    - [x] **Note:** Use CSS patterns/icons for placeholders. Do not implement image fetching.
+    - [x] **Update:** Implement Theme System (Pastel [Default], Club, Clean, Booth).
+        - [x] Implement clean theme
 - [ ] **Task 3.2: Dashboard & Navigation**
     - [ ] Create the main view to display stats before "Story Mode".
     - [ ] Implement "Play Story" overlay.
@@ -61,6 +71,7 @@
     - [ ] Set up Zustand store for user preferences.
     - [ ] **Update:** Add state for `targetYear`, `comparisonYear`, `djName`.
     - [ ] **Update:** Add toggles for `unknownArtistFilter`, `unknownGenreFilter`.
+    - [ ] **Update:** Add toggle to disable genres in `YearComparisonTrendsSlide` (show only artists).
     - [ ] **Update:** Add state for `averageTrackPlayedPercent` (number, default 0.75).
     - [ ] **Update:** Implement UI controls for all configuration options (Year, Filters, Playtime Estimation).
     - [ ] Connect settings UI to the store.
