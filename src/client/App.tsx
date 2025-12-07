@@ -32,15 +32,17 @@ function App() {
     <div className="container mx-auto min-h-screen bg-background text-foreground">
       <h1 className="text-4xl font-bold text-center py-8">Rekordbox Year in Review</h1>
       
-      {/* Story Demo Link */}
-      <div className="text-center mb-4">
-        <button
-          onClick={() => setShowStoryDemo(!showStoryDemo)}
-          className="text-primary hover:underline text-sm"
-        >
-          {showStoryDemo ? 'Back to Upload' : 'View Story Slide Demo →'}
-        </button>
-      </div>
+      {/* Story Demo Link - Only visible in upload view */}
+      {!results && (
+        <div className="text-center mb-4">
+          <button
+            onClick={() => setShowStoryDemo(!showStoryDemo)}
+            className="text-primary hover:underline text-sm"
+          >
+            {showStoryDemo ? 'Back to Upload' : 'View Story Slide Demo →'}
+          </button>
+        </div>
+      )}
 
       {showStoryDemo ? (
         <StoryDemo />

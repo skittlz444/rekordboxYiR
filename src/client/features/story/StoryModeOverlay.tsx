@@ -236,6 +236,8 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const goToNextSlide = () => {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1)
+    } else {
+      onClose()
     }
   }
 
@@ -379,8 +381,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
           variant="ghost"
           size="icon"
           onClick={goToNextSlide}
-          disabled={currentSlide === slides.length - 1}
-          className="text-white hover:bg-white/20 disabled:opacity-30"
+          className="text-white hover:bg-white/20"
         >
           <ChevronRight className="w-8 h-8" />
         </Button>
