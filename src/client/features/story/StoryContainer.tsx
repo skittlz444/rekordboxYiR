@@ -13,6 +13,10 @@ import {
 } from './components'
 import { StatsResponse } from '@/shared/types'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
+import { Button } from '@/client/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
+import { SettingsPanel } from '@/client/components/SettingsPanel'
+import { Settings } from 'lucide-react'
 
 interface StoryContainerProps {
   data: StatsResponse
@@ -107,6 +111,25 @@ export function StoryContainer({ data }: StoryContainerProps) {
             Dark
           </button>
         </div>
+
+        {/* Settings Button */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              className="bg-white/80 backdrop-blur shadow-lg"
+            >
+              <Settings className="w-5 h-5 mr-2" />
+              Settings
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Configuration Settings</DialogTitle>
+            </DialogHeader>
+            <SettingsPanel />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="flex flex-wrap justify-center gap-8 pb-20">

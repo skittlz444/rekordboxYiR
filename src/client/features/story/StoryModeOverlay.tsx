@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Settings } from 'lucide-react'
 import {
   OpenerSlide,
   ArtistSlide,
@@ -14,6 +14,8 @@ import {
 } from '../story/components'
 import { StatsResponse } from '@/shared/types'
 import { Button } from '@/client/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
+import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
 
 interface StoryModeOverlayProps {
@@ -202,15 +204,36 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
           </div>
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="text-white hover:bg-white/20"
-          aria-label="Close story mode"
-        >
-          <X className="w-6 h-6" />
-        </Button>
+        <div className="flex gap-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/20"
+                aria-label="Settings"
+              >
+                <Settings className="w-6 h-6" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Configuration Settings</DialogTitle>
+              </DialogHeader>
+              <SettingsPanel />
+            </DialogContent>
+          </Dialog>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="text-white hover:bg-white/20"
+            aria-label="Close story mode"
+          >
+            <X className="w-6 h-6" />
+          </Button>
+        </div>
       </div>
 
       {/* Main Content Area */}

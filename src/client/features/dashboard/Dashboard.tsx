@@ -1,7 +1,9 @@
 import { StatsResponse } from '@/shared/types'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui/card'
 import { Button } from '@/client/components/ui/button'
-import { Play, Music, Disc, Users, Calendar, TrendingUp, TrendingDown, Grid3x3 } from 'lucide-react'
+import { Play, Music, Disc, Users, Calendar, TrendingUp, TrendingDown, Grid3x3, Settings } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
+import { SettingsPanel } from '@/client/components/SettingsPanel'
 
 interface DashboardProps {
   data: StatsResponse
@@ -39,6 +41,20 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
           <Grid3x3 className="w-5 h-5 mr-2" />
           View All Slides
         </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button size="lg" variant="outline">
+              <Settings className="w-5 h-5 mr-2" />
+              Settings
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Configuration Settings</DialogTitle>
+            </DialogHeader>
+            <SettingsPanel />
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Header */}
