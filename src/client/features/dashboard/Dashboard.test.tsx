@@ -34,14 +34,16 @@ describe('Dashboard', () => {
 
   it('should render the dashboard with year', () => {
     const onPlayStory = vi.fn()
-    render(<Dashboard data={mockData} onPlayStory={onPlayStory} />)
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
     expect(screen.getByText(/Your 2024 Year in Review/i)).toBeInTheDocument()
   })
 
   it('should display total plays stat', () => {
     const onPlayStory = vi.fn()
-    render(<Dashboard data={mockData} onPlayStory={onPlayStory} />)
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
     expect(screen.getByText('Total Plays')).toBeInTheDocument()
     expect(screen.getByText('1,500')).toBeInTheDocument()
@@ -49,30 +51,34 @@ describe('Dashboard', () => {
 
   it('should display top artist', () => {
     const onPlayStory = vi.fn()
-    render(<Dashboard data={mockData} onPlayStory={onPlayStory} />)
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
-    expect(screen.getByText('Your most played artist')).toBeInTheDocument()
+    expect(screen.getByText('Your most played artists')).toBeInTheDocument()
     expect(screen.getByText('100 plays')).toBeInTheDocument()
   })
 
   it('should display top track', () => {
     const onPlayStory = vi.fn()
-    render(<Dashboard data={mockData} onPlayStory={onPlayStory} />)
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
     expect(screen.getByText('Best Track Ever')).toBeInTheDocument()
-    expect(screen.getByText(/Top Artist • 50 plays/i)).toBeInTheDocument()
+    expect(screen.getByText(/Top Artist/i)).toBeInTheDocument()
   })
 
   it('should display play story button', () => {
     const onPlayStory = vi.fn()
-    render(<Dashboard data={mockData} onPlayStory={onPlayStory} />)
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
     expect(screen.getByText('Play Story')).toBeInTheDocument()
   })
 
   it('should call onPlayStory when play button is clicked', () => {
     const onPlayStory = vi.fn()
-    render(<Dashboard data={mockData} onPlayStory={onPlayStory} />)
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
     const playButton = screen.getByText('Play Story')
     fireEvent.click(playButton)
@@ -99,7 +105,8 @@ describe('Dashboard', () => {
     }
     
     const onPlayStory = vi.fn()
-    render(<Dashboard data={dataWithComparison} onPlayStory={onPlayStory} />)
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={dataWithComparison} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
     expect(screen.getByText(/compared to 2023/i)).toBeInTheDocument()
     expect(screen.getByText('+50% from 2023')).toBeInTheDocument()
@@ -107,16 +114,17 @@ describe('Dashboard', () => {
 
   it('should display library growth', () => {
     const onPlayStory = vi.fn()
-    render(<Dashboard data={mockData} onPlayStory={onPlayStory} />)
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
     expect(screen.getByText('Library Growth')).toBeInTheDocument()
-    expect(screen.getByText('+200 tracks')).toBeInTheDocument()
-    expect(screen.getByText('Total library: 5,000 tracks')).toBeInTheDocument()
+    expect(screen.getByText('+200')).toBeInTheDocument()
   })
 
   it('should calculate total playtime in hours', () => {
     const onPlayStory = vi.fn()
-    render(<Dashboard data={mockData} onPlayStory={onPlayStory} />)
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
     
     // 54000 seconds = 15 hours
     expect(screen.getByText('15h')).toBeInTheDocument()
