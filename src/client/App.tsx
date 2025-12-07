@@ -4,11 +4,13 @@ import './App.css'
 import { StatsResponse } from '@/shared/types'
 import { UploadContainer } from './features/upload/UploadContainer'
 import { StoryDemo } from './features/story/StoryDemo'
-import { StoryContainer } from './features/story/StoryContainer'
+import { Dashboard } from './features/dashboard'
+import { StoryModeOverlay } from './features/story/StoryModeOverlay'
 
 function App() {
   const [results, setResults] = useState<StatsResponse | null>(null)
   const [showStoryDemo, setShowStoryDemo] = useState<boolean>(false)
+  const [showStoryMode, setShowStoryMode] = useState<boolean>(false)
 
   return (
     <div className="container mx-auto min-h-screen bg-background text-foreground">
@@ -29,7 +31,15 @@ function App() {
       ) : !results ? (
         <UploadContainer onUploadSuccess={setResults} />
       ) : (
-        <StoryContainer data={results} />
+        <>
+          <Dashboard data={results} onPlayStory={() => setShowStoryMode(true)} />
+          {showStoryMode && (
+            <StoryModeOverlay 
+              data={results} 
+              onClose={() => setShowStoryMode(false)} 
+            />
+          )}
+        </>
       )}
     </div>
   )
