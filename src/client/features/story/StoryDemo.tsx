@@ -134,8 +134,8 @@ export function StoryDemo() {
         <TrackSlide tracks={mockTracks} aspectRatio={aspectRatio} />
         <GenreSlide genres={mockGenres} aspectRatio={aspectRatio} />
         <BusiestDaySlide
-          busiestMonth={{ month: 'July', count: 342 }}
-          longestSession={{ date: 'October 14th', durationSeconds: 22320 }}
+          busiestMonth={{ month: '2023-07', count: 342 }}
+          longestSession={{ date: '2023-10-14', durationSeconds: 22320 }}
           aspectRatio={aspectRatio}
         />
         <LibraryGrowthSlide
@@ -200,7 +200,7 @@ export function StoryDemo() {
             },
             totalPlays: 2451,
             setsPlayed: 42,
-            busiestMonth: 'July',
+            busiestMonth: '2023-07',
             djName: 'DJ SKITTLZ',
           }}
           aspectRatio={aspectRatio}

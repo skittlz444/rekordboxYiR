@@ -20,8 +20,10 @@ export interface SummarySlideProps {
 }
 
 export function SummarySlide({ data, aspectRatio = '9:16' }: SummarySlideProps) {
-  // Accept month name directly (e.g., "July") or fallback to N/A
-  const monthName = data.busiestMonth || 'N/A'
+  // Format YYYY-MM to month name (e.g., "2025-07" -> "July")
+  const monthName = data.busiestMonth
+    ? new Date(`${data.busiestMonth}-01`).toLocaleString('default', { month: 'long' })
+    : 'N/A'
 
   return (
     <StorySlide aspectRatio={aspectRatio}>

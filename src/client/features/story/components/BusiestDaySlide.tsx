@@ -24,11 +24,19 @@ export function BusiestDaySlide({
   longestSession,
   aspectRatio = '9:16',
 }: BusiestDaySlideProps) {
-  // Accept month name directly (e.g., "July") or fallback to N/A
-  const monthName = busiestMonth.month || 'N/A'
+  // Format YYYY-MM to month name (e.g., "2025-07" -> "July")
+  const monthName = busiestMonth.month
+    ? new Date(`${busiestMonth.month}-01`).toLocaleString('default', { month: 'long' })
+    : 'N/A'
 
-  // Accept date string directly (e.g., "October 14th") or fallback to N/A
-  const sessionDate = longestSession.date || 'N/A'
+  // Format date to readable format (e.g., "2023-10-14" -> "Oct 14, 2023")
+  const sessionDate = longestSession.date
+    ? new Date(longestSession.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+    : 'N/A'
 
   return (
     <StorySlide aspectRatio={aspectRatio}>
