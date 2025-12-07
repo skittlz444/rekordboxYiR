@@ -120,7 +120,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
     // 2. Biggest Obsession (Highest % increase)
     // Only consider increases above 1% to avoid noise from rounding or small changes
     const MIN_OBSESSION_INCREASE = 1
-    let maxIncrease = MIN_OBSESSION_INCREASE - 1
+    let maxIncrease = 0 // Start at 0; will only set if increase >= MIN_OBSESSION_INCREASE
     let obsession = null
     
     // Check Artists
