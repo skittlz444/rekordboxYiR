@@ -5,7 +5,7 @@ import { Play, Music, Disc, Users, Calendar, TrendingUp, TrendingDown, Grid3x3, 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
 import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { useConfigStore } from '@/client/lib/store'
-import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
+import { applyPlaytimePercentage, formatPlaytime } from '@/client/lib/playtimeUtils'
 
 interface DashboardProps {
   data: StatsResponse
@@ -187,11 +187,15 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
             <div className="text-sm text-muted-foreground mt-1">
               tracks played
             </div>
-            {stats.longestSession.durationSeconds && (
-              <div className="text-sm text-muted-foreground mt-1">
-                {Math.round(applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent) / 3600)}h {Math.round((applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent) % 3600) / 60)}m
-              </div>
-            )}
+            {stats.longestSession.durationSeconds && (() => {
+              const adjustedDuration = applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent);
+              const { hours, minutes } = formatPlaytime(adjustedDuration);
+              return (
+                <div className="text-sm text-muted-foreground mt-1">
+                  {hours}h {minutes}m
+                </div>
+              );
+            })()}
           </CardContent>
         </Card>
       </div>
