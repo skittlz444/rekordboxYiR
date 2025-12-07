@@ -86,6 +86,17 @@ describe('Dashboard', () => {
     expect(onPlayStory).toHaveBeenCalledTimes(1)
   })
 
+  it('should call onViewAllSlides when view all slides button is clicked', () => {
+    const onPlayStory = vi.fn()
+    const onViewAllSlides = vi.fn()
+    render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
+    
+    const viewAllButton = screen.getByText('View All Slides')
+    fireEvent.click(viewAllButton)
+    
+    expect(onViewAllSlides).toHaveBeenCalledTimes(1)
+  })
+
   it('should display comparison data when available', () => {
     const dataWithComparison: StatsResponse = {
       ...mockData,
