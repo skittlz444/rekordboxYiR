@@ -102,7 +102,12 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
                 min="0"
                 max="1"
                 value={averageTrackPlayedPercent}
-                onChange={(e) => setAverageTrackPlayedPercent(parseFloat(e.target.value))}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value);
+                  if (!isNaN(value) && value >= 0 && value <= 1) {
+                    setAverageTrackPlayedPercent(value);
+                  }
+                }}
                 disabled={isUploading}
               />
               <p className="text-xs text-muted-foreground">
