@@ -13,7 +13,7 @@ export function DownloadableSlideWrapper({ children, filename }: DownloadableSli
   const { downloadSlide } = useSlideDownload()
 
   const handleDownload = () => {
-    if (ref.current) {
+    if (ref.current?.firstElementChild) {
       // Target the first child which is the StorySlide component's div
       downloadSlide(ref.current.firstElementChild as HTMLElement, filename)
     }
@@ -24,7 +24,12 @@ export function DownloadableSlideWrapper({ children, filename }: DownloadableSli
       <div ref={ref}>
         {children}
       </div>
-      <Button variant="outline" size="sm" onClick={handleDownload}>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleDownload}
+        aria-label={`Download ${filename}`}
+      >
         <Download className="w-4 h-4 mr-2" />
         Download
       </Button>

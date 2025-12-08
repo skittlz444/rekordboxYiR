@@ -236,6 +236,7 @@ describe('StoryModeOverlay', () => {
     fireEvent.click(downloadButton)
     
     expect(mockDownloadSlide).toHaveBeenCalledTimes(1)
-    expect(mockDownloadSlide).toHaveBeenCalledWith(expect.any(HTMLElement), expect.stringMatching(/^slide-\d+\.png$/))
+    // Should use descriptive filename for opener slide
+    expect(mockDownloadSlide).toHaveBeenCalledWith(expect.any(HTMLElement), 'opener-2024.png')
   })
 })

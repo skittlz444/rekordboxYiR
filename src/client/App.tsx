@@ -7,6 +7,7 @@ import { StoryDemo } from './features/story/StoryDemo'
 import { StoryContainer } from './features/story/StoryContainer'
 import { Dashboard } from './features/dashboard'
 import { StoryModeOverlay } from './features/story/StoryModeOverlay'
+import { Toaster } from './components/ui/toaster'
 
 function App() {
   const [results, setResults] = useState<StatsResponse | null>(null)
@@ -29,8 +30,9 @@ function App() {
   }
 
   return (
-    <div className="container mx-auto min-h-screen bg-background text-foreground">
-      <h1 className="text-4xl font-bold text-center py-8">Rekordbox Year in Review</h1>
+    <>
+      <div className="container mx-auto min-h-screen bg-background text-foreground">
+        <h1 className="text-4xl font-bold text-center py-8">Rekordbox Year in Review</h1>
       
       {/* Story Demo Link - Only visible in upload view */}
       {!results && (
@@ -83,7 +85,9 @@ function App() {
           )}
         </>
       )}
-    </div>
+      </div>
+      <Toaster />
+    </>
   )
 }
 

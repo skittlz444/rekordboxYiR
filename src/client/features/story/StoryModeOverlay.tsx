@@ -42,8 +42,8 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const { downloadSlide } = useSlideDownload()
 
   const handleDownload = () => {
-    if (slideRef.current) {
-      downloadSlide(slideRef.current.firstElementChild as HTMLElement, `slide-${currentSlide + 1}.png`)
+    if (slideRef.current?.firstElementChild) {
+      downloadSlide(slideRef.current.firstElementChild as HTMLElement, slidesData[currentSlide].filename)
     }
   }
 
@@ -58,51 +58,62 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
       : undefined
   }
 
-  // Build slides array
-  const slides = [
-    <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />,
-    <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />,
-    <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />,
-    <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} />,
-    <BusiestDaySlide 
-      key="busiest" 
-      busiestMonth={stats.busiestMonth} 
-      longestSession={adjustedLongestSession} 
-      aspectRatio={aspectRatio} 
-    />,
-    <LibraryGrowthSlide 
-      key="library" 
-      newTracks={stats.libraryGrowth?.added || 0} 
-      totalLibrarySize={stats.libraryGrowth?.total || 0} 
-      aspectRatio={aspectRatio} 
-    />,
+  // Build slides array with corresponding filenames
+  const slidesData: Array<{ element: JSX.Element; filename: string }> = [
+    { element: <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />, filename: `opener-${year}.png` },
+    { element: <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />, filename: `top-artists-${year}.png` },
+    { element: <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />, filename: `top-tracks-${year}.png` },
+    { element: <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} />, filename: `top-genres-${year}.png` },
+    { 
+      element: <BusiestDaySlide 
+        key="busiest" 
+        busiestMonth={stats.busiestMonth} 
+        longestSession={adjustedLongestSession} 
+        aspectRatio={aspectRatio} 
+      />,
+      filename: `busiest-day-${year}.png`
+    },
+    { 
+      element: <LibraryGrowthSlide 
+        key="library" 
+        newTracks={stats.libraryGrowth?.added || 0} 
+        totalLibrarySize={stats.libraryGrowth?.total || 0} 
+        aspectRatio={aspectRatio} 
+      />,
+      filename: `library-growth-${year}.png`
+    },
   ]
 
   // Add comparison slides if available
   if (comparison && comparisonMetrics.length > 0) {
-    slides.push(
-      <YearComparisonSlide 
+    slidesData.push({
+      element: <YearComparisonSlide 
         key="comparison"
         comparisonYear={comparison.year}
         metrics={comparisonMetrics}
         aspectRatio={aspectRatio}
-      />
-    )
+      />,
+      filename: `comparison-${year}.png`
+    })
   }
 
   if (comparison && (trends.biggestObsession || trends.rankClimber || trends.newFavorite)) {
-    slides.push(
-      <YearComparisonTrendsSlide 
+    slidesData.push({
+      element: <YearComparisonTrendsSlide 
         key="trends"
         trends={trends}
         aspectRatio={aspectRatio}
-      />
-    )
+      />,
+      filename: `trends-${year}.png`
+    })
   }
 
-  slides.push(
-    <SummarySlide key="summary" data={summaryData} aspectRatio={aspectRatio} />
-  )
+  slidesData.push({
+    element: <SummarySlide key="summary" data={summaryData} aspectRatio={aspectRatio} />,
+    filename: `summary-${year}.png`
+  })
+
+  const slides = slidesData.map(s => s.element)
 
   const goToNextSlide = () => {
     if (currentSlide < slides.length - 1) {
