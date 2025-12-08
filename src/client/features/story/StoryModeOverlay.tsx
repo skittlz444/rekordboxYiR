@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { X, ChevronLeft, ChevronRight, Settings, Download } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   OpenerSlide,
   ArtistSlide,
@@ -117,8 +118,11 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
   const slides = slidesData.map(s => s.element)
 
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right')
+
   const goToNextSlide = () => {
     if (currentSlide < slides.length - 1) {
+      setSlideDirection('right')
       setCurrentSlide(currentSlide + 1)
     } else {
       onClose()
@@ -127,8 +131,25 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
   const goToPrevSlide = () => {
     if (currentSlide > 0) {
+      setSlideDirection('left')
       setCurrentSlide(currentSlide - 1)
     }
+  }
+
+  // Animation variants for slide transitions
+  const slideVariants = {
+    enter: (direction: 'left' | 'right') => ({
+      x: direction === 'right' ? '100%' : '-100%',
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: 'left' | 'right') => ({
+      x: direction === 'right' ? '-100%' : '100%',
+      opacity: 0,
+    }),
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -286,9 +307,23 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
       {/* Main Content Area */}
       <div className="flex-1 flex items-center justify-center overflow-hidden p-4">
-        <div ref={slideRef}>
-          {slides[currentSlide]}
-        </div>
+        <AnimatePresence mode="wait" custom={slideDirection}>
+          <motion.div
+            key={currentSlide}
+            ref={slideRef}
+            custom={slideDirection}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: 'spring', stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+          >
+            {slides[currentSlide]}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Navigation Controls */}
