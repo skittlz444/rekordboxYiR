@@ -10,6 +10,7 @@ import {
   YearComparisonTrendsSlide,
   SummarySlide,
   AspectRatio,
+  DownloadableSlideWrapper,
 } from './components'
 import { StatsResponse } from '@/shared/types'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
@@ -148,45 +149,63 @@ export function StoryContainer({ data }: StoryContainerProps) {
       </div>
 
       <div className="flex flex-wrap justify-center gap-8 pb-20">
-        <OpenerSlide year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />
+        <DownloadableSlideWrapper filename={`opener-${year}.png`}>
+          <OpenerSlide year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />
+        </DownloadableSlideWrapper>
         
-        <ArtistSlide artists={stats.topArtists} aspectRatio={aspectRatio} />
+        <DownloadableSlideWrapper filename={`top-artists-${year}.png`}>
+          <ArtistSlide artists={stats.topArtists} aspectRatio={aspectRatio} />
+        </DownloadableSlideWrapper>
         
-        <TrackSlide tracks={stats.topTracks} aspectRatio={aspectRatio} />
+        <DownloadableSlideWrapper filename={`top-tracks-${year}.png`}>
+          <TrackSlide tracks={stats.topTracks} aspectRatio={aspectRatio} />
+        </DownloadableSlideWrapper>
         
-        <GenreSlide genres={stats.topGenres} aspectRatio={aspectRatio} />
+        <DownloadableSlideWrapper filename={`top-genres-${year}.png`}>
+          <GenreSlide genres={stats.topGenres} aspectRatio={aspectRatio} />
+        </DownloadableSlideWrapper>
         
-        <BusiestDaySlide 
-          busiestMonth={stats.busiestMonth} 
-          longestSession={adjustedLongestSession} 
-          aspectRatio={aspectRatio} 
-        />
+        <DownloadableSlideWrapper filename={`busiest-day-${year}.png`}>
+          <BusiestDaySlide 
+            busiestMonth={stats.busiestMonth} 
+            longestSession={adjustedLongestSession} 
+            aspectRatio={aspectRatio} 
+          />
+        </DownloadableSlideWrapper>
         
-        <LibraryGrowthSlide 
-          newTracks={stats.libraryGrowth?.added || 0} 
-          totalLibrarySize={stats.libraryGrowth?.total || 0} 
-          aspectRatio={aspectRatio} 
-        />
+        <DownloadableSlideWrapper filename={`library-growth-${year}.png`}>
+          <LibraryGrowthSlide 
+            newTracks={stats.libraryGrowth?.added || 0} 
+            totalLibrarySize={stats.libraryGrowth?.total || 0} 
+            aspectRatio={aspectRatio} 
+          />
+        </DownloadableSlideWrapper>
 
         {comparison && (
           <>
             {comparisonMetrics.length > 0 && (
-              <YearComparisonSlide 
-                comparisonYear={comparison.year}
-                metrics={comparisonMetrics}
-                aspectRatio={aspectRatio}
-              />
+              <DownloadableSlideWrapper filename={`comparison-${year}.png`}>
+                <YearComparisonSlide 
+                  comparisonYear={comparison.year}
+                  metrics={comparisonMetrics}
+                  aspectRatio={aspectRatio}
+                />
+              </DownloadableSlideWrapper>
             )}
             {(trends.biggestObsession || trends.rankClimber || trends.newFavorite) && (
-              <YearComparisonTrendsSlide 
-                trends={trends}
-                aspectRatio={aspectRatio}
-              />
+              <DownloadableSlideWrapper filename={`trends-${year}.png`}>
+                <YearComparisonTrendsSlide 
+                  trends={trends}
+                  aspectRatio={aspectRatio}
+                />
+              </DownloadableSlideWrapper>
             )}
           </>
         )}
 
-        <SummarySlide data={summaryData} aspectRatio={aspectRatio} />
+        <DownloadableSlideWrapper filename={`summary-${year}.png`}>
+          <SummarySlide data={summaryData} aspectRatio={aspectRatio} />
+        </DownloadableSlideWrapper>
       </div>
     </div>
   )
