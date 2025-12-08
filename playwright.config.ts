@@ -16,7 +16,7 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
-    ['junit', { outputFile: 'test-results/e2e-junit.xml' }],
+    ['junit', { outputFile: 'test-results/playwright/junit.xml' }],
     ['list'],
     // GitHub Actions reporter for annotations
     process.env.CI ? ['github'] : ['list']

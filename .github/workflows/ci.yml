@@ -67,23 +67,23 @@ jobs:
       - name: Verify test result files
         if: always() && matrix.node-version == 22
         run: |
-          echo "=== Checking test-results directory ==="
-          ls -lah test-results/ || echo "Directory not found"
+          echo "=== Checking test-results directory structure ==="
+          find test-results -type f -name "*.xml" 2>/dev/null || echo "No XML files found"
           echo ""
-          echo "=== Files matching glob pattern ==="
-          find test-results -name "*.xml" -type f 2>/dev/null || echo "No XML files found"
-          echo ""
+          echo "=== Unit test results ==="
           if [ -f test-results/junit.xml ]; then
             echo "✓ junit.xml found ($(wc -l < test-results/junit.xml) lines)"
             echo "  Test cases: $(grep -c '<testcase' test-results/junit.xml || echo '0')"
           else
             echo "✗ junit.xml NOT FOUND"
           fi
-          if [ -f test-results/e2e-junit.xml ]; then
-            echo "✓ e2e-junit.xml found ($(wc -l < test-results/e2e-junit.xml) lines)"
-            echo "  Test cases: $(grep -c '<testcase' test-results/e2e-junit.xml || echo '0')"
+          echo ""
+          echo "=== E2E test results ==="
+          if [ -f test-results/playwright/junit.xml ]; then
+            echo "✓ playwright/junit.xml found ($(wc -l < test-results/playwright/junit.xml) lines)"
+            echo "  Test cases: $(grep -c '<testcase' test-results/playwright/junit.xml || echo '0')"
           else
-            echo "✗ e2e-junit.xml NOT FOUND"
+            echo "✗ playwright/junit.xml NOT FOUND"
           fi
         
       - name: Upload Playwright report
@@ -100,7 +100,7 @@ jobs:
         with:
           files: |
             test-results/junit.xml
-            test-results/e2e-junit.xml
+            test-results/playwright/junit.xml
           check_name: Test Results
         
       - name: Archive test results
