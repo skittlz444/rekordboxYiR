@@ -8,3 +8,5 @@ public/
 coverage/
 test-results/
 *.log
+playwright-report/
+playwright/.cache/
