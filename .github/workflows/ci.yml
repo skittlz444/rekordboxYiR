@@ -45,6 +45,15 @@ jobs:
         path: playwright-report/
         retention-days: 30
 
+    - name: Publish Playwright Test Results
+      if: always()
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      with:
+        files: |
+          test-results/e2e-junit.xml
+        check_name: E2E Test Results
+        comment_title: E2E Test Results
+
     - name: Upload coverage reports
       if: always()
       uses: actions/upload-artifact@v4
@@ -65,5 +74,6 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
         files: |
-          test-results/**/*.xml
-        check_name: Test Results
+          test-results/junit.xml
+        check_name: Unit Test Results
+        comment_title: Unit Test Results

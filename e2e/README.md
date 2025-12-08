@@ -103,6 +103,11 @@ Test configuration is in `playwright.config.ts`. Key settings:
 - **Retries**: 2 retries on CI, 0 locally
 - **Browsers**: Chromium (can be expanded to Firefox, WebKit)
 - **Workers**: 1 on CI (sequential), unlimited locally (parallel)
+- **Reporters**: 
+  - HTML report (saved to `playwright-report/`)
+  - JUnit XML (for CI test result comments)
+  - GitHub Actions reporter (for inline annotations on CI)
+  - List reporter (console output)
 
 ## Helpers and Fixtures
 
@@ -158,8 +163,15 @@ E2E tests run automatically in GitHub Actions on every PR. The workflow:
 1. Installs dependencies
 2. Installs Playwright browsers
 3. Runs E2E tests
-4. Uploads test results and videos on failure
-5. Publishes test reports as artifacts
+4. **Publishes E2E test results as PR comments** (pass/fail summary, test counts)
+5. Uploads Playwright HTML report as artifact
+6. Uploads screenshots and videos on failure
+
+Test results are posted to PR comments using the same format as unit tests, showing:
+- Total tests run
+- Pass/fail counts
+- Duration
+- Failed test details (if any)
 
 See `.github/workflows/ci.yml` for the complete configuration.
 

@@ -17,8 +17,10 @@ export default defineConfig({
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
     ['junit', { outputFile: 'test-results/e2e-junit.xml' }],
-    ['list']
-  ],
+    ['list'],
+    // GitHub Actions reporter for annotations
+    process.env.CI ? ['github'] : ['list']
+  ].filter(Boolean),
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
