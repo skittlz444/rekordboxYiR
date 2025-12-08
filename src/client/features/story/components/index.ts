@@ -27,3 +27,4 @@ export type { YearComparisonTrendsSlideProps, TrendData } from './YearComparison
 
 export { SummarySlide } from './SummarySlide'
 export type { SummarySlideProps, SummaryData } from './SummarySlide'
+export { DownloadableSlideWrapper } from './DownloadableSlideWrapper'

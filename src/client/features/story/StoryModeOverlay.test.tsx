@@ -3,6 +3,14 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { StoryModeOverlay } from './StoryModeOverlay'
 import { StatsResponse } from '@/shared/types'
 
+// Mock the download hook
+const mockDownloadSlide = vi.fn()
+vi.mock('./hooks/useSlideDownload', () => ({
+  useSlideDownload: () => ({
+    downloadSlide: mockDownloadSlide,
+  }),
+}))
+
 describe('StoryModeOverlay', () => {
   const mockData: StatsResponse = {
     year: '2024',
@@ -218,5 +226,16 @@ describe('StoryModeOverlay', () => {
     const dialog = screen.getByRole('dialog')
     expect(dialog).toHaveAttribute('aria-label', 'Story Mode')
     expect(dialog).toHaveAttribute('aria-modal', 'true')
+  })
+
+  it('should call downloadSlide when download button is clicked', () => {
+    const onClose = vi.fn()
+    render(<StoryModeOverlay data={mockData} onClose={onClose} />)
+    
+    const downloadButton = screen.getByLabelText('Download slide')
+    fireEvent.click(downloadButton)
+    
+    expect(mockDownloadSlide).toHaveBeenCalledTimes(1)
+    expect(mockDownloadSlide).toHaveBeenCalledWith(expect.any(HTMLElement), expect.stringMatching(/^slide-\d+\.png$/))
   })
 })

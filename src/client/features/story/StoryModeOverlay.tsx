@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { X, ChevronLeft, ChevronRight, Settings } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { X, ChevronLeft, ChevronRight, Settings, Download } from 'lucide-react'
 import {
   OpenerSlide,
   ArtistSlide,
@@ -19,6 +19,7 @@ import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
 import { useConfigStore } from '@/client/lib/store'
 import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
+import { useSlideDownload } from './hooks/useSlideDownload'
 
 interface StoryModeOverlayProps {
   data: StatsResponse
@@ -36,6 +37,15 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const djName = useConfigStore((state) => state.djName)
   const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
   const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
+
+  const slideRef = useRef<HTMLDivElement>(null)
+  const { downloadSlide } = useSlideDownload()
+
+  const handleDownload = () => {
+    if (slideRef.current) {
+      downloadSlide(slideRef.current.firstElementChild as HTMLElement, `slide-${currentSlide + 1}.png`)
+    }
+  }
 
   // Use shared utility to transform data
   const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends, averageTrackPlayedPercent)
@@ -220,6 +230,16 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
         </div>
 
         <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleDownload}
+            className="text-white hover:bg-white/20"
+            aria-label="Download slide"
+          >
+            <Download className="w-6 h-6" />
+          </Button>
+
           <Dialog>
             <DialogTrigger asChild>
               <Button
@@ -253,7 +273,9 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
       {/* Main Content Area */}
       <div className="flex-1 flex items-center justify-center overflow-hidden p-4">
-        {slides[currentSlide]}
+        <div ref={slideRef}>
+          {slides[currentSlide]}
+        </div>
       </div>
 
       {/* Navigation Controls */}
