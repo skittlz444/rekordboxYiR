@@ -32,7 +32,7 @@ export default defineConfig({
     setupFiles: './src/client/test/setup.ts',
     reporters: [
       'default',
-      ['junit', { outputFile: './test-results/junit.xml' }]
+      ['junit', { outputFile: 'test-results/junit.xml' }]
     ],
     coverage: {
       provider: 'v8',

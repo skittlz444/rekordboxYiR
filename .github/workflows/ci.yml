@@ -47,6 +47,28 @@ jobs:
         run: npm run test:e2e
         continue-on-error: true
         
+      - name: Verify test result files
+        if: always() && matrix.node-version == 22
+        run: |
+          echo "=== Checking test-results directory ==="
+          ls -lah test-results/ || echo "Directory not found"
+          echo ""
+          echo "=== Files matching glob pattern ==="
+          find test-results -name "*.xml" -type f 2>/dev/null || echo "No XML files found"
+          echo ""
+          if [ -f test-results/junit.xml ]; then
+            echo "✓ junit.xml found ($(wc -l < test-results/junit.xml) lines)"
+            echo "  Test cases: $(grep -c '<testcase' test-results/junit.xml || echo '0')"
+          else
+            echo "✗ junit.xml NOT FOUND"
+          fi
+          if [ -f test-results/e2e-junit.xml ]; then
+            echo "✓ e2e-junit.xml found ($(wc -l < test-results/e2e-junit.xml) lines)"
+            echo "  Test cases: $(grep -c '<testcase' test-results/e2e-junit.xml || echo '0')"
+          else
+            echo "✗ e2e-junit.xml NOT FOUND"
+          fi
+        
       - name: Upload Playwright report
         if: always() && matrix.node-version == 22
         uses: actions/upload-artifact@v4
@@ -59,7 +81,9 @@ jobs:
         if: always() && matrix.node-version == 22
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: test-results/**/*.xml
+          files: |
+            test-results/junit.xml
+            test-results/e2e-junit.xml
           check_name: Test Results
         
       - name: Archive test results
