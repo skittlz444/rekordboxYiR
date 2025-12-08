@@ -75,10 +75,11 @@
     - [x] **Update:** Add state for `averageTrackPlayedPercent` (number, default 0.75).
     - [x] **Update:** Implement UI controls for all configuration options (Year, Filters, Playtime Estimation. DJ Name, etc) on the initial upload page, but also in the dashboard, story slides and view all slides pages.
     - [x] Connect settings UI to the store.
-- [ ] **Task 3.4: Image Generation**
-    - [ ] Implement `html-to-image` to capture slides as PNGs.
+- [x] **Task 3.4: Image Generation (Sharing)**
+    - [x] Implement `html-to-image` to capture slides as PNGs.
         - *Note: slides should be exported at 1080p wide for optimal instagram upload quality, components in the slide should be in exactly the same layout in their on screen previews and their downloads*
-    - [ ] Add "Download" button next to each slide in both the slideshow and the view all slides page.
+        - *Note: slides should be exported at their chosen aspect ratio with their chosen themes and other settings preserved*
+    - [x] Add "Download" button next to each slide in both the slideshow and the view all slides page.
 
 ## Phase 4: Polish
 - [ ] **Task 4.1: Refinement & Animations**

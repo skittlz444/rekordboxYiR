@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { X, ChevronLeft, ChevronRight, Settings } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { X, ChevronLeft, ChevronRight, Settings, Download } from 'lucide-react'
 import {
   OpenerSlide,
   ArtistSlide,
@@ -19,11 +19,14 @@ import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
 import { useConfigStore } from '@/client/lib/store'
 import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
+import { useSlideDownload } from './hooks/useSlideDownload'
 
 interface StoryModeOverlayProps {
   data: StatsResponse
   onClose: () => void
 }
+
+type SlideData = { element: JSX.Element; filename: string }
 
 export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -37,6 +40,15 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
   const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
 
+  const slideRef = useRef<HTMLDivElement>(null)
+  const { downloadSlide } = useSlideDownload()
+
+  const handleDownload = () => {
+    if (slideRef.current?.firstElementChild) {
+      downloadSlide(slideRef.current.firstElementChild as HTMLElement, slidesData[currentSlide].filename)
+    }
+  }
+
   // Use shared utility to transform data
   const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends, averageTrackPlayedPercent)
   
@@ -48,51 +60,62 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
       : undefined
   }
 
-  // Build slides array
-  const slides = [
-    <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />,
-    <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />,
-    <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />,
-    <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} />,
-    <BusiestDaySlide 
-      key="busiest" 
-      busiestMonth={stats.busiestMonth} 
-      longestSession={adjustedLongestSession} 
-      aspectRatio={aspectRatio} 
-    />,
-    <LibraryGrowthSlide 
-      key="library" 
-      newTracks={stats.libraryGrowth?.added || 0} 
-      totalLibrarySize={stats.libraryGrowth?.total || 0} 
-      aspectRatio={aspectRatio} 
-    />,
+  // Build slides array with corresponding filenames
+  const slidesData: SlideData[] = [
+    { element: <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />, filename: `opener-${year}.png` },
+    { element: <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />, filename: `top-artists-${year}.png` },
+    { element: <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />, filename: `top-tracks-${year}.png` },
+    { element: <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} />, filename: `top-genres-${year}.png` },
+    { 
+      element: <BusiestDaySlide 
+        key="busiest" 
+        busiestMonth={stats.busiestMonth} 
+        longestSession={adjustedLongestSession} 
+        aspectRatio={aspectRatio} 
+      />,
+      filename: `busiest-day-${year}.png`
+    },
+    { 
+      element: <LibraryGrowthSlide 
+        key="library" 
+        newTracks={stats.libraryGrowth?.added || 0} 
+        totalLibrarySize={stats.libraryGrowth?.total || 0} 
+        aspectRatio={aspectRatio} 
+      />,
+      filename: `library-growth-${year}.png`
+    },
   ]
 
   // Add comparison slides if available
   if (comparison && comparisonMetrics.length > 0) {
-    slides.push(
-      <YearComparisonSlide 
+    slidesData.push({
+      element: <YearComparisonSlide 
         key="comparison"
         comparisonYear={comparison.year}
         metrics={comparisonMetrics}
         aspectRatio={aspectRatio}
-      />
-    )
+      />,
+      filename: `comparison-${year}.png`
+    })
   }
 
   if (comparison && (trends.biggestObsession || trends.rankClimber || trends.newFavorite)) {
-    slides.push(
-      <YearComparisonTrendsSlide 
+    slidesData.push({
+      element: <YearComparisonTrendsSlide 
         key="trends"
         trends={trends}
         aspectRatio={aspectRatio}
-      />
-    )
+      />,
+      filename: `trends-${year}.png`
+    })
   }
 
-  slides.push(
-    <SummarySlide key="summary" data={summaryData} aspectRatio={aspectRatio} />
-  )
+  slidesData.push({
+    element: <SummarySlide key="summary" data={summaryData} aspectRatio={aspectRatio} />,
+    filename: `summary-${year}.png`
+  })
+
+  const slides = slidesData.map(s => s.element)
 
   const goToNextSlide = () => {
     if (currentSlide < slides.length - 1) {
@@ -220,6 +243,16 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
         </div>
 
         <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleDownload}
+            className="text-white hover:bg-white/20"
+            aria-label="Download slide"
+          >
+            <Download className="w-6 h-6" />
+          </Button>
+
           <Dialog>
             <DialogTrigger asChild>
               <Button
@@ -253,7 +286,9 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
       {/* Main Content Area */}
       <div className="flex-1 flex items-center justify-center overflow-hidden p-4">
-        {slides[currentSlide]}
+        <div ref={slideRef}>
+          {slides[currentSlide]}
+        </div>
       </div>
 
       {/* Navigation Controls */}
