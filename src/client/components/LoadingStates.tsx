@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader } from '@/client/components/ui/card'
+import { Spinner } from './ui/spinner'
 
 export function DashboardSkeleton() {
   return (
@@ -74,15 +75,7 @@ export function UploadLoadingOverlay() {
         className="bg-white rounded-lg p-8 shadow-2xl max-w-md mx-4"
       >
         <div className="flex flex-col items-center gap-6">
-          <motion.div
-            className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-          />
+          <Spinner size="lg" className="border-purple-200 border-t-purple-600" />
           <div className="text-center">
             <h3 className="text-xl font-bold mb-2">Processing Your Database</h3>
             <p className="text-gray-600">

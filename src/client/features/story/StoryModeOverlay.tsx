@@ -137,9 +137,10 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   }
 
   // Animation variants for slide transitions
+  // Using viewport units ensures consistent animation distance regardless of container size
   const slideVariants = {
     enter: (direction: 'left' | 'right') => ({
-      x: direction === 'right' ? '100%' : '-100%',
+      x: direction === 'right' ? '100vw' : '-100vw',
       opacity: 0,
     }),
     center: {
@@ -147,7 +148,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
       opacity: 1,
     },
     exit: (direction: 'left' | 'right') => ({
-      x: direction === 'right' ? '-100%' : '100%',
+      x: direction === 'right' ? '-100vw' : '100vw',
       opacity: 0,
     }),
   }
