@@ -10,103 +10,86 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
-
+    
+    strategy:
+      matrix:
+        node-version: [22]
+    
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run Linting
+        run: npm run lint
+        
+      - name: Run Unit tests with coverage
+        id: unit-tests
+        run: npm run test:coverage
+        continue-on-error: true
+        
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        
+      - name: Run E2E tests
+        id: e2e-tests
+        run: npm run test:e2e
+        continue-on-error: true
+        
+      - name: Upload Playwright report
+        if: always() && matrix.node-version == 22
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+        
+      - name: Publish Test Results
+        if: always() && matrix.node-version == 22
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: test-results/**/*.xml
+          check_name: Test Results
+        
+      - name: Archive test results
+        if: always() && matrix.node-version == 22
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 30
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22.x'
-        cache: 'npm'
+      - name: Upload coverage reports
+        if: always() && matrix.node-version == 22
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: coverage/
+          retention-days: 30
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Report Coverage
+        if: always() && matrix.node-version == 22
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          json-summary-path: ./coverage/coverage-summary.json
+          json-final-path: ./coverage/coverage-final.json
 
-    - name: Run Linting
-      run: npm run lint
+      - name: Check for test failures
+        if: always() && matrix.node-version == 22
+        run: |
+          if [ "${{ steps.unit-tests.outcome }}" == "failure" ] || [ "${{ steps.e2e-tests.outcome }}" == "failure" ]; then
+            echo "One or more test suites failed"
+            exit 1
+          fi
 
-    - name: Create test results directory
-      run: mkdir -p test-results
-
-    - name: Run Tests with Coverage
-      run: npm run test:coverage
-
-    - name: List test results after unit tests
-      if: always()
-      run: |
-        echo "Contents of test-results directory after unit tests:"
-        ls -la test-results/ || echo "Directory not found"
-        if [ -f test-results/junit.xml ]; then
-          echo "junit.xml exists, size:"
-          ls -lh test-results/junit.xml
-          echo "First 50 lines of junit.xml:"
-          head -50 test-results/junit.xml
-        else
-          echo "junit.xml NOT FOUND"
-        fi
-
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps chromium
-
-    - name: Run E2E Tests
-      run: npm run test:e2e
-
-    - name: List all test results before publishing
-      if: always()
-      run: |
-        echo "Contents of test-results directory before publishing:"
-        ls -la test-results/ || echo "Directory not found"
-        echo ""
-        echo "Checking for junit.xml:"
-        if [ -f test-results/junit.xml ]; then
-          ls -lh test-results/junit.xml
-          echo "Test count in junit.xml:"
-          grep -o '<testcase' test-results/junit.xml | wc -l
-        else
-          echo "junit.xml NOT FOUND"
-        fi
-        echo ""
-        echo "Checking for e2e-junit.xml:"
-        if [ -f test-results/e2e-junit.xml ]; then
-          ls -lh test-results/e2e-junit.xml
-          echo "Test count in e2e-junit.xml:"
-          grep -o '<testcase' test-results/e2e-junit.xml | wc -l
-        else
-          echo "e2e-junit.xml NOT FOUND"
-        fi
-        echo ""
-        echo "Glob pattern test-results/**/*.xml matches:"
-        find test-results -name "*.xml" -type f
-
-    - name: Upload Playwright Report
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
-
-    - name: Upload coverage reports
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-reports
-        path: coverage/
-        retention-days: 30
-
-    - name: Report Coverage
-      if: always()
-      uses: davelosert/vitest-coverage-report-action@v2
-      with:
-        json-summary-path: ./coverage/coverage-summary.json
-        json-final-path: ./coverage/coverage-final.json
-
-    - name: Publish All Test Results
-      if: always()
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      with:
-        files: test-results/**/*.xml
-        check_name: Test Results
