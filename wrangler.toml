@@ -4,7 +4,7 @@ main = "src/worker/index.ts"
 preview_urls = true
 
 [[routes]]
-pattern = "rbyir.haydencarson.com"
+pattern = "ryib.haydencarson.com"
 custom_domain = true
 
 [vars]
