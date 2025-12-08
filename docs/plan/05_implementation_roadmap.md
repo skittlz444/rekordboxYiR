@@ -82,9 +82,9 @@
     - [x] Add "Download" button next to each slide in both the slideshow and the view all slides page.
 
 ## Phase 4: Polish
-- [ ] **Task 4.1: Refinement & Animations**
-    - [ ] Add Framer Motion transitions between slides.
-    - [ ] Add loading states and error messages.
+- [x] **Task 4.1: Refinement & Animations**
+    - [x] Add Framer Motion transitions between slides.
+    - [x] Add loading states and error messages.
 - [ ] **Task 4.2: E2E Testing**
     - [ ] Write Playwright tests for the full user flow.
 

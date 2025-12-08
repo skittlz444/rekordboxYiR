@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { useConfigStore } from '@/client/lib/store'
 import { applyPlaytimePercentage, formatPlaytime } from '@/client/lib/playtimeUtils'
+import { motion } from 'framer-motion'
 
 interface DashboardProps {
   data: StatsResponse
@@ -28,9 +29,19 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
     : 0
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="max-w-7xl mx-auto px-4 py-8"
+    >
       {/* Action Buttons */}
-      <div className="flex justify-center gap-4 mb-8">
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.4 }}
+        className="flex justify-center gap-4 mb-8"
+      >
         <Button
           size="lg"
           onClick={onPlayStory}
@@ -61,19 +72,29 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
             <SettingsPanel />
           </DialogContent>
         </Dialog>
-      </div>
+      </motion.div>
 
       {/* Header */}
-      <div className="text-center mb-8">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.4 }}
+        className="text-center mb-8"
+      >
         <h1 className="text-4xl font-bold mb-2">Your {year} Year in Review</h1>
         <p className="text-muted-foreground">
           Detailed breakdown of your DJ stats for {year}
           {comparison && ` (compared to ${comparison.year})`}
         </p>
-      </div>
+      </motion.div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+      >
         {/* Total Plays */}
         <Card>
           <CardHeader>
@@ -198,10 +219,15 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
             })()}
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
 
       {/* Top 10 Artists */}
-      <Card className="mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+      >
+        <Card className="mb-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="w-6 h-6" />
@@ -233,9 +259,15 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
       {/* Top 10 Tracks */}
-      <Card className="mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+      >
+        <Card className="mb-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Music className="w-6 h-6" />
@@ -264,9 +296,15 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
       {/* Top 10 Genres */}
-      <Card className="mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.5 }}
+      >
+        <Card className="mb-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Disc className="w-6 h-6" />
@@ -298,9 +336,15 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
       {/* Session Stats */}
-      <Card className="mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
+      >
+        <Card className="mb-8">
         <CardHeader>
           <CardTitle>Session Statistics</CardTitle>
           <CardDescription>Breakdown of your DJ sessions in {year}</CardDescription>
@@ -329,10 +373,16 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
       {/* Library Growth */}
       {stats.libraryGrowth && (
-        <Card className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+        >
+          <Card className="mb-8">
           <CardHeader>
             <CardTitle>Library Growth</CardTitle>
             <CardDescription>Your collection in {year}</CardDescription>
@@ -356,7 +406,8 @@ export function Dashboard({ data, onPlayStory, onViewAllSlides }: DashboardProps
             </div>
           </CardContent>
         </Card>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   )
 }

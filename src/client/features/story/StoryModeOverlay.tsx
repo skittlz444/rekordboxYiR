@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { X, ChevronLeft, ChevronRight, Settings, Download } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   OpenerSlide,
   ArtistSlide,
@@ -129,6 +130,22 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
     if (currentSlide > 0) {
       setCurrentSlide(currentSlide - 1)
     }
+  }
+
+  // Animation variants for fade transitions
+  const fadeVariants = {
+    enter: {
+      opacity: 0,
+      scale: 0.95,
+    },
+    center: {
+      opacity: 1,
+      scale: 1,
+    },
+    exit: {
+      opacity: 0,
+      scale: 1.05,
+    },
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -286,9 +303,22 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
       {/* Main Content Area */}
       <div className="flex-1 flex items-center justify-center overflow-hidden p-4">
-        <div ref={slideRef}>
-          {slides[currentSlide]}
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            ref={slideRef}
+            variants={fadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut"
+            }}
+          >
+            {slides[currentSlide]}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Navigation Controls */}
