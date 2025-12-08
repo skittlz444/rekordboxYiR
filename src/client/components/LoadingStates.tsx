@@ -8,14 +8,14 @@ export function DashboardSkeleton() {
       {/* Action Buttons Skeleton */}
       <div className="flex justify-center gap-4 mb-8">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-10 w-32 bg-gray-200 rounded-md animate-pulse" />
+          <div key={i} className="h-10 w-32 bg-muted rounded-md animate-pulse" />
         ))}
       </div>
 
       {/* Header Skeleton */}
       <div className="text-center mb-8 space-y-2">
-        <div className="h-10 w-96 bg-gray-200 rounded-md mx-auto animate-pulse" />
-        <div className="h-6 w-64 bg-gray-200 rounded-md mx-auto animate-pulse" />
+        <div className="h-10 w-96 bg-muted rounded-md mx-auto animate-pulse" />
+        <div className="h-6 w-64 bg-muted rounded-md mx-auto animate-pulse" />
       </div>
 
       {/* Stats Grid Skeleton */}
@@ -23,12 +23,12 @@ export function DashboardSkeleton() {
         {[1, 2, 3, 4].map((i) => (
           <Card key={i}>
             <CardHeader>
-              <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
-              <div className="h-4 w-24 bg-gray-200 rounded animate-pulse mt-2" />
+              <div className="h-6 w-32 bg-muted rounded animate-pulse" />
+              <div className="h-4 w-24 bg-muted rounded animate-pulse mt-2" />
             </CardHeader>
             <CardContent>
-              <div className="h-8 w-20 bg-gray-200 rounded animate-pulse" />
-              <div className="h-4 w-32 bg-gray-200 rounded animate-pulse mt-2" />
+              <div className="h-8 w-20 bg-muted rounded animate-pulse" />
+              <div className="h-4 w-32 bg-muted rounded animate-pulse mt-2" />
             </CardContent>
           </Card>
         ))}
@@ -38,18 +38,18 @@ export function DashboardSkeleton() {
       {[1, 2, 3].map((cardIndex) => (
         <Card key={cardIndex} className="mb-8">
           <CardHeader>
-            <div className="h-6 w-40 bg-gray-200 rounded animate-pulse" />
-            <div className="h-4 w-64 bg-gray-200 rounded animate-pulse mt-2" />
+            <div className="h-6 w-40 bg-muted rounded animate-pulse" />
+            <div className="h-4 w-64 bg-muted rounded animate-pulse mt-2" />
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
-                    <div className="h-4 w-48 bg-gray-200 rounded animate-pulse" />
+                    <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
+                    <div className="h-4 w-48 bg-muted rounded animate-pulse" />
                   </div>
-                  <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-4 w-20 bg-muted rounded animate-pulse" />
                 </div>
               ))}
             </div>
