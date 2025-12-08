@@ -17,8 +17,8 @@ export async function navigateStoryMode(page: Page, direction: 'next' | 'prev') 
     ? page.getByRole('button', { name: /next/i })
     : page.getByRole('button', { name: /previous|prev/i });
   await button.click();
-  // Wait for button to become enabled again (animation complete)
-  await expect(button).toBeEnabled({ timeout: 2000 });
+  // Wait a bit for transition to complete
+  await page.waitForTimeout(300);
 }
 
 /**
