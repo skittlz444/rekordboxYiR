@@ -42,28 +42,6 @@ jobs:
         run: npm run test:e2e
         continue-on-error: true
         
-      - name: Verify test result files
-        if: always() && matrix.node-version == 22
-        run: |
-          echo "=== Checking test-results directory structure ==="
-          find test-results -type f -name "*.xml" 2>/dev/null || echo "No XML files found"
-          echo ""
-          echo "=== Unit test results ==="
-          if [ -f test-results/unit/junit.xml ]; then
-            echo "✓ junit.xml found ($(wc -l < test-results/unit/junit.xml) lines)"
-            echo "  Test cases: $(grep -c '<testcase' test-results/unit/junit.xml || echo '0')"
-          else
-            echo "✗ junit.xml NOT FOUND"
-          fi
-          echo ""
-          echo "=== E2E test results ==="
-          if [ -f test-results/playwright/junit.xml ]; then
-            echo "✓ playwright/junit.xml found ($(wc -l < test-results/playwright/junit.xml) lines)"
-            echo "  Test cases: $(grep -c '<testcase' test-results/playwright/junit.xml || echo '0')"
-          else
-            echo "✗ playwright/junit.xml NOT FOUND"
-          fi
-        
       - name: Upload Playwright report
         if: always() && matrix.node-version == 22
         uses: actions/upload-artifact@v4
@@ -76,20 +54,6 @@ jobs:
         id: unit-tests
         run: npm run test:coverage
         continue-on-error: true
-        
-      - name: Check unit test results file
-        if: always() && matrix.node-version == 22
-        run: |
-          echo "=== After unit tests ==="
-          ls -lah test-results/ 2>/dev/null || echo "test-results directory does not exist"
-          if [ -f test-results/unit/junit.xml ]; then
-            echo "✓ junit.xml created"
-            head -20 test-results/unit/junit.xml
-          else
-            echo "✗ junit.xml NOT created"
-            echo "Checking if vitest wrote the file elsewhere:"
-            find . -name "junit.xml" -type f 2>/dev/null || echo "No junit.xml found anywhere"
-          fi
         
       - name: Publish Test Results
         if: always() && matrix.node-version == 22
