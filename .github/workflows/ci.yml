@@ -34,10 +34,27 @@ jobs:
       - name: Run Linting
         run: npm run lint
         
+      - name: Create test results directory
+        run: mkdir -p test-results
+        
       - name: Run Unit tests with coverage
         id: unit-tests
         run: npm run test:coverage
         continue-on-error: true
+        
+      - name: Check unit test results file
+        if: always() && matrix.node-version == 22
+        run: |
+          echo "=== After unit tests ==="
+          ls -lah test-results/ 2>/dev/null || echo "test-results directory does not exist"
+          if [ -f test-results/junit.xml ]; then
+            echo "✓ junit.xml created"
+            head -20 test-results/junit.xml
+          else
+            echo "✗ junit.xml NOT created"
+            echo "Checking if vitest wrote the file elsewhere:"
+            find . -name "junit.xml" -type f 2>/dev/null || echo "No junit.xml found anywhere"
+          fi
         
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
