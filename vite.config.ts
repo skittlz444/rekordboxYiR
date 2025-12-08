@@ -30,8 +30,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/client/test/setup.ts',
-    reporters: ['default', 'junit'],
-    outputFile: 'test-results/junit.xml',
+    reporters: [
+      'default',
+      ['junit', { outputFile: 'test-results/junit.xml' }]
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'json-summary', 'html'],
