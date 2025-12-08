@@ -15,7 +15,7 @@ const sizeClasses = {
 export function Spinner({ className, size = 'md' }: SpinnerProps) {
   return (
     <motion.div
-      className={cn('border-2 border-gray-300 border-t-primary rounded-full', sizeClasses[size], className)}
+      className={cn('border-2 border-muted border-t-primary rounded-full', sizeClasses[size], className)}
       animate={{ rotate: 360 }}
       transition={{
         duration: 1,

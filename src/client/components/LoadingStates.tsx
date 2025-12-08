@@ -72,16 +72,16 @@ export function UploadLoadingOverlay() {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1 }}
-        className="bg-white rounded-lg p-8 shadow-2xl max-w-md mx-4"
+        className="bg-card rounded-lg p-8 shadow-2xl max-w-md mx-4"
       >
         <div className="flex flex-col items-center gap-6">
-          <Spinner size="lg" className="border-purple-200 border-t-purple-600" />
+          <Spinner size="lg" />
           <div className="text-center">
             <h3 className="text-xl font-bold mb-2">Processing Your Database</h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Analyzing your Rekordbox library and generating statistics...
             </p>
-            <p className="text-sm text-gray-500 mt-4">This may take a few moments</p>
+            <p className="text-sm text-muted-foreground/70 mt-4">This may take a few moments</p>
           </div>
         </div>
       </motion.div>
