@@ -14,13 +14,18 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['html', { outputFolder: 'playwright-report' }],
-    ['junit', { outputFile: 'test-results/playwright/junit.xml' }],
-    ['list'],
-    // GitHub Actions reporter for annotations
-    process.env.CI ? ['github'] : ['list']
-  ].filter(Boolean),
+  reporter: process.env.CI
+    ? [
+        ['html', { outputFolder: 'playwright-report' }],
+        ['junit', { outputFile: 'test-results/playwright/junit.xml' }],
+        ['list'],
+        ['github'],
+      ]
+    : [
+        ['html', { outputFolder: 'playwright-report' }],
+        ['junit', { outputFile: 'test-results/playwright/junit.xml' }],
+        ['list'],
+      ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */

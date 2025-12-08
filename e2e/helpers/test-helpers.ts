@@ -9,14 +9,16 @@ export async function waitForSlideVisible(page: Page, slideTestId: string) {
 
 /**
  * Helper function to navigate through story mode
+ * @param page Playwright page
+ * @param direction 'next' or 'prev'
  */
 export async function navigateStoryMode(page: Page, direction: 'next' | 'prev') {
   const button = direction === 'next' 
     ? page.getByRole('button', { name: /next/i })
     : page.getByRole('button', { name: /previous|prev/i });
   await button.click();
-  // Wait for animation to complete
-  await page.waitForTimeout(500);
+  // Wait for button to become enabled again (animation complete)
+  await expect(button).toBeEnabled({ timeout: 2000 });
 }
 
 /**
@@ -25,7 +27,8 @@ export async function navigateStoryMode(page: Page, direction: 'next' | 'prev') 
 export async function closeStoryMode(page: Page) {
   const closeButton = page.getByRole('button', { name: /close/i }).first();
   await closeButton.click();
-  await page.waitForTimeout(500);
+  // Wait for close button to disappear (overlay closed)
+  await expect(closeButton).not.toBeVisible();
 }
 
 /**
@@ -34,7 +37,8 @@ export async function closeStoryMode(page: Page) {
 export async function openSettings(page: Page) {
   const settingsButton = page.getByRole('button', { name: /settings/i });
   await settingsButton.click();
-  await page.waitForTimeout(300);
+  // Wait for settings dialog to appear
+  await expect(page.getByRole('dialog').first()).toBeVisible();
 }
 
 /**

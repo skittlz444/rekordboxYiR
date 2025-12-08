@@ -63,14 +63,12 @@ test.describe('Story Demo - Aspect Ratio Selection', () => {
     // Find aspect ratio buttons
     const squareButton = page.getByRole('button', { name: /1:1/ }).first();
     
-    if (await squareButton.isVisible()) {
-      await squareButton.click();
-      await page.waitForTimeout(500);
-      
-      // Verify aspect ratio changed (would need to check slide container dimensions)
-      // This is a basic check that the button was clickable
-      expect(true).toBe(true);
-    }
+    await expect(squareButton).toBeVisible();
+    await squareButton.click();
+    await page.waitForTimeout(500);
+    
+    // Button should remain visible after click (stays in UI)
+    await expect(squareButton).toBeVisible();
   });
 });
 
@@ -95,13 +93,12 @@ test.describe('Story Demo - Theme Selection', () => {
     // Find a theme button
     const cleanThemeButton = page.getByRole('button', { name: /clean/i }).first();
     
-    if (await cleanThemeButton.isVisible()) {
-      await cleanThemeButton.click();
-      await page.waitForTimeout(500);
-      
-      // Theme should be applied
-      expect(true).toBe(true);
-    }
+    await expect(cleanThemeButton).toBeVisible();
+    await cleanThemeButton.click();
+    await page.waitForTimeout(500);
+    
+    // Button should remain visible after theme selection
+    await expect(cleanThemeButton).toBeVisible();
   });
 });
 
@@ -132,23 +129,23 @@ test.describe('Story Demo - Download Functionality', () => {
     // Find first download button
     const downloadButton = page.getByRole('button', { name: /download/i }).first();
     
-    if (await downloadButton.isVisible()) {
-      // Set up download listener
-      const downloadPromise = page.waitForEvent('download', { timeout: 10000 });
+    await expect(downloadButton).toBeVisible();
+    
+    // Set up download listener
+    const downloadPromise = page.waitForEvent('download', { timeout: 10000 });
+    
+    await downloadButton.click();
+    
+    try {
+      const download = await downloadPromise;
       
-      await downloadButton.click();
-      
-      try {
-        const download = await downloadPromise;
-        
-        // Verify download was initiated
-        expect(download).toBeTruthy();
-        expect(download.suggestedFilename()).toMatch(/\.png$/i);
-      } catch {
-        // Download might not work in headless mode without proper setup
-        // This test verifies the button is clickable at minimum
-        console.log('Download test: Button clickable, download event may not trigger in test environment');
-      }
+      // Verify download was initiated
+      expect(download).toBeTruthy();
+      expect(download.suggestedFilename()).toMatch(/\.png$/i);
+    } catch {
+      // Download might not work in headless mode without proper setup
+      // This test verifies the button is clickable at minimum
+      console.log('Download test: Button clickable, download event may not trigger in test environment');
     }
   });
 });
@@ -164,17 +161,12 @@ test.describe('Story Demo - Settings Panel', () => {
   test('should open settings panel', async ({ page }) => {
     const settingsButton = page.getByRole('button', { name: /settings/i }).first();
     
-    if (await settingsButton.isVisible()) {
-      await settingsButton.click();
-      await page.waitForTimeout(300);
-      
-      // Settings panel should be visible
-      // Look for common settings elements
-      const settingsPanel = page.getByRole('dialog');
-      
-      if (await settingsPanel.count() > 0) {
-        await expect(settingsPanel.first()).toBeVisible();
-      }
-    }
+    await expect(settingsButton).toBeVisible();
+    await settingsButton.click();
+    await page.waitForTimeout(300);
+    
+    // Settings panel should be visible
+    const settingsPanel = page.getByRole('dialog');
+    await expect(settingsPanel.first()).toBeVisible();
   });
 });

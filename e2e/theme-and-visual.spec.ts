@@ -97,17 +97,16 @@ test.describe('Visual Consistency', () => {
     // Find a button
     const button = page.getByRole('button').first();
     
-    if (await button.isVisible()) {
-      const buttonStyles = await button.evaluate((el) => {
-        const styles = window.getComputedStyle(el);
-        return {
-          borderRadius: styles.borderRadius,
-          cursor: styles.cursor,
-        };
-      });
-      
-      expect(buttonStyles.cursor).toBe('pointer');
-    }
+    await expect(button).toBeVisible();
+    const buttonStyles = await button.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        borderRadius: styles.borderRadius,
+        cursor: styles.cursor,
+      };
+    });
+    
+    expect(buttonStyles.cursor).toBe('pointer');
   });
 });
 
@@ -122,35 +121,32 @@ test.describe('Aspect Ratio Settings', () => {
   test('should support 9:16 aspect ratio (Story)', async ({ page }) => {
     const aspectButton = page.getByRole('button', { name: /9:16/ }).first();
     
-    if (await aspectButton.isVisible()) {
-      await aspectButton.click();
-      await page.waitForTimeout(500);
-      
-      // Verify the aspect ratio is applied (would check container dimensions)
-      expect(true).toBe(true);
-    }
+    await expect(aspectButton).toBeVisible();
+    await aspectButton.click();
+    await page.waitForTimeout(500);
+    
+    // Button should remain visible after selection
+    await expect(aspectButton).toBeVisible();
   });
 
   test('should support 4:5 aspect ratio (Portrait)', async ({ page }) => {
     const aspectButton = page.getByRole('button', { name: /4:5/ }).first();
     
-    if (await aspectButton.isVisible()) {
-      await aspectButton.click();
-      await page.waitForTimeout(500);
-      
-      expect(true).toBe(true);
-    }
+    await expect(aspectButton).toBeVisible();
+    await aspectButton.click();
+    await page.waitForTimeout(500);
+    
+    await expect(aspectButton).toBeVisible();
   });
 
   test('should support 1:1 aspect ratio (Square)', async ({ page }) => {
     const aspectButton = page.getByRole('button', { name: /1:1/ }).first();
     
-    if (await aspectButton.isVisible()) {
-      await aspectButton.click();
-      await page.waitForTimeout(500);
-      
-      expect(true).toBe(true);
-    }
+    await expect(aspectButton).toBeVisible();
+    await aspectButton.click();
+    await page.waitForTimeout(500);
+    
+    await expect(aspectButton).toBeVisible();
   });
 });
 
