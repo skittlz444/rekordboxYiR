@@ -10,8 +10,13 @@ import {
   YearComparisonTrendsSlide,
   SummarySlide,
   AspectRatio,
+  DownloadableSlideWrapper,
 } from './components'
 import { ArtistStat, TrackStat, GenreStat } from '@/shared/types'
+import { Settings } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
+import { SettingsPanel } from '@/client/components/SettingsPanel'
+import { Button } from '@/client/components/ui/button'
 
 // Mock data
 const mockArtists: ArtistStat[] = [
@@ -81,6 +86,20 @@ export function StoryDemo() {
           >
             1:1 (Square)
           </button>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="icon" aria-label="Settings">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Configuration Settings</DialogTitle>
+              </DialogHeader>
+              <SettingsPanel />
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Theme Switcher */}
@@ -129,82 +148,108 @@ export function StoryDemo() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-8">
-        <OpenerSlide year="2025" djName="DJ SKITTLZ" aspectRatio={aspectRatio} />
-        <ArtistSlide artists={mockArtists} aspectRatio={aspectRatio} />
-        <TrackSlide tracks={mockTracks} aspectRatio={aspectRatio} />
-        <GenreSlide genres={mockGenres} aspectRatio={aspectRatio} />
-        <BusiestDaySlide
-          busiestMonth={{ month: '2023-07', count: 342 }}
-          longestSession={{ date: '2023-10-14', durationSeconds: 22320 }}
-          aspectRatio={aspectRatio}
-        />
-        <LibraryGrowthSlide
-          newTracks={420}
-          totalLibrarySize={12450}
-          aspectRatio={aspectRatio}
-        />
-        <YearComparisonSlide
-          comparisonYear="2024"
-          metrics={[
-            {
-              label: 'TOTAL PLAYS',
-              current: '2,451',
-              previous: '2,180',
-              change: '+12%',
-              changePercentage: 12,
-            },
-            {
-              label: 'PLAYTIME',
-              current: '172h',
-              previous: '150h',
-              change: '+15%',
-              changePercentage: 15,
-            },
-            {
-              label: 'LONGEST SET',
-              current: '6h 12m',
-              previous: '4h 05m',
-              change: '+2h',
-              changePercentage: 50,
-            },
-          ]}
-          aspectRatio={aspectRatio}
-        />
-        <YearComparisonTrendsSlide
-          trends={{
-            biggestObsession: {
-              name: 'Peggy Gou',
-              percentageIncrease: 450,
-            },
-            rankClimber: {
-              name: 'Disclosure',
-              previousRank: 12,
-              currentRank: 3,
-            },
-            newFavorite: {
-              name: 'Sammy Virji',
-              currentRank: 10,
-              type: 'Artist',
-            },
-          }}
-          aspectRatio={aspectRatio}
-        />
-        <SummarySlide
-          data={{
-            year: '2025',
-            topArtist: 'Fred again..',
-            topGenre: 'House',
-            topTrack: {
-              title: 'Rumble',
-              artist: 'Skrillex, Fred again..',
-            },
-            totalPlays: 2451,
-            setsPlayed: 42,
-            busiestMonth: '2025-07',
-            djName: 'DJ SKITTLZ',
-          }}
-          aspectRatio={aspectRatio}
-        />
+        <DownloadableSlideWrapper filename="opener.png">
+          <OpenerSlide year="2025" djName="DJ SKITTLZ" aspectRatio={aspectRatio} />
+        </DownloadableSlideWrapper>
+        
+        <DownloadableSlideWrapper filename="artists.png">
+          <ArtistSlide artists={mockArtists} aspectRatio={aspectRatio} />
+        </DownloadableSlideWrapper>
+
+        <DownloadableSlideWrapper filename="tracks.png">
+          <TrackSlide tracks={mockTracks} aspectRatio={aspectRatio} />
+        </DownloadableSlideWrapper>
+
+        <DownloadableSlideWrapper filename="genres.png">
+          <GenreSlide genres={mockGenres} aspectRatio={aspectRatio} />
+        </DownloadableSlideWrapper>
+
+        <DownloadableSlideWrapper filename="busiest.png">
+          <BusiestDaySlide
+            busiestMonth={{ month: '2023-07', count: 342 }}
+            longestSession={{ date: '2023-10-14', durationSeconds: 22320 }}
+            aspectRatio={aspectRatio}
+          />
+        </DownloadableSlideWrapper>
+
+        <DownloadableSlideWrapper filename="library.png">
+          <LibraryGrowthSlide
+            newTracks={420}
+            totalLibrarySize={12450}
+            aspectRatio={aspectRatio}
+          />
+        </DownloadableSlideWrapper>
+
+        <DownloadableSlideWrapper filename="comparison.png">
+          <YearComparisonSlide
+            comparisonYear="2024"
+            metrics={[
+              {
+                label: 'TOTAL PLAYS',
+                current: '2,451',
+                previous: '2,180',
+                change: '+12%',
+                changePercentage: 12,
+              },
+              {
+                label: 'PLAYTIME',
+                current: '172h',
+                previous: '150h',
+                change: '+15%',
+                changePercentage: 15,
+              },
+              {
+                label: 'LONGEST SET',
+                current: '6h 12m',
+                previous: '4h 05m',
+                change: '+2h',
+                changePercentage: 50,
+              },
+            ]}
+            aspectRatio={aspectRatio}
+          />
+        </DownloadableSlideWrapper>
+
+        <DownloadableSlideWrapper filename="trends.png">
+          <YearComparisonTrendsSlide
+            trends={{
+              biggestObsession: {
+                name: 'Peggy Gou',
+                percentageIncrease: 450,
+              },
+              rankClimber: {
+                name: 'Disclosure',
+                previousRank: 12,
+                currentRank: 3,
+              },
+              newFavorite: {
+                name: 'Sammy Virji',
+                currentRank: 10,
+                type: 'Artist',
+              },
+            }}
+            aspectRatio={aspectRatio}
+          />
+        </DownloadableSlideWrapper>
+
+        <DownloadableSlideWrapper filename="summary.png">
+          <SummarySlide
+            data={{
+              year: '2025',
+              topArtist: 'Fred again..',
+              topGenre: 'House',
+              topTrack: {
+                title: 'Rumble',
+                artist: 'Skrillex, Fred again..',
+              },
+              totalPlays: 2451,
+              setsPlayed: 42,
+              busiestMonth: '2025-07',
+              djName: 'DJ SKITTLZ',
+            }}
+            aspectRatio={aspectRatio}
+          />
+        </DownloadableSlideWrapper>
       </div>
     </div>
   )
