@@ -26,6 +26,8 @@ interface StoryModeOverlayProps {
   onClose: () => void
 }
 
+type SlideData = { element: JSX.Element; filename: string }
+
 export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('9:16')
@@ -59,7 +61,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   }
 
   // Build slides array with corresponding filenames
-  const slidesData: Array<{ element: JSX.Element; filename: string }> = [
+  const slidesData: SlideData[] = [
     { element: <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />, filename: `opener-${year}.png` },
     { element: <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />, filename: `top-artists-${year}.png` },
     { element: <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />, filename: `top-tracks-${year}.png` },
