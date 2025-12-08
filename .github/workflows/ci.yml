@@ -64,7 +64,5 @@ jobs:
       if: always()
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
-        files: |
-          test-results/junit.xml
-          test-results/e2e-junit.xml
+        files: test-results/**/*.xml
         check_name: Test Results
