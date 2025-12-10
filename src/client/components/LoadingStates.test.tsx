@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+// import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { Spinner } from './ui/spinner'
@@ -36,7 +36,7 @@ describe('Loading States Components', () => {
     it('renders skeleton structure', () => {
       render(<DashboardSkeleton />)
       // Check for action buttons skeleton
-      const buttons = screen.getAllByRole('generic').filter(el => 
+      const buttons = screen.getAllByRole('generic').filter(el =>
         el.className.includes('h-10 w-32')
       )
       expect(buttons.length).toBeGreaterThan(0)

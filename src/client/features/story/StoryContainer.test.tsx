@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+// import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { StoryContainer } from './StoryContainer'
 import { StatsResponse } from '@/shared/types'
@@ -89,7 +89,7 @@ describe('StoryContainer', () => {
 
   it('should render all base slides with download wrappers', () => {
     render(<StoryContainer data={mockData} />)
-    
+
     // Check that all base slides have download wrappers
     expect(screen.getByTestId('wrapper-opener-2024.png')).toBeInTheDocument()
     expect(screen.getByTestId('wrapper-top-artists-2024.png')).toBeInTheDocument()
@@ -102,7 +102,7 @@ describe('StoryContainer', () => {
 
   it('should render download buttons for each slide', () => {
     render(<StoryContainer data={mockData} />)
-    
+
     expect(screen.getByText('Download opener-2024.png')).toBeInTheDocument()
     expect(screen.getByText('Download top-artists-2024.png')).toBeInTheDocument()
     expect(screen.getByText('Download top-tracks-2024.png')).toBeInTheDocument()
@@ -114,17 +114,17 @@ describe('StoryContainer', () => {
 
   it('should trigger download with correct filename when download button is clicked', () => {
     render(<StoryContainer data={mockData} />)
-    
+
     const downloadButton = screen.getByText('Download opener-2024.png')
     fireEvent.click(downloadButton)
-    
+
     expect(mockDownloadSlide).toHaveBeenCalledTimes(1)
     expect(mockDownloadSlide).toHaveBeenCalledWith(null, 'opener-2024.png')
   })
 
   it('should include comparison slides when comparison data is available', () => {
     render(<StoryContainer data={mockDataWithComparison} />)
-    
+
     // Check that comparison slides are rendered
     expect(screen.getByTestId('wrapper-comparison-2024.png')).toBeInTheDocument()
     expect(screen.getByTestId('wrapper-trends-2024.png')).toBeInTheDocument()
@@ -132,7 +132,7 @@ describe('StoryContainer', () => {
 
   it('should not include comparison slides when comparison data is missing', () => {
     render(<StoryContainer data={mockData} />)
-    
+
     // Check that comparison slides are not rendered
     expect(screen.queryByTestId('wrapper-comparison-2024.png')).not.toBeInTheDocument()
     expect(screen.queryByTestId('wrapper-trends-2024.png')).not.toBeInTheDocument()
@@ -140,7 +140,7 @@ describe('StoryContainer', () => {
 
   it('should have aspect ratio switcher buttons', () => {
     render(<StoryContainer data={mockData} />)
-    
+
     expect(screen.getByText('9:16 (Story)')).toBeInTheDocument()
     expect(screen.getByText('4:5 (Portrait)')).toBeInTheDocument()
     expect(screen.getByText('1:1 (Square)')).toBeInTheDocument()
@@ -148,7 +148,7 @@ describe('StoryContainer', () => {
 
   it('should have theme switcher buttons', () => {
     render(<StoryContainer data={mockData} />)
-    
+
     expect(screen.getByText('Pastel')).toBeInTheDocument()
     expect(screen.getByText('Club')).toBeInTheDocument()
     expect(screen.getByText('Clean')).toBeInTheDocument()

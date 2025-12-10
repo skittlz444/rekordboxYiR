@@ -65,6 +65,7 @@ async function main() {
   const excludeGenreClause = (field: string) => getExcludeGenreClause(field);
 
   // 0. Basic Stats (Total Tracks, Total Playtime)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const totalTracksResult: any[] = db.query(`
     SELECT COUNT(*) as count
     FROM djmdSongHistory sh
@@ -73,6 +74,7 @@ async function main() {
   `, [yearFilter]);
   const totalTracks = Number(totalTracksResult[0]?.count || 0);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const totalPlaytimeResult: any[] = db.query(`
     SELECT SUM(c.Length) as total_seconds
     FROM djmdSongHistory sh
@@ -82,6 +84,7 @@ async function main() {
   `, [yearFilter]);
   const totalPlaytimeSeconds = Number(totalPlaytimeResult[0]?.total_seconds || 0);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const totalSessionsResult: any[] = db.query(`
     SELECT COUNT(*) as count
     FROM djmdHistory
@@ -91,6 +94,7 @@ async function main() {
 
   // 0.5 Library Growth
   const nextYear = (parseInt(TARGET_YEAR) + 1).toString();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const libraryTotalResult: any[] = db.query(`
     SELECT COUNT(*) as count 
     FROM djmdContent 
@@ -98,6 +102,7 @@ async function main() {
   `, [nextYear]);
   const libraryTotal = Number(libraryTotalResult[0]?.count || 0);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const libraryAddedResult: any[] = db.query(`
     SELECT COUNT(*) as count 
     FROM djmdContent 
@@ -162,6 +167,7 @@ async function main() {
   `, [yearFilter]);
 
   // 5. Most songs in a session
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const resMostSongs: any[] = db.query(`
     SELECT h.ID, h.DateCreated, COUNT(sh.ID) as song_count
     FROM djmdHistory h
@@ -199,6 +205,7 @@ async function main() {
   const end = performance.now();
   console.log(`Baseline execution time: ${(end - start).toFixed(2)} ms`);
   console.log(`Stats found: Total Tracks=${totalTracks}, Sessions=${totalSessions}`);
+  console.log(`Additional stats: Playtime=${totalPlaytimeSeconds}, Library=${libraryTotal}/${libraryAdded}`);
 
   db.close();
 }

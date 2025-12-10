@@ -73,6 +73,7 @@ async function main() {
   const excludeGenreClause = (field: string) => getExcludeGenreClause(field);
 
   // 1. Consolidated Aggregation Query (Tracks, Playtime, Sessions)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const aggResult: any[] = db.query(`
     SELECT
       (SELECT COUNT(*) FROM djmdSongHistory sh 
@@ -91,6 +92,7 @@ async function main() {
 
   // 2. Library Growth Query
   const nextYear = (parseInt(TARGET_YEAR) + 1).toString();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const growthResult: any[] = db.query(`
     SELECT
       (SELECT COUNT(*) FROM djmdContent WHERE DateCreated < ?) as libraryTotal,
@@ -102,6 +104,7 @@ async function main() {
 
   // 3. Consolidated Top Entities (Tracks, Artists, Genres, BPMs)
   // using UNION ALL with 'type' discriminator
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const topEntitiesResult: any[] = db.query(`
     SELECT * FROM (
       SELECT 'track' as type, c.Title as name, a.Name as artist, COUNT(*) as count
@@ -147,11 +150,11 @@ async function main() {
   `, [yearFilter, yearFilter, yearFilter, yearFilter]);
 
   // Process rows just to simulate work
-  topEntitiesResult.forEach((row: any) => {
-    // iterating
-  });
+  // (Loop removed to satisfy lint)
+  console.log(`Top entities count: ${topEntitiesResult.length}`);
 
   // 4. Session Stats Query
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sessionStatsResult: any[] = db.query(`
     WITH SessionCounts AS (
       SELECT h.ID, h.DateCreated, COUNT(sh.ID) as song_count
@@ -194,7 +197,8 @@ async function main() {
 
   const end = performance.now();
   console.log(`Baseline execution time: ${(end - start).toFixed(2)} ms`);
-  console.log(`Stats found: Total Tracks=${totalTracks}, Sessions=${totalSessions}`);
+  console.log(`Stats found: Total Tracks=${totalTracks}, Sessions=${totalSessions}, Library=${libraryTotal}/${libraryAdded}`);
+  console.log(`Session stats found: ${JSON.stringify(sessionStats)}`);
 
   db.close();
 }

@@ -1,7 +1,7 @@
 /**
  * @vitest-environment node
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+// import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Define mocks using vi.hoisted to allow access in vi.mock
 const mocks = vi.hoisted(() => {
@@ -49,40 +49,54 @@ describe('Worker API', () => {
 
     // Default mock sequence for single year stats (4 consolidated queries)
 
-    // 1. Aggregation
-    mocks.mockDb.query.mockReturnValueOnce([{
-      totalTracks: 100,
-      totalPlaytime: 3600,
-      totalSessions: 50
-    }]);
+    // Smart mock implementation based on year
+    mocks.mockDb.query.mockImplementation((_sql, params) => {
+      const paramYear = params?.[0]; // e.g., '2024%'
 
-    // 2. Library Growth
-    mocks.mockDb.query.mockReturnValueOnce([{
-      libraryTotal: 500,
-      libraryAdded: 100
-    }]);
+      // If it's the comparison year (2023), return empty
+      if (paramYear === '2023%') {
+        return [];
+      }
 
-    // 3. Top Entities (Union)
-    // Return a mix of types
-    mocks.mockDb.query.mockReturnValueOnce([
-      { type: 'track', name: 'Test Track', artist: 'Test Artist', count: 10 },
-      { type: 'artist', name: 'Test Artist', artist: null, count: 20 },
-      { type: 'genre', name: 'Test Genre', artist: null, count: 30 },
-      { type: 'bpm', name: '120', artist: null, count: 40 }
-    ]);
+      // Otherwise (2024), return valid mock data
+      // Return an array that satisfies all queries (superset of fields) or logic to differentiate.
+      // Since the code simply plucks fields from the first row or loops over rows, 
+      // a single array with all fields can work for Aggregation, Library, Session.
+      // For Top Entities, we need specific rows.
 
-    // 4. Session Stats
-    mocks.mockDb.query.mockReturnValueOnce([{
-      maxSessionDate: '2024-01-01',
-      maxSessionCount: 15,
-      maxSessionDuration: 3600,
-      busiestMonth: '2024-01',
-      busiestMonthCount: 30
-    }]);
+      // But wait, getYearStats calls 4 DIFFERENT queries.
+      // If we return the SAME array for all 4 queries, it must be compatible with ALL 4.
 
-    // Fallback for any subsequent calls (e.g., comparison year)
-    // Returning empty array will result in 0 stats, which is valid for comparison baseline logic
-    mocks.mockDb.query.mockReturnValue([]);
+      return [
+        {
+          // Aggregation
+          totalTracks: 100,
+          totalPlaytime: 3600,
+          totalSessions: 50,
+
+          // Library
+          libraryTotal: 500,
+          libraryAdded: 100,
+
+          // Session
+          maxSessionDate: '2024-01-01',
+          maxSessionCount: 15,
+          maxSessionDuration: 3600,
+          busiestMonth: '2024-01',
+          busiestMonthCount: 30,
+
+          // Top Entities (First row)
+          type: 'track',
+          name: 'Test Track',
+          artist: 'Test Artist',
+          count: 10
+        },
+        // Additional Top Entities rows
+        { type: 'artist', name: 'Test Artist', count: 20 },
+        { type: 'genre', name: 'Test Genre', count: 30 },
+        { type: 'bpm', name: '120', count: 40, BPM: 120 }
+      ];
+    });
   });
 
   it('sanity check', () => {
@@ -188,6 +202,7 @@ describe('Worker API', () => {
 
     // Since comparison data is all 0s (from empty mock), diffing 100 vs 0 => 100%
     // Check one diff to ensure calculation ran
+    // console.log("Debug Data:", JSON.stringify(data, null, 2));
     expect(data.comparison.diffs.tracksPercentage).toBe(100);
   });
 });
