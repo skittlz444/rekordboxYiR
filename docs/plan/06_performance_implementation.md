@@ -169,7 +169,7 @@ Improve error messages and handling for failures that can be caught (note: Worke
 
 #### Sub-tasks
 
-- [ ] **Task 6.3.1: Define error types**
+- [x] **Task 6.3.1: Define error types**
     - Create error type enumeration in `src/shared/types.d.ts`:
       ```typescript
       type WorkerErrorCode = 
@@ -188,7 +188,7 @@ Improve error messages and handling for failures that can be caught (note: Worke
       }
       ```
 
-- [ ] **Task 6.3.2: Implement error handling in Worker**
+- [x] **Task 6.3.2: Implement error handling in Worker**
     - Update `src/worker/index.ts` with specific try/catch blocks
     - Catch and classify errors:
         - SQLCipher decryption errors → `DECRYPTION_FAILED`
@@ -197,17 +197,17 @@ Improve error messages and handling for failures that can be caught (note: Worke
         - Gzip decompression errors → `DECOMPRESSION_FAILED`
     - Return structured `WorkerErrorResponse` with user-friendly messages
 
-- [ ] **Task 6.3.3: Add processing duration logging**
+- [x] **Task 6.3.3: Add processing duration logging**
     - Add `console.time()` / `console.timeEnd()` around key operations
     - Log: decompression time, decryption time, query time, total time
     - Use Cloudflare's `ctx.waitUntil()` for async logging if needed
 
-- [ ] **Task 6.3.4: Update client error display**
+- [x] **Task 6.3.4: Update client error display**
     - Update `src/client/features/upload/UploadContainer.tsx` to handle `WorkerErrorResponse`
     - Display user-friendly error messages based on error code
     - Provide actionable guidance where possible (e.g., "Database may be corrupted or from an unsupported Rekordbox version")
 
-- [ ] **Task 6.3.5: Add error handling tests**
+- [x] **Task 6.3.5: Add error handling tests**
     - Add tests for each error type in `src/worker/index.test.ts`
     - Test malformed gzip data
     - Test invalid SQLite file
@@ -231,10 +231,10 @@ Improve error messages and handling for failures that can be caught (note: Worke
 - [x] No regression in data accuracy
 
 ### Task 6.3 Complete When:
-- [ ] All catchable errors return structured `WorkerErrorResponse`
-- [ ] Client displays appropriate error messages
-- [ ] Processing duration is logged
-- [ ] Error handling tests pass
+- [x] All catchable errors return structured `WorkerErrorResponse`
+- [x] Client displays appropriate error messages
+- [x] Processing duration is logged
+- [x] Error handling tests pass
 
 ---
 
