@@ -23,22 +23,44 @@ app.post('/upload', async (c) => {
     const year = body['year'] as string || new Date().getFullYear().toString();
 
     if (!(file instanceof File)) {
-      return c.json({ error: 'No file uploaded' }, 400);
+      return c.json({
+        success: false,
+        error: {
+          code: 'UNKNOWN_ERROR',
+          message: 'No file uploaded'
+        }
+      }, 400);
     }
+
+    // Performance logging
+    console.time('Total Processing');
 
     const buffer = await file.arrayBuffer();
     let u8 = new Uint8Array(buffer);
 
     // Check for compression
     const encoding = c.req.header('X-File-Content-Encoding');
-    if (encoding === 'gzip') {
-      console.log('Decompressing gzip payload...');
-      const ds = new DecompressionStream('gzip');
-      const compressedStream = new Blob([u8]).stream();
-      const decompressedStream = compressedStream.pipeThrough(ds);
-      const decompressedBuffer = await new Response(decompressedStream).arrayBuffer();
-      u8 = new Uint8Array(decompressedBuffer);
-      console.log(`Decompressed size: ${u8.length} bytes`);
+    try {
+      if (encoding === 'gzip') {
+        console.time('Decompression');
+        console.log('Decompressing gzip payload...');
+        const ds = new DecompressionStream('gzip');
+        const compressedStream = new Blob([u8]).stream();
+        const decompressedStream = compressedStream.pipeThrough(ds);
+        const decompressedBuffer = await new Response(decompressedStream).arrayBuffer();
+        u8 = new Uint8Array(decompressedBuffer);
+        console.log(`Decompressed size: ${u8.length} bytes`);
+        console.timeEnd('Decompression');
+      }
+    } catch (e) {
+      console.error('Decompression failed:', e);
+      return c.json({
+        success: false,
+        error: {
+          code: 'DECOMPRESSION_FAILED',
+          message: 'Failed to decompress the uploaded file. Please try again.'
+        }
+      }, 400);
     }
 
     // Initialize SQLCipher
@@ -60,6 +82,7 @@ app.post('/upload', async (c) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let db: any;
     try {
+      console.time('DB Open & Key');
       // Open without key first
       db = sqlite.open(dbPath);
 
@@ -70,17 +93,27 @@ app.post('/upload', async (c) => {
       }
 
       // Try using the key as a passphrase (standard SQLCipher behavior)
-      // This matches how pyrekordbox passes the key in the connection string
       db.exec(`PRAGMA key = '${key}'`);
 
-      // Try SQLCipher 4 defaults first (most likely for modern libs)
-      // If this fails, we might need to try compatibility=3
+      // Try SQLCipher 4 defaults first
       db.exec('PRAGMA cipher_page_size = 4096');
       db.exec('PRAGMA kdf_iter = 256000');
       db.exec('PRAGMA cipher_hmac_algorithm = HMAC_SHA512');
       db.exec('PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA512');
       db.exec('PRAGMA cipher_plaintext_header_size = 0');
 
+      // Verify decryption by attempting a simple read
+      try {
+        db.exec('SELECT count(*) FROM sqlite_master');
+      } catch (e) {
+        console.error('Decryption verification failed:', e);
+        // If simple read fails, it's likely a decryption or DB format issue
+        // Distinguish if possible, but mostly it's decryption with wrong key or params
+        throw new Error('DECRYPTION_FAILED_SIGNAL');
+      }
+      console.timeEnd('DB Open & Key');
+
+      console.time('Query Execution');
       console.log(`Opening DB with key length: ${key.length}, File size: ${u8.length}`);
 
       // Optimizations for ephemeral read-mostly usage
@@ -88,7 +121,6 @@ app.post('/upload', async (c) => {
       db.exec('PRAGMA journal_mode = MEMORY');
 
       // Create temporary indexes for performance (DateCreated is main filter)
-      // Benchmarks show this reduces query time by ~40-50%
       db.exec('CREATE INDEX IF NOT EXISTS idx_history_date ON djmdHistory(DateCreated)');
       db.exec('CREATE INDEX IF NOT EXISTS idx_content_date ON djmdContent(DateCreated)');
       db.exec('CREATE INDEX IF NOT EXISTS idx_sh_history ON djmdSongHistory(HistoryID)');
@@ -139,7 +171,6 @@ app.post('/upload', async (c) => {
         const libraryAdded = Number(growthResult[0]?.libraryAdded || 0);
 
         // 3. Consolidated Top Entities (Tracks, Artists, Genres, BPMs)
-        // using UNION ALL with 'type' discriminator
         const topEntitiesResult = db.query(`
           SELECT * FROM (
             SELECT 'track' as type, c.Title as name, a.Name as artist, COUNT(*) as count
@@ -208,12 +239,6 @@ app.post('/upload', async (c) => {
         });
 
         // 4. Session Stats Query
-        // Get longest session and busiest month
-        // We need Most Songs Session (and its duration) and Busiest Month
-
-        // This is complex to combine perfectly in one query without CTEs that returned multiple rows diff ways
-        // But we can use multiple CTEs and select single values.
-
         const sessionStatsResult = db.query(`
           WITH SessionCounts AS (
             SELECT h.ID, h.DateCreated, COUNT(sh.ID) as song_count
@@ -305,11 +330,40 @@ app.post('/upload', async (c) => {
         };
       }
 
+      console.timeEnd('Query Execution');
+      console.timeEnd('Total Processing');
+
       return c.json({
         year,
         stats: mainStats,
         comparison: comparisonData
       });
+
+    } catch (dbError: unknown) {
+      console.error('Database operation failed:', dbError);
+
+      const err = dbError as Error;
+      let errorCode = 'UNKNOWN_ERROR';
+      let errorMessage = 'An unexpected error occurred while processing the database.';
+
+      if (err.message === 'DECRYPTION_FAILED_SIGNAL' || err.message?.includes('file is not a database') || err.message?.includes('encrypted') || err.message?.includes('image is malformed')) {
+        errorCode = 'DECRYPTION_FAILED';
+        errorMessage = 'Failed to decrypt the database. This usually means the Rekordbox version is incompatible or the database key is incorrect.';
+      } else if (err.message?.includes('no such table')) {
+        errorCode = 'INVALID_DATABASE';
+        errorMessage = 'The database file does not contain the expected tables. Please ensure you uploaded a valid Rekordbox master.db file.';
+      } else if (err.message?.includes('SQL logic error')) {
+        errorCode = 'QUERY_FAILED';
+        errorMessage = 'Failed to execute analysis queries. The database might be corrupted.';
+      }
+
+      return c.json({
+        success: false,
+        error: {
+          code: errorCode,
+          message: errorMessage
+        }
+      }, 400);
 
     } finally {
       if (db) {
@@ -319,9 +373,15 @@ app.post('/upload', async (c) => {
     }
 
   } catch (e: unknown) {
-    console.error(e);
+    console.error('Unhandled worker error:', e);
     const error = e as Error;
-    return c.json({ error: error.message, stack: error.stack }, 500);
+    return c.json({
+      success: false,
+      error: {
+        code: 'UNKNOWN_ERROR',
+        message: error.message || 'An unexpected server error occurred.'
+      }
+    }, 500);
   }
 });
 

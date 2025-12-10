@@ -42,12 +42,14 @@ vi.mock('@7mind.io/sqlcipher-wasm', () => ({
 
 // Import app AFTER mocks are defined
 import app from './index';
+import { StatsResponse, WorkerErrorResponse } from '../shared/types';
 
 describe('Worker API', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
     // Default mock sequence for single year stats (4 consolidated queries)
+    mocks.mockDb.exec.mockImplementation(() => { });
 
     // Smart mock implementation based on year
     mocks.mockDb.query.mockImplementation((_sql, params) => {
@@ -120,7 +122,7 @@ describe('Worker API', () => {
     });
 
     expect(res.status).toBe(200);
-    const data = await res.json();
+    const data = await res.json() as StatsResponse;
 
     expect(data).toHaveProperty('year', '2024');
     expect(data).toHaveProperty('stats');
@@ -167,8 +169,66 @@ describe('Worker API', () => {
     });
 
     expect(res.status).toBe(400);
-    const data = await res.json();
-    expect(data).toHaveProperty('error', 'No file uploaded');
+    const data = await res.json() as WorkerErrorResponse;
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe('UNKNOWN_ERROR');
+    expect(data.error.message).toBe('No file uploaded');
+  });
+
+  it('should handle decryption failure (wrong key)', async () => {
+    // Simulate decryption failure by having verification query fail
+    mocks.mockDb.exec.mockImplementation((sql: string) => {
+      if (sql.includes('SELECT count(*) FROM sqlite_master')) {
+        throw new Error('DECRYPTION_FAILED_SIGNAL');
+      }
+    });
+
+    const formData = new FormData();
+    formData.append('file', new File(['encrypted'], 'master.db'));
+    formData.append('year', '2024');
+
+    const req = new Request('http://localhost/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const res = await app.request(req, undefined, {
+      REKORDBOX_KEY: 'wrong-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
+    });
+
+    expect(res.status).toBe(400);
+    const data = await res.json() as WorkerErrorResponse;
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe('DECRYPTION_FAILED');
+  });
+
+  it('should handle invalid database structure', async () => {
+    // Simulate invalid DB by failing on query
+    mocks.mockDb.query.mockImplementation(() => {
+      throw new Error('no such table: djmdHistory');
+    });
+
+    const formData = new FormData();
+    formData.append('file', new File(['corrupt'], 'master.db'));
+    formData.append('year', '2024');
+
+    const req = new Request('http://localhost/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const res = await app.request(req, undefined, {
+      REKORDBOX_KEY: 'test-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
+    });
+
+    expect(res.status).toBe(400);
+    const data = await res.json() as WorkerErrorResponse;
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe('INVALID_DATABASE');
   });
 
   it('should handle comparison year', async () => {
@@ -176,6 +236,31 @@ describe('Worker API', () => {
     // The beforeEach setup provides 4 specific One-time returns and then infinite empty returns.
     // The first 4 satisfy the main year. The next 4 (for comparison) will get empty arrays.
     // This results in comparison stats being 0, which is fine for structure testing.
+
+    // Ensure standard mock behavior for this test despite previous mocks in other tests
+    mocks.mockDb.exec.mockImplementation(() => { });
+    mocks.mockDb.query.mockImplementation((_sql, params) => {
+      const paramYear = params?.[0];
+      if (paramYear === '2023%') return [];
+      return [
+        {
+          totalTracks: 100,
+          totalPlaytime: 3600,
+          totalSessions: 50,
+          libraryTotal: 500,
+          libraryAdded: 100,
+          maxSessionDate: '2024-01-01',
+          maxSessionCount: 15,
+          maxSessionDuration: 3600,
+          busiestMonth: '2024-01',
+          busiestMonthCount: 30,
+          type: 'track',
+          name: 'Test Track',
+          artist: 'Test Artist',
+          count: 10
+        }
+      ];
+    });
 
     const formData = new FormData();
     formData.append('file', new File(['dummy'], 'master.db'));
@@ -194,7 +279,7 @@ describe('Worker API', () => {
     });
 
     expect(res.status).toBe(200);
-    const data = await res.json();
+    const data = await res.json() as StatsResponse;
 
     expect(data).toHaveProperty('comparison');
     expect(data.comparison).toHaveProperty('year', '2023');
@@ -203,6 +288,6 @@ describe('Worker API', () => {
     // Since comparison data is all 0s (from empty mock), diffing 100 vs 0 => 100%
     // Check one diff to ensure calculation ran
     // console.log("Debug Data:", JSON.stringify(data, null, 2));
-    expect(data.comparison.diffs.tracksPercentage).toBe(100);
+    expect(data.comparison?.diffs.tracksPercentage).toBe(100);
   });
 });

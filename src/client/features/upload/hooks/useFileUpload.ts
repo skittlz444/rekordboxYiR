@@ -69,6 +69,33 @@ export function useFileUpload(): UseFileUploadReturn {
       });
 
       if (!response.ok) {
+        let serverErrorMessage: string | null = null;
+
+        // Try to parse structured error message
+        try {
+          const errorData = await response.json() as unknown;
+          if (errorData && typeof errorData === 'object' && 'error' in errorData) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const errObj = errorData as any;
+
+            // Handle WorkerErrorResponse
+            if (errObj.error?.message) {
+              serverErrorMessage = errObj.error.message;
+            }
+            // Handle legacy simple error { error: "message" }
+            else if (typeof errObj.error === 'string') {
+              serverErrorMessage = errObj.error;
+            }
+          }
+        } catch (parseError) {
+          // If JSON parse fails or structure doesn't match, fall through to generic error
+          console.warn('Failed to parse error response:', parseError);
+        }
+
+        if (serverErrorMessage) {
+          throw new Error(serverErrorMessage);
+        }
+
         throw new Error(`Upload failed with status: ${response.status}`);
       }
 
@@ -76,7 +103,9 @@ export function useFileUpload(): UseFileUploadReturn {
       return data as StatsResponse;
     } catch (err) {
       console.error('Upload failed:', err);
-      setError('Failed to upload file. Please try again.');
+      // Extract the message from the Error object if available
+      const errorMessage = err instanceof Error ? err.message : 'Failed to upload file. Please try again.';
+      setError(errorMessage);
       throw err;
     } finally {
       setIsUploading(false);

@@ -99,6 +99,13 @@ describe('useFileUpload', () => {
       ok: false,
       status: 500,
       statusText: 'Internal Server Error',
+      json: async () => ({
+        success: false,
+        error: {
+          code: 'UNKNOWN_ERROR',
+          message: 'Failed to upload file from worker',
+        },
+      }),
     });
 
     act(() => {
@@ -114,7 +121,7 @@ describe('useFileUpload', () => {
     });
 
     expect(result.current.isUploading).toBe(false);
-    expect(result.current.error).toContain('Failed to upload file');
+    expect(result.current.error).toContain('Failed to upload file from worker');
     expect(console.error).toHaveBeenCalled();
   });
 });
