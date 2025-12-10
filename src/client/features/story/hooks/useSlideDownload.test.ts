@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+// import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook } from '@testing-library/react'
 import { useSlideDownload } from './useSlideDownload'
 import * as htmlToImage from 'html-to-image'
@@ -43,7 +43,7 @@ describe('useSlideDownload', () => {
   it('should handle errors gracefully', async () => {
     const mockNode = document.createElement('div')
     const filename = 'test-slide.png'
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { })
 
     // Setup mock to reject
     vi.mocked(htmlToImage.toPng).mockRejectedValue(new Error('Failed to generate image'))

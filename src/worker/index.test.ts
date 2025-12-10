@@ -1,7 +1,7 @@
 /**
  * @vitest-environment node
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+// import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Define mocks using vi.hoisted to allow access in vi.mock
 const mocks = vi.hoisted(() => {
@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => {
     writeFile: vi.fn(),
     unlink: vi.fn(),
   };
-  
+
   const mockDb = {
     exec: vi.fn(),
     query: vi.fn(),
@@ -33,7 +33,7 @@ vi.mock('@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs', () => ({
 }));
 
 vi.mock('@7mind.io/sqlcipher-wasm', () => ({
-  SQLiteAPI: vi.fn(function() {
+  SQLiteAPI: vi.fn(function () {
     return {
       open: vi.fn().mockReturnValue(mocks.mockDb),
     };
@@ -42,27 +42,67 @@ vi.mock('@7mind.io/sqlcipher-wasm', () => ({
 
 // Import app AFTER mocks are defined
 import app from './index';
-
-// Mock row that satisfies all queries
-const mockRow = {
-  count: 100,
-  total_seconds: 3600,
-  Title: 'Test Track',
-  Artist: 'Test Artist',
-  Name: 'Test Genre',
-  BPM: 120,
-  song_count: 10,
-  ID: '1',
-  DateCreated: '2024-01-01',
-  total_duration: 3600,
-  month: '2024-01'
-};
+import { StatsResponse, WorkerErrorResponse } from '../shared/types';
 
 describe('Worker API', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default mock return for queries
-    mocks.mockDb.query.mockReturnValue([mockRow]);
+
+    // Default mock sequence for single year stats (4 consolidated queries)
+    mocks.mockDb.exec.mockImplementation(() => { });
+
+    // Smart mock implementation based on year
+    mocks.mockDb.query.mockImplementation((_sql, params) => {
+      const paramYear = params?.[0]; // e.g., '2024%'
+
+      // If it's the comparison year (2023), return empty
+      if (paramYear === '2023%') {
+        return [];
+      }
+
+      // Otherwise (2024), return valid mock data
+      // Return an array that satisfies all queries (superset of fields) or logic to differentiate.
+      // Since the code simply plucks fields from the first row or loops over rows, 
+      // a single array with all fields can work for Aggregation, Library, Session.
+      // For Top Entities, we need specific rows.
+
+      // But wait, getYearStats calls 4 DIFFERENT queries.
+      // If we return the SAME array for all 4 queries, it must be compatible with ALL 4.
+
+      return [
+        {
+          // Aggregation
+          totalTracks: 100,
+          totalPlaytime: 3600,
+          totalSessions: 50,
+
+          // Library
+          libraryTotal: 500,
+          libraryAdded: 100,
+
+          // Session
+          maxSessionDate: '2024-01-01',
+          maxSessionCount: 15,
+          maxSessionDuration: 3600,
+          busiestMonth: '2024-01',
+          busiestMonthCount: 30,
+
+          // Top Entities (First row)
+          type: 'track',
+          name: 'Test Track',
+          artist: 'Test Artist',
+          count: 10
+        },
+        // Additional Top Entities rows
+        { type: 'artist', name: 'Test Artist', count: 20 },
+        { type: 'genre', name: 'Test Genre', count: 30 },
+        { type: 'bpm', name: '120', count: 40, BPM: 120 }
+      ];
+    });
+  });
+
+  it('sanity check', () => {
+    expect(true).toBe(true);
   });
 
   it('should handle file upload and return stats', async () => {
@@ -76,46 +116,180 @@ describe('Worker API', () => {
     });
 
     const res = await app.request(req, undefined, {
-        REKORDBOX_KEY: 'test-key',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ASSETS: { fetch: vi.fn() } as any
+      REKORDBOX_KEY: 'test-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
     });
 
     expect(res.status).toBe(200);
-    const data = await res.json();
-    
+    const data = await res.json() as StatsResponse;
+
     expect(data).toHaveProperty('year', '2024');
     expect(data).toHaveProperty('stats');
+
+    // content from mock 1
     expect(data.stats).toHaveProperty('totalTracks', 100);
     expect(data.stats).toHaveProperty('totalPlaytimeSeconds', 3600);
+    expect(data.stats).toHaveProperty('totalSessions', 50);
+
+    // content from mock 2
+    expect(data.stats.libraryGrowth).toHaveProperty('total', 500);
+    expect(data.stats.libraryGrowth).toHaveProperty('added', 100);
+
+    // content from mock 3
     expect(data.stats.topTracks).toHaveLength(1);
     expect(data.stats.topTracks[0].Title).toBe('Test Track');
-    
+
+    expect(data.stats.topArtists).toHaveLength(1);
+    expect(data.stats.topArtists[0].Name).toBe('Test Artist');
+
+    // content from mock 4
+    expect(data.stats.longestSession.count).toBe(15);
+    expect(data.stats.busiestMonth.month).toBe('2024-01');
+
     // Verify DB interactions
     expect(mocks.mockDb.exec).toHaveBeenCalledWith(expect.stringContaining('PRAGMA key'));
+    expect(mocks.mockDb.exec).toHaveBeenCalledWith(expect.stringContaining('PRAGMA synchronous = OFF'));
+    // NOTE: CREATE INDEX removed - benchmarking showed it adds overhead without benefit
     expect(mocks.mockFS.writeFile).toHaveBeenCalled();
     expect(mocks.mockFS.unlink).toHaveBeenCalled();
     expect(mocks.mockDb.close).toHaveBeenCalled();
   });
 
   it('should return 400 if no file is uploaded', async () => {
-      const req = new Request('http://localhost/upload', {
-          method: 'POST',
-          body: new FormData(),
-      });
-      
-      const res = await app.request(req, undefined, {
-        REKORDBOX_KEY: 'test-key',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ASSETS: { fetch: vi.fn() } as any
-      });
-      
-      expect(res.status).toBe(400);
-      const data = await res.json();
-      expect(data).toHaveProperty('error', 'No file uploaded');
+    const req = new Request('http://localhost/upload', {
+      method: 'POST',
+      body: new FormData(),
+    });
+
+    const res = await app.request(req, undefined, {
+      REKORDBOX_KEY: 'test-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
+    });
+
+    expect(res.status).toBe(400);
+    const data = await res.json() as WorkerErrorResponse;
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe('NO_FILE_PROVIDED');
+    expect(data.error.message).toContain('No valid file was uploaded');
+  });
+
+  it('should handle decryption failure (wrong key)', async () => {
+    // Simulate decryption failure by having verification query fail
+    mocks.mockDb.exec.mockImplementation((sql: string) => {
+      if (sql.includes('SELECT count(*) FROM sqlite_master')) {
+        throw new Error('DECRYPTION_FAILED_SIGNAL');
+      }
+    });
+
+    const formData = new FormData();
+    formData.append('file', new File(['encrypted'], 'master.db'));
+    formData.append('year', '2024');
+
+    const req = new Request('http://localhost/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const res = await app.request(req, undefined, {
+      REKORDBOX_KEY: 'wrong-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
+    });
+
+    expect(res.status).toBe(400);
+    const data = await res.json() as WorkerErrorResponse;
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe('DECRYPTION_FAILED');
+  });
+
+  it('should handle decompression failure', async () => {
+    // Send malformed gzip data with the gzip encoding header
+    const malformedGzipData = new Uint8Array([0x1F, 0x8B, 0x08, 0x00, 0xFF, 0xFF]); // Invalid gzip
+    const formData = new FormData();
+    formData.append('file', new File([malformedGzipData], 'master.db'));
+    formData.append('year', '2024');
+
+    const req = new Request('http://localhost/upload', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-File-Content-Encoding': 'gzip'
+      }
+    });
+
+    const res = await app.request(req, undefined, {
+      REKORDBOX_KEY: 'test-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
+    });
+
+    expect(res.status).toBe(400);
+    const data = await res.json() as WorkerErrorResponse;
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe('DECOMPRESSION_FAILED');
+    expect(data.error.message).toContain('decompress');
+  });
+
+  it('should handle invalid database structure', async () => {
+    // Simulate invalid DB by failing on query
+    mocks.mockDb.query.mockImplementation(() => {
+      throw new Error('no such table: djmdHistory');
+    });
+
+    const formData = new FormData();
+    formData.append('file', new File(['corrupt'], 'master.db'));
+    formData.append('year', '2024');
+
+    const req = new Request('http://localhost/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const res = await app.request(req, undefined, {
+      REKORDBOX_KEY: 'test-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
+    });
+
+    expect(res.status).toBe(400);
+    const data = await res.json() as WorkerErrorResponse;
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe('INVALID_DATABASE');
   });
 
   it('should handle comparison year', async () => {
+    // Reset mocks to ensure we have enough responses for 2 runs (if needed)
+    // The beforeEach setup provides 4 specific One-time returns and then infinite empty returns.
+    // The first 4 satisfy the main year. The next 4 (for comparison) will get empty arrays.
+    // This results in comparison stats being 0, which is fine for structure testing.
+
+    // Ensure standard mock behavior for this test despite previous mocks in other tests
+    mocks.mockDb.exec.mockImplementation(() => { });
+    mocks.mockDb.query.mockImplementation((_sql, params) => {
+      const paramYear = params?.[0];
+      if (paramYear === '2023%') return [];
+      return [
+        {
+          totalTracks: 100,
+          totalPlaytime: 3600,
+          totalSessions: 50,
+          libraryTotal: 500,
+          libraryAdded: 100,
+          maxSessionDate: '2024-01-01',
+          maxSessionCount: 15,
+          maxSessionDuration: 3600,
+          busiestMonth: '2024-01',
+          busiestMonthCount: 30,
+          type: 'track',
+          name: 'Test Track',
+          artist: 'Test Artist',
+          count: 10
+        }
+      ];
+    });
+
     const formData = new FormData();
     formData.append('file', new File(['dummy'], 'master.db'));
     formData.append('year', '2024');
@@ -127,16 +301,21 @@ describe('Worker API', () => {
     });
 
     const res = await app.request(req, undefined, {
-        REKORDBOX_KEY: 'test-key',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ASSETS: { fetch: vi.fn() } as any
+      REKORDBOX_KEY: 'test-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
     });
 
     expect(res.status).toBe(200);
-    const data = await res.json();
-    
+    const data = await res.json() as StatsResponse;
+
     expect(data).toHaveProperty('comparison');
     expect(data.comparison).toHaveProperty('year', '2023');
     expect(data.comparison).toHaveProperty('diffs');
+
+    // Since comparison data is all 0s (from empty mock), diffing 100 vs 0 => 100%
+    // Check one diff to ensure calculation ran
+    // console.log("Debug Data:", JSON.stringify(data, null, 2));
+    expect(data.comparison?.diffs.tracksPercentage).toBe(100);
   });
 });

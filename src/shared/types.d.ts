@@ -48,6 +48,7 @@ export interface YearStats {
 }
 
 export interface StatsResponse {
+  success: true;
   year: string;
   stats: YearStats;
   comparison?: {
@@ -61,3 +62,22 @@ export interface StatsResponse {
     }
   };
 }
+
+export type WorkerErrorCode =
+  | 'DECRYPTION_FAILED'
+  | 'INVALID_DATABASE'
+  | 'QUERY_FAILED'
+  | 'DECOMPRESSION_FAILED'
+  | 'NO_FILE_PROVIDED'
+  | 'UNKNOWN_ERROR';
+
+export interface WorkerErrorResponse {
+  success: false;
+  error: {
+    code: WorkerErrorCode;
+    message: string;
+  };
+}
+
+declare module '@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs';
+declare module '@7mind.io/sqlcipher-wasm';

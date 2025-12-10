@@ -1,5 +1,12 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
+import type { Mock } from 'vitest';
+// import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
+// Mock the compression module - must be before importing useFileUpload
+vi.mock('@/client/lib/compression', () => ({
+  compressFile: vi.fn().mockImplementation((file) => Promise.resolve(new Blob([file], { type: 'application/gzip' }))),
+}));
+
 import { useFileUpload } from './useFileUpload';
 
 describe('useFileUpload', () => {
@@ -77,13 +84,17 @@ describe('useFileUpload', () => {
     });
 
     await act(async () => {
-      const data = await result.current.uploadFile('2023', { unknownArtist: false, unknownGenre: false });
+      const data = await result.current.uploadFile('2023', undefined);
       expect(data).toEqual(mockResponse);
     });
 
     expect(result.current.isUploading).toBe(false);
     expect(result.current.error).toBeNull();
-    expect(global.fetch).toHaveBeenCalledWith('/upload', expect.any(Object));
+    expect(global.fetch).toHaveBeenCalledWith('/upload', expect.objectContaining({
+      headers: {
+        'X-File-Content-Encoding': 'gzip'
+      }
+    }));
   });
 
   it('should handle upload failure', async () => {
@@ -94,6 +105,13 @@ describe('useFileUpload', () => {
       ok: false,
       status: 500,
       statusText: 'Internal Server Error',
+      json: async () => ({
+        success: false,
+        error: {
+          code: 'UNKNOWN_ERROR',
+          message: 'Failed to upload file from worker',
+        },
+      }),
     });
 
     act(() => {
@@ -102,14 +120,14 @@ describe('useFileUpload', () => {
 
     await act(async () => {
       try {
-        await result.current.uploadFile('2023', { unknownArtist: false, unknownGenre: false });
+        await result.current.uploadFile('2023', undefined);
       } catch {
         // Expected error
       }
     });
 
     expect(result.current.isUploading).toBe(false);
-    expect(result.current.error).toContain('Failed to upload file');
+    expect(result.current.error).toContain('Failed to upload file from worker');
     expect(console.error).toHaveBeenCalled();
   });
 });
