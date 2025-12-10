@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { StatsResponse } from '@/shared/types';
+import { compressFile } from '@/client/lib/compression';
 
 interface UseFileUploadReturn {
   file: File | null;
@@ -47,8 +48,12 @@ export function useFileUpload(): UseFileUploadReturn {
     setError(null);
 
     try {
+      // Compress the file
+      const compressedBlob = await compressFile(file);
+
       const formData = new FormData();
-      formData.append('file', file);
+      // Send the compressed blob, but keep the original filename so the server knows it's the db
+      formData.append('file', compressedBlob, file.name);
       formData.append('year', year);
       if (comparisonYear) {
         formData.append('comparisonYear', comparisonYear);
@@ -56,6 +61,10 @@ export function useFileUpload(): UseFileUploadReturn {
 
       const response = await fetch('/upload', {
         method: 'POST',
+        headers: {
+          // Signal to the worker that this file is gzipped
+          'X-File-Content-Encoding': 'gzip'
+        },
         body: formData,
       });
 

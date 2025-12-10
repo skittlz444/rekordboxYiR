@@ -77,13 +77,17 @@ describe('useFileUpload', () => {
     });
 
     await act(async () => {
-      const data = await result.current.uploadFile('2023', { unknownArtist: false, unknownGenre: false });
+      const data = await result.current.uploadFile('2023', undefined);
       expect(data).toEqual(mockResponse);
     });
 
     expect(result.current.isUploading).toBe(false);
     expect(result.current.error).toBeNull();
-    expect(global.fetch).toHaveBeenCalledWith('/upload', expect.any(Object));
+    expect(global.fetch).toHaveBeenCalledWith('/upload', expect.objectContaining({
+      headers: {
+        'X-File-Content-Encoding': 'gzip'
+      }
+    }));
   });
 
   it('should handle upload failure', async () => {
@@ -102,7 +106,7 @@ describe('useFileUpload', () => {
 
     await act(async () => {
       try {
-        await result.current.uploadFile('2023', { unknownArtist: false, unknownGenre: false });
+        await result.current.uploadFile('2023', undefined);
       } catch {
         // Expected error
       }
@@ -113,3 +117,9 @@ describe('useFileUpload', () => {
     expect(console.error).toHaveBeenCalled();
   });
 });
+
+// Mock the compression module
+vi.mock('@/client/lib/compression', () => ({
+  compressFile: vi.fn().mockImplementation((file) => Promise.resolve(new Blob([file], { type: 'application/gzip' }))),
+}));
+

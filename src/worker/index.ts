@@ -27,12 +27,24 @@ app.post('/upload', async (c) => {
     }
 
     const buffer = await file.arrayBuffer();
-    const u8 = new Uint8Array(buffer);
+    let u8 = new Uint8Array(buffer);
+
+    // Check for compression
+    const encoding = c.req.header('X-File-Content-Encoding');
+    if (encoding === 'gzip') {
+      console.log('Decompressing gzip payload...');
+      const ds = new DecompressionStream('gzip');
+      const compressedStream = new Blob([u8]).stream();
+      const decompressedStream = compressedStream.pipeThrough(ds);
+      const decompressedBuffer = await new Response(decompressedStream).arrayBuffer();
+      u8 = new Uint8Array(decompressedBuffer);
+      console.log(`Decompressed size: ${u8.length} bytes`);
+    }
 
     // Initialize SQLCipher
     const module = await initSqlcipher({
-      instantiateWasm: function(imports: WebAssembly.Imports, successCallback: (instance: WebAssembly.Instance) => void) {
-        WebAssembly.instantiate(wasmBinary, imports).then(function(instance) {
+      instantiateWasm: function (imports: WebAssembly.Imports, successCallback: (instance: WebAssembly.Instance) => void) {
+        WebAssembly.instantiate(wasmBinary, imports).then(function (instance) {
           successCallback(instance);
         });
         return {};
@@ -50,7 +62,7 @@ app.post('/upload', async (c) => {
     try {
       // Open without key first
       db = sqlite.open(dbPath);
-      
+
       // Manually set key to handle raw hex format correctly
       const key = c.env.REKORDBOX_KEY;
       if (!key) {
@@ -68,9 +80,9 @@ app.post('/upload', async (c) => {
       db.exec('PRAGMA cipher_hmac_algorithm = HMAC_SHA512');
       db.exec('PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA512');
       db.exec('PRAGMA cipher_plaintext_header_size = 0');
-      
+
       console.log(`Opening DB with key length: ${key.length}, File size: ${u8.length}`);
-      
+
       // Helper to add exclusion clause for unknown artists
       const getExcludeArtistClause = (field: string) => {
         return `AND ${field} IS NOT NULL AND ${field} != '' AND ${field} != 'Unknown Artist'`;
@@ -204,14 +216,14 @@ app.post('/upload', async (c) => {
 
         let longestSessionDuration = 0;
         if (mostSongsSession.length > 0) {
-             const historyId = mostSongsSession[0].ID;
-             const durationResult = db.query(`
+          const historyId = mostSongsSession[0].ID;
+          const durationResult = db.query(`
                 SELECT SUM(c.Length) as total_duration
                 FROM djmdSongHistory sh
                 JOIN djmdContent c ON sh.ContentID = c.ID
                 WHERE sh.HistoryID = ?
              `, [historyId]);
-             longestSessionDuration = Number(durationResult[0]?.total_duration || 0);
+          longestSessionDuration = Number(durationResult[0]?.total_duration || 0);
         }
 
         // 6. Most active month by song count
@@ -251,14 +263,14 @@ app.post('/upload', async (c) => {
 
       // Get stats for the main year
       const mainStats = getYearStats(year);
-      
+
       // Handle comparison if requested
       let comparisonData = undefined;
       const comparisonYear = body['comparisonYear'] as string;
-      
+
       if (comparisonYear && comparisonYear !== year) {
         const compStats = getYearStats(comparisonYear);
-        
+
         // Calculate diffs
         const calculateDiff = (current: number, previous: number) => {
           if (previous === 0) return current > 0 ? 100 : 0;
@@ -285,9 +297,9 @@ app.post('/upload', async (c) => {
 
     } finally {
       if (db) {
-        try { db.close(); } catch(e) { console.error(e); }
+        try { db.close(); } catch (e) { console.error(e); }
       }
-      try { module.FS.unlink(dbPath); } catch(e) { console.error(e); }
+      try { module.FS.unlink(dbPath); } catch (e) { console.error(e); }
     }
 
   } catch (e: unknown) {

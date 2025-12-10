@@ -19,12 +19,12 @@ Implement gzip compression on the client before uploading to reduce transfer siz
 
 #### Sub-tasks
 
-- [ ] **Task 6.1.1: Install compression library**
+- [x] **Task 6.1.1: Install compression library**
     - Install `fflate` package (lightweight, ~8KB gzipped, fast compression)
     - Command: `npm install fflate`
     - Add to `package.json` dependencies
 
-- [ ] **Task 6.1.2: Create compression utility**
+- [x] **Task 6.1.2: Create compression utility**
     - Create `src/client/lib/compression.ts`
     - Implement `compressFile(file: File): Promise<Blob>` function using `fflate.gzipSync()`
     - Export utility for use in upload flow
@@ -40,14 +40,14 @@ Implement gzip compression on the client before uploading to reduce transfer siz
       }
       ```
 
-- [ ] **Task 6.1.3: Update upload hook**
+- [x] **Task 6.1.3: Update upload hook**
     - Modify `src/client/features/upload/hooks/useUpload.ts`
     - Compress file using `fflate`
     - **Important**: Do NOT use `Content-Encoding: gzip` on the main request, as it applies to the entire multipart body.
     - Instead, add a custom header: `X-File-Content-Encoding: gzip`
     - Update loading state to show "Compressing..." then "Uploading..."
 
-- [ ] **Task 6.1.4: Update Worker to decompress**
+- [x] **Task 6.1.4: Update Worker to decompress**
     - Modify `src/worker/index.ts`
     - Check for `X-File-Content-Encoding: gzip` header
     - Decompress using native `DecompressionStream` API with piping to minimize peak memory:
@@ -61,7 +61,7 @@ Implement gzip compression on the client before uploading to reduce transfer siz
       ```
     - Fall back to uncompressed handling if header not present
 
-- [ ] **Task 6.1.5: Add compression tests**
+- [x] **Task 6.1.5: Add compression tests**
     - Add unit tests in `src/client/lib/compression.test.ts`
     - Test compression/decompression round-trip
     - Test handling of various file sizes
@@ -218,11 +218,11 @@ Improve error messages and handling for failures that can be caught (note: Worke
 ## Acceptance Criteria
 
 ### Task 6.1 Complete When:
-- [ ] Files compress before upload without user interaction
-- [ ] Worker correctly decompresses gzip payloads
-- [ ] Uncompressed uploads still work (backward compatibility)
-- [ ] Compression achieves ~60%+ size reduction on test `.db` files
-- [ ] All existing tests pass
+- [x] Files compress before upload without user interaction
+- [x] Worker correctly decompresses gzip payloads
+- [x] Uncompressed uploads still work (backward compatibility)
+- [x] Compression achieves ~60%+ size reduction on test `.db` files
+- [x] All existing tests pass
 
 ### Task 6.2 Complete When:
 - [ ] Query count reduced from ~11 to ~4-6 per year
