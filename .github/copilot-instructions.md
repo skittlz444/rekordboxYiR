@@ -32,8 +32,7 @@ Before generating any code, editing files, or answering architectural questions,
 ## Workflow Checklist
 When asked to implement a feature:
 1.  [ ] Read the relevant `docs/plan/` file.
-2.  [ ] Check `docs/plan/05_implementation_roadmap.md` for the task context (if part of the initial roadmap, it's ok if it's not in there).
-3.  [ ] Implement the code following `04_coding_standards.md`.
-4.  [ ] Add tests (Vitest/Playwright).
-5.  [ ] **CRITICAL:** If you edit `wrangler.toml`, you **MUST** run `npx wrangler types` immediately to update the worker types.
-6.  [ ] Run `npm run lint` to ensure code quality and fix any issues.
+2.  [ ] Implement the code following `04_coding_standards.md`.
+3.  [ ] Add tests (Vitest/Playwright).
+4.  [ ] **CRITICAL:** If you edit `wrangler.toml`, you **MUST** run `npx wrangler types` immediately to update the worker types.
+5.  [ ] Run `npm run lint` to ensure code quality and fix any issues.

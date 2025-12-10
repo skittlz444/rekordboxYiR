@@ -99,6 +99,6 @@
     - [x] Create comprehensive testing documentation
 
 ## Phase 5: Deployment
-- [ ] **Task 5.1: Deployment Readiness**
-    - [ ] Create readme for local setup and running.
-    - [ ] Remove reading of this document from the copilot instructions.
+- [x] **Task 5.1: Deployment Readiness**
+    - [x] Create readme for local setup and running.
+    - [x] Remove reading of this document from the copilot instructions.
