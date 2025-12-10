@@ -85,7 +85,7 @@ Reduce CPU time by consolidating multiple SQL queries into fewer, optimized quer
 
 #### Sub-tasks
 
-- [ ] **Task 6.2.1: Consolidate aggregation queries**
+- [x] **Task 6.2.1: Consolidate aggregation queries**
     - Combine into single query with subqueries:
         - Total tracks count
         - Total playtime sum
@@ -104,7 +104,7 @@ Reduce CPU time by consolidating multiple SQL queries into fewer, optimized quer
          WHERE strftime('%Y', h.DateCreated) = ?) as totalSessions
       ```
 
-- [ ] **Task 6.2.2: Consolidate library growth queries**
+- [x] **Task 6.2.2: Consolidate library growth queries**
     - Merge library total and library added counts:
       ```sql
       SELECT
@@ -112,7 +112,7 @@ Reduce CPU time by consolidating multiple SQL queries into fewer, optimized quer
         (SELECT COUNT(*) FROM djmdContent WHERE strftime('%Y', DateCreated) = ?) as libraryAdded
       ```
 
-- [ ] **Task 6.2.3: Consolidate top entities queries**
+- [x] **Task 6.2.3: Consolidate top entities queries**
     - Combine top tracks, artists, genres, BPMs using UNION ALL with type discriminator:
       ```sql
       WITH plays AS (
@@ -133,7 +133,7 @@ Reduce CPU time by consolidating multiple SQL queries into fewer, optimized quer
       -- ... etc for genres and BPMs
       ```
 
-- [ ] **Task 6.2.4: Consolidate session stats queries**
+- [x] **Task 6.2.4: Consolidate session stats queries**
     - Combine most songs in session, longest session, busiest month:
       ```sql
       WITH session_stats AS (
@@ -150,13 +150,13 @@ Reduce CPU time by consolidating multiple SQL queries into fewer, optimized quer
         -- ... etc
       ```
 
-- [ ] **Task 6.2.5: Refactor worker query execution**
+- [x] **Task 6.2.5: Refactor worker query execution**
     - Update `src/worker/index.ts` to use consolidated queries
     - Create helper functions for each consolidated query
     - Parse combined results into existing response structure
     - Ensure backward compatibility with `StatsResponse` type in `src/shared/types.d.ts`
 
-- [ ] **Task 6.2.6: Update query tests**
+- [x] **Task 6.2.6: Update query tests**
     - Update `src/worker/index.test.ts` with new query patterns
     - Ensure all existing test assertions still pass
     - Add performance timing assertions if feasible
@@ -225,10 +225,10 @@ Improve error messages and handling for failures that can be caught (note: Worke
 - [x] All existing tests pass
 
 ### Task 6.2 Complete When:
-- [ ] Query count reduced from ~11 to ~4-6 per year
-- [ ] Response data structure unchanged (`StatsResponse` compatible)
-- [ ] All existing tests pass with refactored queries
-- [ ] No regression in data accuracy
+- [x] Query count reduced from ~11 to ~4-6 per year
+- [x] Response data structure unchanged (`StatsResponse` compatible)
+- [x] All existing tests pass with refactored queries
+- [x] No regression in data accuracy
 
 ### Task 6.3 Complete When:
 - [ ] All catchable errors return structured `WorkerErrorResponse`
