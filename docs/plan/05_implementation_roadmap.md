@@ -99,8 +99,6 @@
     - [x] Create comprehensive testing documentation
 
 ## Phase 5: Deployment
-- [ ] **Task 5.1: Deployment Verification**
-    - [ ] Verify Cloudflare Workers auto-deploy is functioning correctly.
-    - [ ] Perform final production smoke tests.
+- [ ] **Task 5.1: Deployment Readiness**
     - [ ] Create readme for local setup and running.
     - [ ] Remove reading of this document from the copilot instructions.
