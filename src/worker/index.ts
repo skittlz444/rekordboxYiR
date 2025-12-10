@@ -120,11 +120,9 @@ app.post('/upload', async (c) => {
       db.exec('PRAGMA synchronous = OFF');
       db.exec('PRAGMA journal_mode = MEMORY');
 
-      // Create temporary indexes for performance (DateCreated is main filter)
-      db.exec('CREATE INDEX IF NOT EXISTS idx_history_date ON djmdHistory(DateCreated)');
-      db.exec('CREATE INDEX IF NOT EXISTS idx_content_date ON djmdContent(DateCreated)');
-      db.exec('CREATE INDEX IF NOT EXISTS idx_sh_history ON djmdSongHistory(HistoryID)');
-      db.exec('CREATE INDEX IF NOT EXISTS idx_sh_content ON djmdSongHistory(ContentID)');
+      // NOTE: Removed CREATE INDEX statements - benchmarking showed they add ~176ms overhead
+      // without improving query performance (the database already has suitable indexes)
+
 
       // Helper to add exclusion clause for unknown artists
       const getExcludeArtistClause = (field: string) => {

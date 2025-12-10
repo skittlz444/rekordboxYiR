@@ -150,7 +150,7 @@ describe('Worker API', () => {
     // Verify DB interactions
     expect(mocks.mockDb.exec).toHaveBeenCalledWith(expect.stringContaining('PRAGMA key'));
     expect(mocks.mockDb.exec).toHaveBeenCalledWith(expect.stringContaining('PRAGMA synchronous = OFF'));
-    expect(mocks.mockDb.exec).toHaveBeenCalledWith(expect.stringContaining('CREATE INDEX'));
+    // NOTE: CREATE INDEX removed - benchmarking showed it adds overhead without benefit
     expect(mocks.mockFS.writeFile).toHaveBeenCalled();
     expect(mocks.mockFS.unlink).toHaveBeenCalled();
     expect(mocks.mockDb.close).toHaveBeenCalled();
