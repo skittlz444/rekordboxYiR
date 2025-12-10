@@ -48,6 +48,7 @@ export interface YearStats {
 }
 
 export interface StatsResponse {
+  success: true;
   year: string;
   stats: YearStats;
   comparison?: {
@@ -67,6 +68,7 @@ export type WorkerErrorCode =
   | 'INVALID_DATABASE'
   | 'QUERY_FAILED'
   | 'DECOMPRESSION_FAILED'
+  | 'NO_FILE_PROVIDED'
   | 'UNKNOWN_ERROR';
 
 export interface WorkerErrorResponse {

@@ -26,8 +26,8 @@ app.post('/upload', async (c) => {
       return c.json({
         success: false,
         error: {
-          code: 'UNKNOWN_ERROR',
-          message: 'No file uploaded'
+          code: 'NO_FILE_PROVIDED',
+          message: 'No valid file was uploaded. Please select a file and try again.'
         }
       }, 400);
     }
@@ -332,6 +332,7 @@ app.post('/upload', async (c) => {
       console.timeEnd('Total Processing');
 
       return c.json({
+        success: true,
         year,
         stats: mainStats,
         comparison: comparisonData

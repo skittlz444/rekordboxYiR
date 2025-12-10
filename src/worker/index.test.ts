@@ -171,8 +171,8 @@ describe('Worker API', () => {
     expect(res.status).toBe(400);
     const data = await res.json() as WorkerErrorResponse;
     expect(data.success).toBe(false);
-    expect(data.error.code).toBe('UNKNOWN_ERROR');
-    expect(data.error.message).toBe('No file uploaded');
+    expect(data.error.code).toBe('NO_FILE_PROVIDED');
+    expect(data.error.message).toContain('No valid file was uploaded');
   });
 
   it('should handle decryption failure (wrong key)', async () => {
@@ -202,6 +202,34 @@ describe('Worker API', () => {
     const data = await res.json() as WorkerErrorResponse;
     expect(data.success).toBe(false);
     expect(data.error.code).toBe('DECRYPTION_FAILED');
+  });
+
+  it('should handle decompression failure', async () => {
+    // Send malformed gzip data with the gzip encoding header
+    const malformedGzipData = new Uint8Array([0x1F, 0x8B, 0x08, 0x00, 0xFF, 0xFF]); // Invalid gzip
+    const formData = new FormData();
+    formData.append('file', new File([malformedGzipData], 'master.db'));
+    formData.append('year', '2024');
+
+    const req = new Request('http://localhost/upload', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-File-Content-Encoding': 'gzip'
+      }
+    });
+
+    const res = await app.request(req, undefined, {
+      REKORDBOX_KEY: 'test-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
+    });
+
+    expect(res.status).toBe(400);
+    const data = await res.json() as WorkerErrorResponse;
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe('DECOMPRESSION_FAILED');
+    expect(data.error.message).toContain('decompress');
   });
 
   it('should handle invalid database structure', async () => {

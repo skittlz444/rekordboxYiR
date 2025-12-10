@@ -1,6 +1,12 @@
 import { renderHook, act } from '@testing-library/react';
 import type { Mock } from 'vitest';
 // import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
+// Mock the compression module - must be before importing useFileUpload
+vi.mock('@/client/lib/compression', () => ({
+  compressFile: vi.fn().mockImplementation((file) => Promise.resolve(new Blob([file], { type: 'application/gzip' }))),
+}));
+
 import { useFileUpload } from './useFileUpload';
 
 describe('useFileUpload', () => {
@@ -125,9 +131,3 @@ describe('useFileUpload', () => {
     expect(console.error).toHaveBeenCalled();
   });
 });
-
-// Mock the compression module
-vi.mock('@/client/lib/compression', () => ({
-  compressFile: vi.fn().mockImplementation((file) => Promise.resolve(new Blob([file], { type: 'application/gzip' }))),
-}));
-
