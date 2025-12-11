@@ -6,6 +6,7 @@ import initSqlcipher from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs';
 import { SQLiteAPI } from '@7mind.io/sqlcipher-wasm';
 // @ts-expect-error - wasm import
 import wasmBinary from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.wasm';
+import { MAX_FILE_SIZE_BYTES, getFileSizeLimitErrorMessage } from '../shared/constants';
 
 type Bindings = {
   REKORDBOX_KEY: string;
@@ -23,16 +24,38 @@ app.post('/upload', async (c) => {
     const year = body['year'] as string || new Date().getFullYear().toString();
 
     if (!(file instanceof File)) {
-      return c.json({ error: 'No file uploaded' }, 400);
+      return c.json({
+        success: false,
+        error: {
+          code: 'NO_FILE_PROVIDED',
+          message: 'No valid file was uploaded. Please select a file and try again.'
+        }
+      }, 400);
     }
+
+    // Validate file size (100MB limit due to Cloudflare restrictions)
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+      console.error(`[Upload Error] File size exceeds limit. File size: ${fileSizeMB}MB`);
+      return c.json({
+        success: false,
+        error: {
+          code: 'FILE_TOO_LARGE',
+          message: getFileSizeLimitErrorMessage(fileSizeMB)
+        }
+      }, 413);
+    }
+
+    // Performance logging
+    console.time('Total Processing');
 
     const buffer = await file.arrayBuffer();
     const u8 = new Uint8Array(buffer);
 
     // Initialize SQLCipher
     const module = await initSqlcipher({
-      instantiateWasm: function(imports: WebAssembly.Imports, successCallback: (instance: WebAssembly.Instance) => void) {
-        WebAssembly.instantiate(wasmBinary, imports).then(function(instance) {
+      instantiateWasm: function (imports: WebAssembly.Imports, successCallback: (instance: WebAssembly.Instance) => void) {
+        WebAssembly.instantiate(wasmBinary, imports).then(function (instance) {
           successCallback(instance);
         });
         return {};
@@ -50,7 +73,7 @@ app.post('/upload', async (c) => {
     try {
       // Open without key first
       db = sqlite.open(dbPath);
-      
+
       // Manually set key to handle raw hex format correctly
       const key = c.env.REKORDBOX_KEY;
       if (!key) {
@@ -68,9 +91,9 @@ app.post('/upload', async (c) => {
       db.exec('PRAGMA cipher_hmac_algorithm = HMAC_SHA512');
       db.exec('PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA512');
       db.exec('PRAGMA cipher_plaintext_header_size = 0');
-      
+
       console.log(`Opening DB with key length: ${key.length}, File size: ${u8.length}`);
-      
+
       // Helper to add exclusion clause for unknown artists
       const getExcludeArtistClause = (field: string) => {
         return `AND ${field} IS NOT NULL AND ${field} != '' AND ${field} != 'Unknown Artist'`;
@@ -204,14 +227,14 @@ app.post('/upload', async (c) => {
 
         let longestSessionDuration = 0;
         if (mostSongsSession.length > 0) {
-             const historyId = mostSongsSession[0].ID;
-             const durationResult = db.query(`
+          const historyId = mostSongsSession[0].ID;
+          const durationResult = db.query(`
                 SELECT SUM(c.Length) as total_duration
                 FROM djmdSongHistory sh
                 JOIN djmdContent c ON sh.ContentID = c.ID
                 WHERE sh.HistoryID = ?
              `, [historyId]);
-             longestSessionDuration = Number(durationResult[0]?.total_duration || 0);
+          longestSessionDuration = Number(durationResult[0]?.total_duration || 0);
         }
 
         // 6. Most active month by song count
@@ -251,14 +274,14 @@ app.post('/upload', async (c) => {
 
       // Get stats for the main year
       const mainStats = getYearStats(year);
-      
+
       // Handle comparison if requested
       let comparisonData = undefined;
       const comparisonYear = body['comparisonYear'] as string;
-      
+
       if (comparisonYear && comparisonYear !== year) {
         const compStats = getYearStats(comparisonYear);
-        
+
         // Calculate diffs
         const calculateDiff = (current: number, previous: number) => {
           if (previous === 0) return current > 0 ? 100 : 0;
@@ -277,6 +300,8 @@ app.post('/upload', async (c) => {
         };
       }
 
+      console.timeEnd('Total Processing');
+
       return c.json({
         year,
         stats: mainStats,
@@ -285,15 +310,22 @@ app.post('/upload', async (c) => {
 
     } finally {
       if (db) {
-        try { db.close(); } catch(e) { console.error(e); }
+        try { db.close(); } catch (e) { console.error(e); }
       }
-      try { module.FS.unlink(dbPath); } catch(e) { console.error(e); }
+      try { module.FS.unlink(dbPath); } catch (e) { console.error(e); }
     }
 
   } catch (e: unknown) {
     console.error(e);
     const error = e as Error;
-    return c.json({ error: error.message, stack: error.stack }, 500);
+    return c.json({
+      success: false,
+      error: {
+        code: 'PROCESSING_ERROR',
+        message: error.message,
+        stack: error.stack
+      }
+    }, 500);
   }
 });
 

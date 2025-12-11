@@ -112,7 +112,42 @@ describe('Worker API', () => {
       
       expect(res.status).toBe(400);
       const data = await res.json();
-      expect(data).toHaveProperty('error', 'No file uploaded');
+      expect(data).toHaveProperty('success', false);
+      expect(data).toHaveProperty('error');
+      expect(data.error).toHaveProperty('code', 'NO_FILE_PROVIDED');
+      expect(data.error).toHaveProperty('message');
+  });
+
+  it('should return 413 if file exceeds MAX_FILE_SIZE_BYTES', async () => {
+    // Create a file with actual large content to exceed 100MB
+    const largeFileSize = 101 * 1024 * 1024; // 101MB
+    const largeBuffer = new Uint8Array(largeFileSize);
+    
+    const formData = new FormData();
+    const largeFile = new File([largeBuffer], 'master.db');
+    formData.append('file', largeFile);
+    formData.append('year', '2024');
+
+    const req = new Request('http://localhost/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const res = await app.request(req, undefined, {
+      REKORDBOX_KEY: 'test-key',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ASSETS: { fetch: vi.fn() } as any
+    });
+
+    expect(res.status).toBe(413);
+    const data = await res.json();
+    expect(data).toHaveProperty('success', false);
+    expect(data).toHaveProperty('error');
+    expect(data.error).toHaveProperty('code', 'FILE_TOO_LARGE');
+    expect(data.error).toHaveProperty('message');
+    expect(data.error.message).toContain('100MB limit');
+    expect(data.error.message).toContain('@dj_skittlz');
+    expect(data.error.message).toContain('Instagram');
   });
 
   it('should handle comparison year', async () => {

@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { StatsResponse } from '@/shared/types';
+import { MAX_FILE_SIZE_BYTES, getFileSizeLimitErrorMessage } from '@/shared/constants';
 
 interface UseFileUploadReturn {
   file: File | null;
@@ -9,9 +10,6 @@ interface UseFileUploadReturn {
   uploadFile: (year: string, comparisonYear?: string) => Promise<StatsResponse>;
   reset: () => void;
 }
-
-const MAX_FILE_SIZE_MB = 100;
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 export function useFileUpload(): UseFileUploadReturn {
   const [file, setFile] = useState<File | null>(null);
@@ -29,8 +27,9 @@ export function useFileUpload(): UseFileUploadReturn {
 
     // Validate file size
     if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
-      const errorMsg = `File size exceeds ${MAX_FILE_SIZE_MB}MB limit.`;
-      console.error(`[Upload Error] ${errorMsg} File size: ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB`);
+      const fileSizeMB = (selectedFile.size / 1024 / 1024).toFixed(2);
+      const errorMsg = getFileSizeLimitErrorMessage(fileSizeMB);
+      console.error(`[Upload Error] File size exceeds limit. File size: ${fileSizeMB}MB`);
       setError(errorMsg);
       return;
     }
