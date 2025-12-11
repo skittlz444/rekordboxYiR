@@ -28,4 +28,13 @@ describe('OpenerSlide', () => {
     expect(screen.getByText(/YOUR/i)).toBeInTheDocument()
     expect(screen.getByText(/IN MUSIC/i)).toBeInTheDocument()
   })
+
+  it('renders logo when provided', () => {
+    const logoUrl = 'data:image/png;base64,fake-logo'
+    render(<OpenerSlide year="2025" djName="DJ Test" logo={logoUrl} />)
+    const img = screen.getByAltText('DJ Test logo')
+    expect(img).toBeInTheDocument()
+    expect(img).toHaveAttribute('src', logoUrl)
+    expect(screen.queryByText('DJ TEST')).not.toBeInTheDocument()
+  })
 })

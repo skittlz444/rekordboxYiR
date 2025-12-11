@@ -5,20 +5,22 @@ export interface ConfigurationState {
   // Year configuration
   targetYear: number
   comparisonYear: number | null
-  
+
   // User preferences
   djName: string
-  
+  logo: string | null // Base64 data URL
+
   // Trend slide configuration
   disableGenresInTrends: boolean
-  
+
   // Playtime estimation
   averageTrackPlayedPercent: number
-  
+
   // Actions
   setTargetYear: (year: number) => void
   setComparisonYear: (year: number | null) => void
   setDjName: (name: string) => void
+  setLogo: (logo: string | null) => void
   setDisableGenresInTrends: (value: boolean) => void
   setAverageTrackPlayedPercent: (value: number) => void
   resetToDefaults: () => void
@@ -30,6 +32,7 @@ const defaultState = {
   targetYear: currentYear,
   comparisonYear: currentYear - 1,
   djName: '',
+  logo: null,
   disableGenresInTrends: false,
   averageTrackPlayedPercent: 0.75,
 }
@@ -38,13 +41,21 @@ export const useConfigStore = create<ConfigurationState>()(
   persist(
     (set) => ({
       ...defaultState,
-      
+
       setTargetYear: (year) => set({ targetYear: year }),
       setComparisonYear: (year) => set({ comparisonYear: year }),
       setDjName: (name) => set({ djName: name }),
+      setLogo: (logo) => set({ logo }),
       setDisableGenresInTrends: (value) => set({ disableGenresInTrends: value }),
       setAverageTrackPlayedPercent: (value) => set({ averageTrackPlayedPercent: value }),
-      resetToDefaults: () => set(defaultState),
+      resetToDefaults: () => set({
+        targetYear: currentYear,
+        comparisonYear: currentYear - 1,
+        djName: '',
+        logo: null,
+        disableGenresInTrends: false,
+        averageTrackPlayedPercent: 0.75,
+      }),
     }),
     {
       name: 'rekordbox-yir-config',
