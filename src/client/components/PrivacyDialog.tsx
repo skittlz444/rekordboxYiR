@@ -17,7 +17,7 @@ export function PrivacyDialog({ children }: PrivacyDialogProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Your Data - We Don't Use It</DialogTitle>
+          <DialogTitle>Your Data - We Don&apos;t Use It</DialogTitle>
           <DialogDescription asChild>
             <div className="pt-4 space-y-4 text-left text-sm text-muted-foreground">
               <div className="bg-primary/10 border-l-4 border-primary p-4 rounded-r-md">
@@ -39,7 +39,7 @@ export function PrivacyDialog({ children }: PrivacyDialogProps) {
                   <h4 className="font-semibold text-foreground mb-1">🔒 No Storage</h4>
                   <p className="text-sm">
                     Your Rekordbox database file is <strong>never stored</strong> on our servers. 
-                    It's processed in memory and immediately discarded after generating your statistics.
+                    It&apos;s processed in memory and immediately discarded after generating your statistics.
                   </p>
                 </div>
                 
@@ -64,14 +64,14 @@ export function PrivacyDialog({ children }: PrivacyDialogProps) {
                   <h4 className="font-semibold text-foreground mb-1">💾 Client-Side Only</h4>
                   <p className="text-sm">
                     All visualizations and sharing features happen in your browser. 
-                    We don't track what you share or download.
+                    We don&apos;t track what you share or download.
                   </p>
                 </div>
               </div>
               
               <p className="text-sm italic border-t pt-3 mt-4">
                 In short: Upload your database, get your stats, and rest assured that 
-                we've already forgotten about it. Your music library is yours alone.
+                we&apos;ve already forgotten about it. Your music library is yours alone.
               </p>
             </div>
           </DialogDescription>

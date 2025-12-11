@@ -38,7 +38,7 @@ function App() {
           <div className="text-center mt-2">
             <PrivacyDialog>
               <button className="text-primary hover:underline text-sm">
-                Your data - we don't use it
+                Your data - we don&apos;t use it
               </button>
             </PrivacyDialog>
           </div>

@@ -63,7 +63,7 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
                 Upload your Rekordbox master.db file to generate your Year in Review.
                 <PrivacyDialog>
                   <button className="text-primary hover:underline ml-1 text-sm font-medium">
-                    Your data - we don't use it
+                    Your data - we don&apos;t use it
                   </button>
                 </PrivacyDialog>
               </CardDescription>
