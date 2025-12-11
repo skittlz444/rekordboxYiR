@@ -1,4 +1,4 @@
-// import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { useConfigStore } from './store'
 
 describe('Configuration Store', () => {
@@ -10,7 +10,7 @@ describe('Configuration Store', () => {
   it('should initialize with default values', () => {
     const state = useConfigStore.getState()
     const currentYear = new Date().getFullYear()
-
+    
     expect(state.targetYear).toBe(currentYear)
     expect(state.comparisonYear).toBe(currentYear - 1)
     expect(state.djName).toBe('')
@@ -59,17 +59,17 @@ describe('Configuration Store', () => {
   it('should reset to defaults', () => {
     const currentYear = new Date().getFullYear()
     const store = useConfigStore.getState()
-
+    
     // Change all values
     store.setTargetYear(2020)
     store.setComparisonYear(2019)
     store.setDjName('Test')
     store.setDisableGenresInTrends(true)
     store.setAverageTrackPlayedPercent(0.5)
-
+    
     // Reset to defaults
     store.resetToDefaults()
-
+    
     const state = useConfigStore.getState()
     expect(state.targetYear).toBe(currentYear)
     expect(state.comparisonYear).toBe(currentYear - 1)
