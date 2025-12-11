@@ -13,7 +13,7 @@ import {
   DownloadableSlideWrapper,
 } from './components'
 import { ArtistStat, TrackStat, GenreStat } from '@/shared/types'
-import { ArtistStat, TrackStat, GenreStat } from '@/shared/types'
+
 
 // Mock data
 const mockArtists: ArtistStat[] = [
