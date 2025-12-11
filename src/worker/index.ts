@@ -6,6 +6,7 @@ import initSqlcipher from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs';
 import { SQLiteAPI } from '@7mind.io/sqlcipher-wasm';
 // @ts-expect-error - wasm import
 import wasmBinary from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.wasm';
+import { MAX_FILE_SIZE_BYTES, getFileSizeLimitErrorMessage } from '../shared/constants';
 
 type Bindings = {
   REKORDBOX_KEY: string;
@@ -27,7 +28,6 @@ app.post('/upload', async (c) => {
     }
 
     // Validate file size (100MB limit due to Cloudflare restrictions)
-    const MAX_FILE_SIZE_BYTES = 100 * 1024 * 1024;
     if (file.size > MAX_FILE_SIZE_BYTES) {
       const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
       console.error(`[Upload Error] File size exceeds limit. File size: ${fileSizeMB}MB`);
@@ -35,7 +35,7 @@ app.post('/upload', async (c) => {
         success: false,
         error: {
           code: 'FILE_TOO_LARGE',
-          message: `Sorry! Your file (${fileSizeMB}MB) exceeds the 100MB limit due to Cloudflare restrictions. If you'd like a Year in Review created, please reach out to @dj_skittlz on Instagram for manual processing.`
+          message: getFileSizeLimitErrorMessage(fileSizeMB)
         }
       }, 413);
     }

@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { StatsResponse } from '@/shared/types';
+import { MAX_FILE_SIZE_BYTES, getFileSizeLimitErrorMessage } from '@/shared/constants';
 
 interface UseFileUploadReturn {
   file: File | null;
@@ -9,9 +10,6 @@ interface UseFileUploadReturn {
   uploadFile: (year: string, comparisonYear?: string) => Promise<StatsResponse>;
   reset: () => void;
 }
-
-const MAX_FILE_SIZE_MB = 100;
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 export function useFileUpload(): UseFileUploadReturn {
   const [file, setFile] = useState<File | null>(null);
@@ -30,7 +28,7 @@ export function useFileUpload(): UseFileUploadReturn {
     // Validate file size
     if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
       const fileSizeMB = (selectedFile.size / 1024 / 1024).toFixed(2);
-      const errorMsg = `Sorry! Your file (${fileSizeMB}MB) exceeds the ${MAX_FILE_SIZE_MB}MB limit due to Cloudflare restrictions. If you'd like a Year in Review created, please reach out to @dj_skittlz on Instagram for manual processing.`;
+      const errorMsg = getFileSizeLimitErrorMessage(fileSizeMB);
       console.error(`[Upload Error] File size exceeds limit. File size: ${fileSizeMB}MB`);
       setError(errorMsg);
       return;
