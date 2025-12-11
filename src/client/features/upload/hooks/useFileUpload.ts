@@ -29,8 +29,9 @@ export function useFileUpload(): UseFileUploadReturn {
 
     // Validate file size
     if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
-      const errorMsg = `File size exceeds ${MAX_FILE_SIZE_MB}MB limit.`;
-      console.error(`[Upload Error] ${errorMsg} File size: ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB`);
+      const fileSizeMB = (selectedFile.size / 1024 / 1024).toFixed(2);
+      const errorMsg = `Sorry! Your file (${fileSizeMB}MB) exceeds the ${MAX_FILE_SIZE_MB}MB limit due to Cloudflare restrictions. If you'd like a Year in Review created, please reach out to @dj_skittlz on Instagram for manual processing.`;
+      console.error(`[Upload Error] File size exceeds limit. File size: ${fileSizeMB}MB`);
       setError(errorMsg);
       return;
     }

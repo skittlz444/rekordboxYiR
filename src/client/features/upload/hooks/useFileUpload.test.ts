@@ -58,7 +58,9 @@ describe('useFileUpload', () => {
     });
 
     expect(result.current.file).toBeNull();
-    expect(result.current.error).toContain('File size exceeds 100MB limit');
+    expect(result.current.error).toContain('exceeds the 100MB limit');
+    expect(result.current.error).toContain('@dj_skittlz');
+    expect(result.current.error).toContain('Instagram');
     expect(console.error).toHaveBeenCalled();
   });
 
