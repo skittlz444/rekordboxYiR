@@ -8,6 +8,7 @@ import { StatsResponse } from '@/shared/types';
 import { useConfigStore } from '@/client/lib/store';
 import { UploadLoadingOverlay } from '@/client/components/LoadingStates';
 import { AnimatePresence } from 'framer-motion';
+import { PrivacyDialog } from '@/client/components/PrivacyDialog';
 import {
   Dialog,
   DialogContent,
@@ -60,6 +61,11 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
             <div className="flex items-center gap-2">
               <CardDescription>
                 Upload your Rekordbox master.db file to generate your Year in Review.
+                <PrivacyDialog>
+                  <button className="text-primary hover:underline ml-1 text-sm font-medium">
+                    Your data - we don&apos;t use it
+                  </button>
+                </PrivacyDialog>
               </CardDescription>
               <Dialog>
                 <DialogTrigger asChild>
@@ -125,7 +131,7 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
             <div className="space-y-4">
               <div className="flex gap-2 items-end">
                 <div className="space-y-2 flex-1">
-                  <Label htmlFor="djName">DJ Name (Optional)</Label>
+                  <Label htmlFor="djName">DJ Name or Logo (Optional)</Label>
                   <Input
                     id="djName"
                     type="text"
