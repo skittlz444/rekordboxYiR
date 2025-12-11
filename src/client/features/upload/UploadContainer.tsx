@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../components/ui/dialog"
+} from '../../components/ui/dialog'
 import { HelpCircle } from 'lucide-react'
 
 interface UploadContainerProps {
