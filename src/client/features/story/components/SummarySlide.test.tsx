@@ -63,4 +63,13 @@ describe('SummarySlide', () => {
     render(<SummarySlide data={dataWithoutDJ} />)
     expect(screen.getByText('YOUR YEAR IN MUSIC')).toBeInTheDocument()
   })
+
+  it('renders logo when provided', () => {
+    const dataWithLogo = { ...mockData, logo: 'data:image/png;base64,fake-logo' }
+    render(<SummarySlide data={dataWithLogo} />)
+    const img = screen.getByAltText('DJ Logo')
+    expect(img).toBeInTheDocument()
+    expect(img).toHaveAttribute('src', 'data:image/png;base64,fake-logo')
+    expect(screen.queryByText('DJ SKITTLZ')).not.toBeInTheDocument()
+  })
 })

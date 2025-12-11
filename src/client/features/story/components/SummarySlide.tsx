@@ -12,6 +12,7 @@ export interface SummaryData {
   setsPlayed: number
   busiestMonth: string
   djName?: string
+  logo?: string
 }
 
 export interface SummarySlideProps {
@@ -80,9 +81,19 @@ export function SummarySlide({ data, aspectRatio = '9:16' }: SummarySlideProps) 
         </div>
 
         <div className="mt-4 text-center hide-on-square">
-          <div className="font-mono font-bold text-sm">
-            {data.djName ? data.djName.toUpperCase() : 'YOUR YEAR IN MUSIC'}
-          </div>
+          {data.logo ? (
+            <div className="flex justify-center">
+              <img
+                src={data.logo}
+                alt="DJ Logo"
+                className="h-12 w-auto max-w-[150px] object-contain drop-shadow-sm opacity-90"
+              />
+            </div>
+          ) : (
+            <div className="font-mono font-bold text-sm">
+              {data.djName ? data.djName.toUpperCase() : 'YOUR YEAR IN MUSIC'}
+            </div>
+          )}
         </div>
       </div>
     </StorySlide>

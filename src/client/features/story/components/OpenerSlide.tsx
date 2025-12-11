@@ -3,10 +3,11 @@ import { StorySlide, AspectRatio } from './StorySlide'
 export interface OpenerSlideProps {
   year: string
   djName?: string
+  logo?: string
   aspectRatio?: AspectRatio
 }
 
-export function OpenerSlide({ year, djName = 'DJ', aspectRatio = '9:16' }: OpenerSlideProps) {
+export function OpenerSlide({ year, djName = 'DJ', logo, aspectRatio = '9:16' }: OpenerSlideProps) {
   return (
     <StorySlide aspectRatio={aspectRatio}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col justify-center items-center p-8 text-theme-text slide-p-square h-full">
@@ -21,9 +22,17 @@ export function OpenerSlide({ year, djName = 'DJ', aspectRatio = '9:16' }: Opene
         <p className="text-lg font-medium text-center mb-12 slide-mt-square-sm">
           Ready to see what you played?
         </p>
-        <div className="glass-panel px-6 py-3 rounded-full font-mono text-sm font-bold">
-          {djName.toUpperCase()}
-        </div>
+        {logo ? (
+          <img
+            src={logo}
+            alt="DJ Logo"
+            className="h-24 w-auto max-w-[200px] object-contain drop-shadow-md"
+          />
+        ) : (
+          <div className="glass-panel px-6 py-3 rounded-full font-mono text-sm font-bold">
+            {djName.toUpperCase()}
+          </div>
+        )}
       </div>
     </StorySlide>
   )

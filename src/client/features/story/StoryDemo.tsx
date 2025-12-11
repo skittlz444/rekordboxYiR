@@ -13,10 +13,7 @@ import {
   DownloadableSlideWrapper,
 } from './components'
 import { ArtistStat, TrackStat, GenreStat } from '@/shared/types'
-import { Settings } from 'lucide-react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/client/components/ui/dialog'
-import { SettingsPanel } from '@/client/components/SettingsPanel'
-import { Button } from '@/client/components/ui/button'
+import { ArtistStat, TrackStat, GenreStat } from '@/shared/types'
 
 // Mock data
 const mockArtists: ArtistStat[] = [
@@ -43,9 +40,14 @@ const mockGenres: GenreStat[] = [
   { Name: 'Other', count: 100 },
 ]
 
+import { useConfigStore } from '@/client/lib/store'
+
 export function StoryDemo() {
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('9:16')
   const [theme, setTheme] = useState<string>('theme-pastel')
+
+  const djName = useConfigStore((state) => state.djName)
+  const logo = useConfigStore((state) => state.logo)
 
   return (
     <div className={`min-h-screen bg-gray-100 p-8 ${theme}`} data-ratio={aspectRatio}>
@@ -58,89 +60,68 @@ export function StoryDemo() {
         <div className="bg-white/80 backdrop-blur p-2 rounded-xl shadow-lg flex gap-2">
           <button
             onClick={() => setAspectRatio('9:16')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              aspectRatio === '9:16'
-                ? 'bg-slate-800 text-white'
-                : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${aspectRatio === '9:16'
+              ? 'bg-slate-800 text-white'
+              : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+              }`}
           >
             9:16 (Story)
           </button>
           <button
             onClick={() => setAspectRatio('4:5')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              aspectRatio === '4:5'
-                ? 'bg-slate-800 text-white'
-                : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${aspectRatio === '4:5'
+              ? 'bg-slate-800 text-white'
+              : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+              }`}
           >
             4:5 (Portrait)
           </button>
           <button
             onClick={() => setAspectRatio('1:1')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              aspectRatio === '1:1'
-                ? 'bg-slate-800 text-white'
-                : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${aspectRatio === '1:1'
+              ? 'bg-slate-800 text-white'
+              : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+              }`}
           >
             1:1 (Square)
           </button>
-
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="icon" aria-label="Settings">
-                <Settings className="w-4 h-4" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Configuration Settings</DialogTitle>
-              </DialogHeader>
-              <SettingsPanel />
-            </DialogContent>
-          </Dialog>
         </div>
 
         {/* Theme Switcher */}
         <div className="bg-white/80 backdrop-blur p-2 rounded-xl shadow-lg flex gap-2">
           <button
             onClick={() => setTheme('theme-pastel')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              theme === 'theme-pastel'
-                ? 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800 border-2 border-slate-400'
-                : 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800 border border-slate-200 hover:border-slate-400'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${theme === 'theme-pastel'
+              ? 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800 border-2 border-slate-400'
+              : 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800 border border-slate-200 hover:border-slate-400'
+              }`}
           >
             Pastel
           </button>
           <button
             onClick={() => setTheme('theme-club')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              theme === 'theme-club'
-                ? 'bg-gradient-to-r from-[#2E0249] to-[#000000] text-white border-2 border-pink-500'
-                : 'bg-gradient-to-r from-[#2E0249] to-[#000000] text-white hover:border-pink-500 border border-transparent'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${theme === 'theme-club'
+              ? 'bg-gradient-to-r from-[#2E0249] to-[#000000] text-white border-2 border-pink-500'
+              : 'bg-gradient-to-r from-[#2E0249] to-[#000000] text-white hover:border-pink-500 border border-transparent'
+              }`}
           >
             Club
           </button>
           <button
             onClick={() => setTheme('theme-clean')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              theme === 'theme-clean'
-                ? 'bg-gradient-to-r from-[#F9FAFB] to-[#F3F4F6] text-slate-800 border-2 border-slate-800'
-                : 'bg-gradient-to-r from-[#F9FAFB] to-[#F3F4F6] text-slate-800 border border-slate-200 hover:border-slate-800'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${theme === 'theme-clean'
+              ? 'bg-gradient-to-r from-[#F9FAFB] to-[#F3F4F6] text-slate-800 border-2 border-slate-800'
+              : 'bg-gradient-to-r from-[#F9FAFB] to-[#F3F4F6] text-slate-800 border border-slate-200 hover:border-slate-800'
+              }`}
           >
             Clean
           </button>
           <button
             onClick={() => setTheme('theme-dark')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              theme === 'theme-dark'
-                ? 'bg-gradient-to-r from-[#000000] to-[#1a1a1a] text-white border-2 border-red-500'
-                : 'bg-gradient-to-r from-[#000000] to-[#1a1a1a] text-white hover:border-red-500 border border-transparent'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${theme === 'theme-dark'
+              ? 'bg-gradient-to-r from-[#000000] to-[#1a1a1a] text-white border-2 border-red-500'
+              : 'bg-gradient-to-r from-[#000000] to-[#1a1a1a] text-white hover:border-red-500 border border-transparent'
+              }`}
           >
             Dark
           </button>
@@ -149,9 +130,9 @@ export function StoryDemo() {
 
       <div className="flex flex-wrap justify-center gap-8">
         <DownloadableSlideWrapper filename="opener.png">
-          <OpenerSlide year="2025" djName="DJ SKITTLZ" aspectRatio={aspectRatio} />
+          <OpenerSlide year="2025" djName={djName || 'DJ SKITTLZ'} logo={logo || undefined} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
-        
+
         <DownloadableSlideWrapper filename="artists.png">
           <ArtistSlide artists={mockArtists} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
@@ -245,7 +226,8 @@ export function StoryDemo() {
               totalPlays: 2451,
               setsPlayed: 42,
               busiestMonth: '2025-07',
-              djName: 'DJ SKITTLZ',
+              djName: djName || 'DJ SKITTLZ',
+              logo: logo || undefined,
             }}
             aspectRatio={aspectRatio}
           />

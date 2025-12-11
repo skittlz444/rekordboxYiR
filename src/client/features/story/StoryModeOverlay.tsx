@@ -35,9 +35,10 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const [theme, setTheme] = useState<string>('theme-pastel')
 
   const { stats, year, comparison } = data
-  
+
   // Get configuration from store
   const djName = useConfigStore((state) => state.djName)
+  const logo = useConfigStore((state) => state.logo)
   const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
   const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
 
@@ -51,37 +52,37 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   }
 
   // Use shared utility to transform data
-  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends, averageTrackPlayedPercent)
-  
+  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends, averageTrackPlayedPercent, logo)
+
   // Adjust playtime for longest session
   const adjustedLongestSession = {
     ...stats.longestSession,
-    durationSeconds: stats.longestSession.durationSeconds 
+    durationSeconds: stats.longestSession.durationSeconds
       ? applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent)
       : undefined
   }
 
   // Build slides array with corresponding filenames
   const slidesData: SlideData[] = [
-    { element: <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />, filename: `opener-${year}.png` },
+    { element: <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} logo={logo || undefined} aspectRatio={aspectRatio} />, filename: `opener-${year}.png` },
     { element: <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />, filename: `top-artists-${year}.png` },
     { element: <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />, filename: `top-tracks-${year}.png` },
     { element: <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} />, filename: `top-genres-${year}.png` },
-    { 
-      element: <BusiestDaySlide 
-        key="busiest" 
-        busiestMonth={stats.busiestMonth} 
-        longestSession={adjustedLongestSession} 
-        aspectRatio={aspectRatio} 
+    {
+      element: <BusiestDaySlide
+        key="busiest"
+        busiestMonth={stats.busiestMonth}
+        longestSession={adjustedLongestSession}
+        aspectRatio={aspectRatio}
       />,
       filename: `busiest-day-${year}.png`
     },
-    { 
-      element: <LibraryGrowthSlide 
-        key="library" 
-        newTracks={stats.libraryGrowth?.added || 0} 
-        totalLibrarySize={stats.libraryGrowth?.total || 0} 
-        aspectRatio={aspectRatio} 
+    {
+      element: <LibraryGrowthSlide
+        key="library"
+        newTracks={stats.libraryGrowth?.added || 0}
+        totalLibrarySize={stats.libraryGrowth?.total || 0}
+        aspectRatio={aspectRatio}
       />,
       filename: `library-growth-${year}.png`
     },
@@ -90,7 +91,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   // Add comparison slides if available
   if (comparison && comparisonMetrics.length > 0) {
     slidesData.push({
-      element: <YearComparisonSlide 
+      element: <YearComparisonSlide
         key="comparison"
         comparisonYear={comparison.year}
         metrics={comparisonMetrics}
@@ -102,7 +103,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
   if (comparison && (trends.biggestObsession || trends.rankClimber || trends.newFavorite)) {
     slidesData.push({
-      element: <YearComparisonTrendsSlide 
+      element: <YearComparisonTrendsSlide
         key="trends"
         trends={trends}
         aspectRatio={aspectRatio}
@@ -161,7 +162,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   }
 
   return (
-    <div 
+    <div
       className={`fixed inset-0 bg-black z-50 flex flex-col ${theme}`}
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -178,33 +179,30 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
             <button
               onClick={() => setAspectRatio('9:16')}
               aria-label="Set aspect ratio to 9:16"
-              className={`px-3 py-1 rounded text-xs font-bold transition ${
-                aspectRatio === '9:16'
-                  ? 'bg-white text-black'
-                  : 'text-white hover:bg-white/20'
-              }`}
+              className={`px-3 py-1 rounded text-xs font-bold transition ${aspectRatio === '9:16'
+                ? 'bg-white text-black'
+                : 'text-white hover:bg-white/20'
+                }`}
             >
               9:16
             </button>
             <button
               onClick={() => setAspectRatio('4:5')}
               aria-label="Set aspect ratio to 4:5"
-              className={`px-3 py-1 rounded text-xs font-bold transition ${
-                aspectRatio === '4:5'
-                  ? 'bg-white text-black'
-                  : 'text-white hover:bg-white/20'
-              }`}
+              className={`px-3 py-1 rounded text-xs font-bold transition ${aspectRatio === '4:5'
+                ? 'bg-white text-black'
+                : 'text-white hover:bg-white/20'
+                }`}
             >
               4:5
             </button>
             <button
               onClick={() => setAspectRatio('1:1')}
               aria-label="Set aspect ratio to 1:1"
-              className={`px-3 py-1 rounded text-xs font-bold transition ${
-                aspectRatio === '1:1'
-                  ? 'bg-white text-black'
-                  : 'text-white hover:bg-white/20'
-              }`}
+              className={`px-3 py-1 rounded text-xs font-bold transition ${aspectRatio === '1:1'
+                ? 'bg-white text-black'
+                : 'text-white hover:bg-white/20'
+                }`}
             >
               1:1
             </button>
@@ -215,44 +213,40 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
             <button
               onClick={() => setTheme('theme-pastel')}
               aria-label="Set theme to Pastel"
-              className={`px-3 py-1 rounded text-xs font-bold transition ${
-                theme === 'theme-pastel'
-                  ? 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800'
-                  : 'text-white hover:bg-white/20'
-              }`}
+              className={`px-3 py-1 rounded text-xs font-bold transition ${theme === 'theme-pastel'
+                ? 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800'
+                : 'text-white hover:bg-white/20'
+                }`}
             >
               Pastel
             </button>
             <button
               onClick={() => setTheme('theme-club')}
               aria-label="Set theme to Club"
-              className={`px-3 py-1 rounded text-xs font-bold transition ${
-                theme === 'theme-club'
-                  ? 'bg-gradient-to-r from-[#1a1a2e] to-[#16213e] text-white'
-                  : 'text-white hover:bg-white/20'
-              }`}
+              className={`px-3 py-1 rounded text-xs font-bold transition ${theme === 'theme-club'
+                ? 'bg-gradient-to-r from-[#1a1a2e] to-[#16213e] text-white'
+                : 'text-white hover:bg-white/20'
+                }`}
             >
               Club
             </button>
             <button
               onClick={() => setTheme('theme-clean')}
               aria-label="Set theme to Clean"
-              className={`px-3 py-1 rounded text-xs font-bold transition ${
-                theme === 'theme-clean'
-                  ? 'bg-gray-100 text-gray-800'
-                  : 'text-white hover:bg-white/20'
-              }`}
+              className={`px-3 py-1 rounded text-xs font-bold transition ${theme === 'theme-clean'
+                ? 'bg-gray-100 text-gray-800'
+                : 'text-white hover:bg-white/20'
+                }`}
             >
               Clean
             </button>
             <button
               onClick={() => setTheme('theme-dark')}
               aria-label="Set theme to Dark"
-              className={`px-3 py-1 rounded text-xs font-bold transition ${
-                theme === 'theme-dark'
-                  ? 'bg-slate-900 text-white'
-                  : 'text-white hover:bg-white/20'
-              }`}
+              className={`px-3 py-1 rounded text-xs font-bold transition ${theme === 'theme-dark'
+                ? 'bg-slate-900 text-white'
+                : 'text-white hover:bg-white/20'
+                }`}
             >
               Dark
             </button>
@@ -351,12 +345,12 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
       {/* Click areas for mobile navigation */}
       <div className="absolute inset-0 flex pointer-events-none">
-        <div 
+        <div
           className={`flex-1 pointer-events-auto ${currentSlide === 0 ? 'cursor-default' : 'cursor-pointer'}`}
           onClick={currentSlide > 0 ? goToPrevSlide : undefined}
           style={{ opacity: 0 }}
         />
-        <div 
+        <div
           className="flex-1 pointer-events-auto cursor-pointer"
           onClick={goToNextSlide}
           style={{ opacity: 0 }}

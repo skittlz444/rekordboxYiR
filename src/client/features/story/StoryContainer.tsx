@@ -30,19 +30,20 @@ export function StoryContainer({ data }: StoryContainerProps) {
   const [theme, setTheme] = useState<string>('theme-pastel')
 
   const { stats, year, comparison } = data
-  
+
   // Get configuration from store
   const djName = useConfigStore((state) => state.djName)
+  const logo = useConfigStore((state) => state.logo)
   const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
   const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
 
   // Use shared utility to transform data
-  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends, averageTrackPlayedPercent)
-  
+  const { summaryData, comparisonMetrics, trends } = transformStatsToStoryData(data, djName, disableGenresInTrends, averageTrackPlayedPercent, logo)
+
   // Adjust playtime for longest session
   const adjustedLongestSession = {
     ...stats.longestSession,
-    durationSeconds: stats.longestSession.durationSeconds 
+    durationSeconds: stats.longestSession.durationSeconds
       ? applyPlaytimePercentage(stats.longestSession.durationSeconds, averageTrackPlayedPercent)
       : undefined
   }
@@ -54,31 +55,28 @@ export function StoryContainer({ data }: StoryContainerProps) {
         <div className="bg-white/80 backdrop-blur p-2 rounded-xl shadow-lg flex gap-2">
           <button
             onClick={() => setAspectRatio('9:16')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              aspectRatio === '9:16'
-                ? 'bg-slate-800 text-white'
-                : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${aspectRatio === '9:16'
+              ? 'bg-slate-800 text-white'
+              : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+              }`}
           >
             9:16 (Story)
           </button>
           <button
             onClick={() => setAspectRatio('4:5')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              aspectRatio === '4:5'
-                ? 'bg-slate-800 text-white'
-                : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${aspectRatio === '4:5'
+              ? 'bg-slate-800 text-white'
+              : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+              }`}
           >
             4:5 (Portrait)
           </button>
           <button
             onClick={() => setAspectRatio('1:1')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              aspectRatio === '1:1'
-                ? 'bg-slate-800 text-white'
-                : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${aspectRatio === '1:1'
+              ? 'bg-slate-800 text-white'
+              : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+              }`}
           >
             1:1 (Square)
           </button>
@@ -88,41 +86,37 @@ export function StoryContainer({ data }: StoryContainerProps) {
         <div className="bg-white/80 backdrop-blur p-2 rounded-xl shadow-lg flex gap-2">
           <button
             onClick={() => setTheme('theme-pastel')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              theme === 'theme-pastel'
-                ? 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800 border-2 border-slate-400'
-                : 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800 border border-slate-200 hover:border-slate-400'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${theme === 'theme-pastel'
+              ? 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800 border-2 border-slate-400'
+              : 'bg-gradient-to-r from-[#F0F9FF] to-[#ECFCCB] text-slate-800 border border-slate-200 hover:border-slate-400'
+              }`}
           >
             Pastel
           </button>
           <button
             onClick={() => setTheme('theme-club')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              theme === 'theme-club'
-                ? 'bg-gradient-to-r from-[#1a1a2e] to-[#16213e] text-white border-2 border-slate-400'
-                : 'bg-gradient-to-r from-[#1a1a2e] to-[#16213e] text-white border border-slate-200 hover:border-slate-400'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${theme === 'theme-club'
+              ? 'bg-gradient-to-r from-[#1a1a2e] to-[#16213e] text-white border-2 border-slate-400'
+              : 'bg-gradient-to-r from-[#1a1a2e] to-[#16213e] text-white border border-slate-200 hover:border-slate-400'
+              }`}
           >
             Club
           </button>
           <button
             onClick={() => setTheme('theme-clean')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              theme === 'theme-clean'
-                ? 'bg-gray-100 text-gray-800 border-2 border-slate-400'
-                : 'bg-gray-100 text-gray-800 border border-slate-200 hover:border-slate-400'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${theme === 'theme-clean'
+              ? 'bg-gray-100 text-gray-800 border-2 border-slate-400'
+              : 'bg-gray-100 text-gray-800 border border-slate-200 hover:border-slate-400'
+              }`}
           >
             Clean
           </button>
           <button
             onClick={() => setTheme('theme-dark')}
-            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${
-              theme === 'theme-dark'
-                ? 'bg-slate-900 text-white border-2 border-slate-400'
-                : 'bg-slate-900 text-white border border-slate-200 hover:border-slate-400'
-            }`}
+            className={`px-4 py-2 rounded-lg font-bold transition text-sm ${theme === 'theme-dark'
+              ? 'bg-slate-900 text-white border-2 border-slate-400'
+              : 'bg-slate-900 text-white border border-slate-200 hover:border-slate-400'
+              }`}
           >
             Dark
           </button>
@@ -150,34 +144,34 @@ export function StoryContainer({ data }: StoryContainerProps) {
 
       <div className="flex flex-wrap justify-center gap-8 pb-20">
         <DownloadableSlideWrapper filename={`opener-${year}.png`}>
-          <OpenerSlide year={year} djName={djName || 'DJ'} aspectRatio={aspectRatio} />
+          <OpenerSlide year={year} djName={djName || 'DJ'} logo={logo || undefined} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
-        
+
         <DownloadableSlideWrapper filename={`top-artists-${year}.png`}>
           <ArtistSlide artists={stats.topArtists} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
-        
+
         <DownloadableSlideWrapper filename={`top-tracks-${year}.png`}>
           <TrackSlide tracks={stats.topTracks} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
-        
+
         <DownloadableSlideWrapper filename={`top-genres-${year}.png`}>
           <GenreSlide genres={stats.topGenres} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
-        
+
         <DownloadableSlideWrapper filename={`busiest-day-${year}.png`}>
-          <BusiestDaySlide 
-            busiestMonth={stats.busiestMonth} 
-            longestSession={adjustedLongestSession} 
-            aspectRatio={aspectRatio} 
+          <BusiestDaySlide
+            busiestMonth={stats.busiestMonth}
+            longestSession={adjustedLongestSession}
+            aspectRatio={aspectRatio}
           />
         </DownloadableSlideWrapper>
-        
+
         <DownloadableSlideWrapper filename={`library-growth-${year}.png`}>
-          <LibraryGrowthSlide 
-            newTracks={stats.libraryGrowth?.added || 0} 
-            totalLibrarySize={stats.libraryGrowth?.total || 0} 
-            aspectRatio={aspectRatio} 
+          <LibraryGrowthSlide
+            newTracks={stats.libraryGrowth?.added || 0}
+            totalLibrarySize={stats.libraryGrowth?.total || 0}
+            aspectRatio={aspectRatio}
           />
         </DownloadableSlideWrapper>
 
@@ -185,7 +179,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
           <>
             {comparisonMetrics.length > 0 && (
               <DownloadableSlideWrapper filename={`comparison-${year}.png`}>
-                <YearComparisonSlide 
+                <YearComparisonSlide
                   comparisonYear={comparison.year}
                   metrics={comparisonMetrics}
                   aspectRatio={aspectRatio}
@@ -194,7 +188,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
             )}
             {(trends.biggestObsession || trends.rankClimber || trends.newFavorite) && (
               <DownloadableSlideWrapper filename={`trends-${year}.png`}>
-                <YearComparisonTrendsSlide 
+                <YearComparisonTrendsSlide
                   trends={trends}
                   aspectRatio={aspectRatio}
                 />

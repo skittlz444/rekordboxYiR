@@ -15,7 +15,7 @@ interface UploadContainerProps {
 
 export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
   const { file, error, isUploading, handleFileSelect, uploadFile, reset } = useFileUpload();
-  
+
   // Use configuration store
   const targetYear = useConfigStore((state) => state.targetYear);
   const comparisonYear = useConfigStore((state) => state.comparisonYear);
@@ -24,12 +24,14 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
   const setTargetYear = useConfigStore((state) => state.setTargetYear);
   const setComparisonYear = useConfigStore((state) => state.setComparisonYear);
   const setDjName = useConfigStore((state) => state.setDjName);
+  const logo = useConfigStore((state) => state.logo);
+  const setLogo = useConfigStore((state) => state.setLogo);
   const setAverageTrackPlayedPercent = useConfigStore((state) => state.setAverageTrackPlayedPercent);
 
   const handleUpload = async () => {
     try {
       const data = await uploadFile(
-        targetYear.toString(), 
+        targetYear.toString(),
         comparisonYear?.toString() || ''
       );
       if (data) {
@@ -60,17 +62,60 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
             />
 
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="djName">DJ Name (Optional)</Label>
-                <Input
-                  id="djName"
-                  type="text"
-                  value={djName}
-                  onChange={(e) => setDjName(e.target.value)}
-                  placeholder="Enter your DJ name"
-                  disabled={isUploading}
-                />
+              <div className="flex gap-2 items-end">
+                <div className="space-y-2 flex-1">
+                  <Label htmlFor="djName">DJ Name (Optional)</Label>
+                  <Input
+                    id="djName"
+                    type="text"
+                    value={djName}
+                    onChange={(e) => setDjName(e.target.value)}
+                    placeholder="Enter your DJ name"
+                    disabled={isUploading}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="file"
+                    id="upload-logo-input"
+                    accept="image/*"
+                    className="hidden"
+                    disabled={isUploading}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        const reader = new FileReader()
+                        reader.onload = (event) => {
+                          const result = event.target?.result as string
+                          setLogo(result)
+                        }
+                        reader.readAsDataURL(file)
+                      }
+                    }}
+                  />
+                  <Label
+                    htmlFor="upload-logo-input"
+                    className={`cursor-pointer px-3 py-2 bg-slate-800 text-white rounded-md text-sm font-medium hover:bg-slate-700 flex items-center gap-2 h-10 whitespace-nowrap mb-0.5 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    📷 Logo
+                  </Label>
+                  {logo && (
+                    <button
+                      onClick={() => setLogo(null)}
+                      disabled={isUploading}
+                      className="p-2 text-red-500 hover:bg-red-50 rounded-md h-10 w-10 flex items-center justify-center border border-red-200 mb-0.5"
+                      title="Remove Logo"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
               </div>
+              {logo && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Logo uploaded! It will replace your DJ Name on slides.
+                </p>
+              )}
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -129,7 +174,7 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
           </CardContent>
         </Card>
       </div>
-      
+
       <AnimatePresence>
         {isUploading && <UploadLoadingOverlay />}
       </AnimatePresence>
