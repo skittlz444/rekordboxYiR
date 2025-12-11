@@ -8,15 +8,11 @@ interface SettingsPanelProps {
 }
 
 export function SettingsPanel({ className = '' }: SettingsPanelProps) {
-  const targetYear = useConfigStore((state) => state.targetYear)
-  const comparisonYear = useConfigStore((state) => state.comparisonYear)
   const djName = useConfigStore((state) => state.djName)
   const logo = useConfigStore((state) => state.logo)
   const averageTrackPlayedPercent = useConfigStore((state) => state.averageTrackPlayedPercent)
   const disableGenresInTrends = useConfigStore((state) => state.disableGenresInTrends)
 
-  const setTargetYear = useConfigStore((state) => state.setTargetYear)
-  const setComparisonYear = useConfigStore((state) => state.setComparisonYear)
   const setDjName = useConfigStore((state) => state.setDjName)
   const setLogo = useConfigStore((state) => state.setLogo)
   const setAverageTrackPlayedPercent = useConfigStore((state) => state.setAverageTrackPlayedPercent)
@@ -73,31 +69,6 @@ export function SettingsPanel({ className = '' }: SettingsPanelProps) {
         <p className="text-xs text-muted-foreground">
           Upload a transparent PNG to replace your DJ Name on slides.
         </p>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="settings-year">Target Year</Label>
-          <Input
-            id="settings-year"
-            type="number"
-            value={targetYear}
-            onChange={(e) => {
-              const value = parseInt(e.target.value);
-              setTargetYear(isNaN(value) ? targetYear : value);
-            }}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="settings-comparisonYear">Comparison Year</Label>
-          <Input
-            id="settings-comparisonYear"
-            type="number"
-            value={comparisonYear || ''}
-            onChange={(e) => setComparisonYear(e.target.value ? parseInt(e.target.value) : null)}
-            placeholder="Optional"
-          />
-        </div>
       </div>
 
       <div className="space-y-2">
