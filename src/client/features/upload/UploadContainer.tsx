@@ -8,6 +8,15 @@ import { StatsResponse } from '@/shared/types';
 import { useConfigStore } from '@/client/lib/store';
 import { UploadLoadingOverlay } from '@/client/components/LoadingStates';
 import { AnimatePresence } from 'framer-motion';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../components/ui/dialog"
+import { HelpCircle } from "lucide-react"
 
 interface UploadContainerProps {
   onUploadSuccess: (data: StatsResponse) => void;
@@ -48,8 +57,58 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
         <Card className="w-full max-w-lg backdrop-blur-sm bg-card/95">
           <CardHeader>
             <CardTitle>Upload Library</CardTitle>
-            <CardDescription>
+            <CardDescription className="flex items-center gap-2">
               Upload your Rekordbox master.db file to generate your Year in Review.
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" title="Where is my master.db?">
+                    <HelpCircle className="h-5 w-5 text-primary" />
+                    <span className="sr-only">Where is my master.db?</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>How to find your master.db</DialogTitle>
+                    <DialogDescription>
+                      Follow these steps to locate your Rekordbox database file.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 text-sm">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold flex items-center gap-2">
+                        <span className="text-xl">🪟</span> Windows
+                      </h4>
+                      <ol className="list-decimal list-inside space-y-1 text-muted-foreground ml-2">
+                        <li>Press <kbd className="px-1 py-0.5 rounded bg-muted font-mono text-xs">Win + R</kbd> to open Run</li>
+                        <li>Paste <code className="px-1 py-0.5 rounded bg-muted font-mono text-xs text-primary">%AppData%\Pioneer\rekordbox</code></li>
+                        <li>Locate the <span className="font-medium text-foreground">master.db</span> file</li>
+                      </ol>
+                    </div>
+
+                    <div className="space-y-2 border-t pt-4">
+                      <h4 className="font-semibold flex items-center gap-2">
+                        <span className="text-xl">🍎</span> macOS
+                      </h4>
+                      <ol className="list-decimal list-inside space-y-1 text-muted-foreground ml-2">
+                        <li>Open Finder and press <kbd className="px-1 py-0.5 rounded bg-muted font-mono text-xs">Cmd + Shift + G</kbd></li>
+                        <li>Paste <code className="px-1 py-0.5 rounded bg-muted font-mono text-xs text-primary">~/Library/Pioneer/rekordbox</code></li>
+                        <li>Locate the <span className="font-medium text-foreground">master.db</span> file</li>
+                      </ol>
+                    </div>
+
+                    <div className="space-y-2 border-t pt-4 bg-muted/30 p-3 rounded-md">
+                      <h4 className="font-semibold text-xs uppercase tracking-wider text-muted-foreground">Custom Drive Location</h4>
+                      <p className="text-muted-foreground">
+                        If you&apos;ve moved your database to a different drive (e.g. D:), check:
+                        <br />
+                        <code className="px-1 py-0.5 rounded bg-muted font-mono text-xs mt-1 block w-fit">
+                          &lt;DriveLetter&gt;:\PIONEER\Master\master.db
+                        </code>
+                      </p>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
