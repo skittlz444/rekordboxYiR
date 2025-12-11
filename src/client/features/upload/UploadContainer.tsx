@@ -131,7 +131,7 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
             <div className="space-y-4">
               <div className="flex gap-2 items-end">
                 <div className="space-y-2 flex-1">
-                  <Label htmlFor="djName">DJ Name (Optional)</Label>
+                  <Label htmlFor="djName">DJ Name or Logo (Optional)</Label>
                   <Input
                     id="djName"
                     type="text"
