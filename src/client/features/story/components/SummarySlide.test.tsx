@@ -67,7 +67,7 @@ describe('SummarySlide', () => {
   it('renders logo when provided', () => {
     const dataWithLogo = { ...mockData, logo: 'data:image/png;base64,fake-logo' }
     render(<SummarySlide data={dataWithLogo} />)
-    const img = screen.getByAltText('DJ Logo')
+    const img = screen.getByAltText('DJ SKITTLZ logo')
     expect(img).toBeInTheDocument()
     expect(img).toHaveAttribute('src', 'data:image/png;base64,fake-logo')
     expect(screen.queryByText('DJ SKITTLZ')).not.toBeInTheDocument()

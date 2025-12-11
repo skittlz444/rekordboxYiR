@@ -85,8 +85,11 @@ export function SummarySlide({ data, aspectRatio = '9:16' }: SummarySlideProps) 
             <div className="flex justify-center">
               <img
                 src={data.logo}
-                alt="DJ Logo"
+                alt={data.djName ? `${data.djName} logo` : "DJ logo"}
                 className="h-12 w-auto max-w-[150px] object-contain drop-shadow-sm opacity-90"
+                width={150}
+                height={48}
+                loading="lazy"
               />
             </div>
           ) : (
