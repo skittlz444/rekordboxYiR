@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { StatsResponse } from '@/shared/types';
-import { compressFile } from '@/client/lib/compression';
 
 interface UseFileUploadReturn {
   file: File | null;
@@ -48,12 +47,8 @@ export function useFileUpload(): UseFileUploadReturn {
     setError(null);
 
     try {
-      // Compress the file
-      const compressedBlob = await compressFile(file);
-
       const formData = new FormData();
-      // Send the compressed blob, but keep the original filename so the server knows it's the db
-      formData.append('file', compressedBlob, file.name);
+      formData.append('file', file);
       formData.append('year', year);
       if (comparisonYear) {
         formData.append('comparisonYear', comparisonYear);
@@ -61,41 +56,10 @@ export function useFileUpload(): UseFileUploadReturn {
 
       const response = await fetch('/upload', {
         method: 'POST',
-        headers: {
-          // Signal to the worker that this file is gzipped
-          'X-File-Content-Encoding': 'gzip'
-        },
         body: formData,
       });
 
       if (!response.ok) {
-        let serverErrorMessage: string | null = null;
-
-        // Try to parse structured error message
-        try {
-          const errorData = await response.json() as unknown;
-          if (errorData && typeof errorData === 'object' && 'error' in errorData) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const errObj = errorData as any;
-
-            // Handle WorkerErrorResponse
-            if (errObj.error?.message) {
-              serverErrorMessage = errObj.error.message;
-            }
-            // Handle legacy simple error { error: "message" }
-            else if (typeof errObj.error === 'string') {
-              serverErrorMessage = errObj.error;
-            }
-          }
-        } catch (parseError) {
-          // If JSON parse fails or structure doesn't match, fall through to generic error
-          console.warn('Failed to parse error response:', parseError);
-        }
-
-        if (serverErrorMessage) {
-          throw new Error(serverErrorMessage);
-        }
-
         throw new Error(`Upload failed with status: ${response.status}`);
       }
 
@@ -103,9 +67,7 @@ export function useFileUpload(): UseFileUploadReturn {
       return data as StatsResponse;
     } catch (err) {
       console.error('Upload failed:', err);
-      // Extract the message from the Error object if available
-      const errorMessage = err instanceof Error ? err.message : 'Failed to upload file. Please try again.';
-      setError(errorMessage);
+      setError('Failed to upload file. Please try again.');
       throw err;
     } finally {
       setIsUploading(false);

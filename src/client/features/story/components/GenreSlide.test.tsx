@@ -1,4 +1,4 @@
-// import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { GenreSlide } from './GenreSlide'
 import { GenreStat } from '@/shared/types'

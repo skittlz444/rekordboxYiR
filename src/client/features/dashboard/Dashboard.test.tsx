@@ -1,4 +1,4 @@
-// import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Dashboard } from './Dashboard'
 import { StatsResponse } from '@/shared/types'
@@ -36,7 +36,7 @@ describe('Dashboard', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     expect(screen.getByText(/Your 2024 Year in Review/i)).toBeInTheDocument()
   })
 
@@ -44,7 +44,7 @@ describe('Dashboard', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     expect(screen.getByText('Total Plays')).toBeInTheDocument()
     expect(screen.getByText('1,500')).toBeInTheDocument()
   })
@@ -53,7 +53,7 @@ describe('Dashboard', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     expect(screen.getByText('Top 10 Artists')).toBeInTheDocument()
     expect(screen.getByText('100 plays')).toBeInTheDocument()
   })
@@ -62,7 +62,7 @@ describe('Dashboard', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     expect(screen.getByText('Best Track Ever')).toBeInTheDocument()
     expect(screen.getByText('50 plays')).toBeInTheDocument()
   })
@@ -71,7 +71,7 @@ describe('Dashboard', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     expect(screen.getByText('Play Story')).toBeInTheDocument()
   })
 
@@ -79,10 +79,10 @@ describe('Dashboard', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     const playButton = screen.getByText('Play Story')
     fireEvent.click(playButton)
-
+    
     expect(onPlayStory).toHaveBeenCalledTimes(1)
   })
 
@@ -90,10 +90,10 @@ describe('Dashboard', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     const viewAllButton = screen.getByText('View All Slides')
     fireEvent.click(viewAllButton)
-
+    
     expect(onViewAllSlides).toHaveBeenCalledTimes(1)
   })
 
@@ -114,11 +114,11 @@ describe('Dashboard', () => {
         },
       },
     }
-
+    
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={dataWithComparison} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     expect(screen.getByText(/compared to 2023/i)).toBeInTheDocument()
     expect(screen.getByText('+50% from 2023')).toBeInTheDocument()
   })
@@ -127,7 +127,7 @@ describe('Dashboard', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     expect(screen.getByText('Library Growth')).toBeInTheDocument()
     expect(screen.getByText('+200')).toBeInTheDocument()
   })
@@ -136,7 +136,7 @@ describe('Dashboard', () => {
     const onPlayStory = vi.fn()
     const onViewAllSlides = vi.fn()
     render(<Dashboard data={mockData} onPlayStory={onPlayStory} onViewAllSlides={onViewAllSlides} />)
-
+    
     // 54000 seconds * 0.75 (default percentage) = 40500 seconds = 11.25 hours => 11h
     expect(screen.getByText('11h')).toBeInTheDocument()
   })

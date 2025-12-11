@@ -1,20 +1,10 @@
 {
   "compilerOptions": {
     "target": "es2021",
-    "lib": [
-      "es2021",
-      "dom",
-      "dom.iterable"
-    ],
+    "lib": ["es2021", "dom", "dom.iterable"],
     "module": "es2022",
     "moduleResolution": "bundler",
-    "types": [
-      "@cloudflare/workers-types",
-      "hono",
-      "vite/client",
-      "node",
-      "vitest/globals"
-    ],
+    "types": ["@cloudflare/workers-types", "hono", "vite/client", "node"],
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": false,
@@ -27,12 +17,8 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
