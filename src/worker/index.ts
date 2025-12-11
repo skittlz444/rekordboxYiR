@@ -24,7 +24,13 @@ app.post('/upload', async (c) => {
     const year = body['year'] as string || new Date().getFullYear().toString();
 
     if (!(file instanceof File)) {
-      return c.json({ error: 'No file uploaded' }, 400);
+      return c.json({
+        success: false,
+        error: {
+          code: 'NO_FILE_PROVIDED',
+          message: 'No valid file was uploaded. Please select a file and try again.'
+        }
+      }, 400);
     }
 
     // Validate file size (100MB limit due to Cloudflare restrictions)
@@ -294,6 +300,8 @@ app.post('/upload', async (c) => {
         };
       }
 
+      console.timeEnd('Total Processing');
+
       return c.json({
         year,
         stats: mainStats,
@@ -310,7 +318,14 @@ app.post('/upload', async (c) => {
   } catch (e: unknown) {
     console.error(e);
     const error = e as Error;
-    return c.json({ error: error.message, stack: error.stack }, 500);
+    return c.json({
+      success: false,
+      error: {
+        code: 'PROCESSING_ERROR',
+        message: error.message,
+        stack: error.stack
+      }
+    }, 500);
   }
 });
 
