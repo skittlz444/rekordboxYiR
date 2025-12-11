@@ -8,6 +8,7 @@ import { StoryContainer } from './features/story/StoryContainer'
 import { Dashboard } from './features/dashboard'
 import { StoryModeOverlay } from './features/story/StoryModeOverlay'
 import { Toaster } from './components/ui/toaster'
+import { PrivacyDialog } from './components/PrivacyDialog'
 
 function App() {
   const [results, setResults] = useState<StatsResponse | null>(null)
@@ -32,7 +33,16 @@ function App() {
   return (
     <>
       <div className="container mx-auto min-h-screen bg-background text-foreground">
-        <h1 className="text-4xl font-bold text-center py-8">Rekordbox Year in Review</h1>
+        <header className="py-8">
+          <h1 className="text-4xl font-bold text-center">Rekordbox Year in Review</h1>
+          <div className="text-center mt-2">
+            <PrivacyDialog>
+              <button className="text-primary hover:underline text-sm">
+                Your data - we don't use it
+              </button>
+            </PrivacyDialog>
+          </div>
+        </header>
       
       {/* Story Demo Link - Only visible in upload view */}
       {!results && (

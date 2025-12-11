@@ -8,6 +8,7 @@ import { StatsResponse } from '@/shared/types';
 import { useConfigStore } from '@/client/lib/store';
 import { UploadLoadingOverlay } from '@/client/components/LoadingStates';
 import { AnimatePresence } from 'framer-motion';
+import { PrivacyDialog } from '@/client/components/PrivacyDialog';
 
 interface UploadContainerProps {
   onUploadSuccess: (data: StatsResponse) => void;
@@ -50,6 +51,11 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
             <CardTitle>Upload Library</CardTitle>
             <CardDescription>
               Upload your Rekordbox master.db file to generate your Year in Review.
+              <PrivacyDialog>
+                <button className="text-primary hover:underline ml-1 text-sm font-medium">
+                  Your data - we don't use it
+                </button>
+              </PrivacyDialog>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
