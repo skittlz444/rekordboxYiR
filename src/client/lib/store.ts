@@ -48,7 +48,14 @@ export const useConfigStore = create<ConfigurationState>()(
       setLogo: (logo) => set({ logo }),
       setDisableGenresInTrends: (value) => set({ disableGenresInTrends: value }),
       setAverageTrackPlayedPercent: (value) => set({ averageTrackPlayedPercent: value }),
-      resetToDefaults: () => set(defaultState),
+      resetToDefaults: () => set({
+        targetYear: currentYear,
+        comparisonYear: currentYear - 1,
+        djName: '',
+        logo: null,
+        disableGenresInTrends: false,
+        averageTrackPlayedPercent: 0.75,
+      }),
     }),
     {
       name: 'rekordbox-yir-config',

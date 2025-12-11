@@ -25,8 +25,15 @@ export function OpenerSlide({ year, djName = 'DJ', logo, aspectRatio = '9:16' }:
         {logo ? (
           <img
             src={logo}
-            alt="DJ Logo"
+            alt={djName ? `${djName} logo` : "DJ logo"}
             className="h-24 w-auto max-w-[200px] object-contain drop-shadow-md"
+            width={200}
+            height={96}
+            loading="lazy"
+            onError={(e) => {
+              // Hide image if loading fails
+              e.currentTarget.style.display = 'none'
+            }}
           />
         ) : (
           <div className="glass-panel px-6 py-3 rounded-full font-mono text-sm font-bold">
