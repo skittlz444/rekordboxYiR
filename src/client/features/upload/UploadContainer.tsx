@@ -57,11 +57,13 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
         <Card className="w-full max-w-lg backdrop-blur-sm bg-card/95">
           <CardHeader>
             <CardTitle>Upload Library</CardTitle>
-            <CardDescription className="flex items-center gap-2">
-              Upload your Rekordbox master.db file to generate your Year in Review.
+            <div className="flex items-center gap-2">
+              <CardDescription>
+                Upload your Rekordbox master.db file to generate your Year in Review.
+              </CardDescription>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" title="Where is my master.db?">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full flex-shrink-0" title="Where is my master.db?">
                     <HelpCircle className="h-5 w-5 text-primary" />
                     <span className="sr-only">Where is my master.db?</span>
                   </Button>
@@ -109,7 +111,7 @@ export function UploadContainer({ onUploadSuccess }: UploadContainerProps) {
                   </div>
                 </DialogContent>
               </Dialog>
-            </CardDescription>
+            </div>
           </CardHeader>
           <CardContent className="space-y-6">
             <FileDropzone
