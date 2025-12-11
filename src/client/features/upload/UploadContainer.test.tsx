@@ -25,7 +25,7 @@ describe('UploadContainer - Logo Upload', () => {
   it('should render logo upload button', () => {
     const onUploadSuccess = vi.fn()
     render(<UploadContainer onUploadSuccess={onUploadSuccess} />)
-    
+
     const logoButton = screen.getByLabelText('📷 Logo')
     expect(logoButton).toBeInTheDocument()
   })
@@ -33,7 +33,7 @@ describe('UploadContainer - Logo Upload', () => {
   it('should have file input for logo upload', () => {
     const onUploadSuccess = vi.fn()
     render(<UploadContainer onUploadSuccess={onUploadSuccess} />)
-    
+
     const fileInput = document.querySelector('#upload-logo-input') as HTMLInputElement
     expect(fileInput).toBeInTheDocument()
     expect(fileInput).toHaveAttribute('accept', 'image/*')
@@ -41,52 +41,65 @@ describe('UploadContainer - Logo Upload', () => {
 
   it('should show remove button when logo is uploaded', () => {
     const onUploadSuccess = vi.fn()
-    
+
     // Set a logo in the store
     useConfigStore.getState().setLogo('data:image/png;base64,mockbase64')
-    
+
     render(<UploadContainer onUploadSuccess={onUploadSuccess} />)
-    
+
     const removeButton = screen.getByTitle('Remove Logo')
     expect(removeButton).toBeInTheDocument()
   })
 
   it('should remove logo when remove button is clicked', () => {
     const onUploadSuccess = vi.fn()
-    
+
     // Set a logo in the store
     useConfigStore.getState().setLogo('data:image/png;base64,mockbase64')
-    
+
     render(<UploadContainer onUploadSuccess={onUploadSuccess} />)
-    
+
     const removeButton = screen.getByTitle('Remove Logo')
     fireEvent.click(removeButton)
-    
+
     expect(useConfigStore.getState().logo).toBeNull()
   })
 
   it('should show feedback message when logo is uploaded', () => {
     const onUploadSuccess = vi.fn()
-    
+
     // Set a logo in the store
     useConfigStore.getState().setLogo('data:image/png;base64,mockbase64')
-    
+
     render(<UploadContainer onUploadSuccess={onUploadSuccess} />)
-    
+
     expect(screen.getByText('Logo uploaded! It will replace your DJ Name on slides.')).toBeInTheDocument()
   })
 
   it('should not show feedback message when logo is not uploaded', () => {
     const onUploadSuccess = vi.fn()
     render(<UploadContainer onUploadSuccess={onUploadSuccess} />)
-    
+
     expect(screen.queryByText('Logo uploaded! It will replace your DJ Name on slides.')).not.toBeInTheDocument()
   })
 
   it('should update logo state when setLogo is called', () => {
     const testLogoData = 'data:image/png;base64,testdata'
     useConfigStore.getState().setLogo(testLogoData)
-    
+
     expect(useConfigStore.getState().logo).toBe(testLogoData)
   })
+})
+
+describe('UploadContainer - Help Dialog', () => {
+  it('should render help button', () => {
+    const onUploadSuccess = vi.fn()
+    render(<UploadContainer onUploadSuccess={onUploadSuccess} />)
+
+    const helpButton = screen.getByTitle('Where is my master.db?')
+    expect(helpButton).toBeInTheDocument()
+  })
+
+  // Note: Testing Radix Dialog open state typically requires user interactions 
+  // and might be better suited for E2E tests, but checking button existence is a good unit test.
 })
