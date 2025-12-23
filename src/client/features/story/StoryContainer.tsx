@@ -94,7 +94,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
   }
 
   return (
-    <div className={`min-h-screen bg-gray-100 p-8 ${theme}`} data-ratio={aspectRatio}>
+    <div className={`min-h-screen bg-gray-100 p-8 ${theme}`} data-ratio={aspectRatio} data-theme-container data-theme={theme}>
       <div className="flex flex-col items-center gap-4 mb-8 sticky top-4 z-50">
         {/* Aspect Ratio Switcher */}
         <div className="bg-white/80 backdrop-blur p-2 rounded-xl shadow-lg flex gap-2">
