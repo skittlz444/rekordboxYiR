@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { DownloadableSlideWrapper } from './DownloadableSlideWrapper'
+import { createRef } from 'react'
 
 // Mock the hook
 const mockDownloadSlide = vi.fn()
@@ -35,5 +36,17 @@ describe('DownloadableSlideWrapper', () => {
     expect(mockDownloadSlide).toHaveBeenCalledTimes(1)
     // The first argument is the DOM node, second is filename
     expect(mockDownloadSlide).toHaveBeenCalledWith(expect.any(HTMLElement), 'test.png')
+  })
+
+  it('should forward ref correctly', () => {
+    const ref = createRef<HTMLDivElement>()
+    
+    render(
+      <DownloadableSlideWrapper ref={ref} filename="test.png">
+        <div data-testid="slide-content">Slide Content</div>
+      </DownloadableSlideWrapper>
+    )
+
+    expect(ref.current).toBeInstanceOf(HTMLDivElement)
   })
 })

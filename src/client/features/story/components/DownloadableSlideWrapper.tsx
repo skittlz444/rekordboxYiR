@@ -1,4 +1,4 @@
-import { useRef, forwardRef } from 'react'
+import { useRef, forwardRef, useImperativeHandle } from 'react'
 import { Button } from '@/client/components/ui/button'
 import { Download } from 'lucide-react'
 import { useSlideDownload } from '../hooks/useSlideDownload'
@@ -13,19 +13,19 @@ export const DownloadableSlideWrapper = forwardRef<HTMLDivElement, DownloadableS
     const internalRef = useRef<HTMLDivElement>(null)
     const { downloadSlide } = useSlideDownload()
 
-    // Use external ref if provided, otherwise use internal
-    const ref = (externalRef as React.RefObject<HTMLDivElement>) || internalRef
+    // Properly expose the ref to parent using useImperativeHandle
+    useImperativeHandle(externalRef, () => internalRef.current as HTMLDivElement, [])
 
     const handleDownload = () => {
-      if (ref.current?.firstElementChild) {
+      if (internalRef.current?.firstElementChild) {
         // Target the first child which is the StorySlide component's div
-        downloadSlide(ref.current.firstElementChild as HTMLElement, filename)
+        downloadSlide(internalRef.current.firstElementChild as HTMLElement, filename)
       }
     }
 
     return (
       <div className="flex flex-col items-center gap-2">
-        <div ref={ref}>
+        <div ref={internalRef}>
           {children}
         </div>
         <Button
