@@ -185,10 +185,18 @@
   body {
     @apply bg-background text-foreground;
   }
+  button {
+    cursor: pointer;
+  }
 }
 
 /* Story Slide Aspect Ratio Adaptations */
 @layer utilities {
+  /* Cursor utilities - explicitly defined for Tailwind v4 */
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
   /* Glass panel effect */
   .glass-panel {
     background: rgba(255, 255, 255, 0.4);
