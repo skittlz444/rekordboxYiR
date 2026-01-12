@@ -60,7 +60,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "downloadjs": "^1.4.7",
-    "framer-motion": "^12.24.0",
+    "framer-motion": "^12.26.1",
     "hono": "^4.11.3",
     "html-to-image": "^1.11.13",
     "lucide-react": "^0.562.0",
@@ -68,6 +68,6 @@
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "tslib": "^2.8.1",
-    "zustand": "^5.0.9"
+    "zustand": "^5.0.10"
   }
 }
