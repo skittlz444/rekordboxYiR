@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import { type Theme } from '../hooks/useBulkDownload'
 
 export type AspectRatio = '9:16' | '4:5' | '1:1'
+export type { Theme }
 
 export interface StorySlideProps {
   children: ReactNode
