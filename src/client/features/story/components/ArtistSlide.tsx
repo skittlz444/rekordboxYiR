@@ -1,16 +1,17 @@
-import { StorySlide, AspectRatio } from './StorySlide'
+import { StorySlide, AspectRatio, Theme } from './StorySlide'
 import { ArtistStat } from '@/shared/types'
 
 export interface ArtistSlideProps {
   artists: ArtistStat[]
   aspectRatio?: AspectRatio
+  theme?: Theme
 }
 
-export function ArtistSlide({ artists, aspectRatio = '9:16' }: ArtistSlideProps) {
+export function ArtistSlide({ artists, aspectRatio = '9:16', theme }: ArtistSlideProps) {
   const displayArtists = aspectRatio === '1:1' || aspectRatio === '4:5' ? artists.slice(0, 3) : artists.slice(0, 5)
 
   return (
-    <StorySlide aspectRatio={aspectRatio}>
+    <StorySlide aspectRatio={aspectRatio} theme={theme}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col p-8 text-theme-text relative slide-p-square h-full">
         <div className="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">
           #TOPARTISTS

@@ -1,15 +1,17 @@
-import { StorySlide, AspectRatio } from './StorySlide'
+import { StorySlide, AspectRatio, Theme } from './StorySlide'
 
 export interface LibraryGrowthSlideProps {
   newTracks: number
   totalLibrarySize: number
   aspectRatio?: AspectRatio
+  theme?: Theme
 }
 
 export function LibraryGrowthSlide({
   newTracks,
   totalLibrarySize,
   aspectRatio = '9:16',
+  theme,
 }: LibraryGrowthSlideProps) {
   const isGrowth = newTracks > 0
   const title = isGrowth ? 'THE\nCOLLECTION\nGREW' : 'LIBRARY\nCLEANED\nUP'
@@ -19,7 +21,7 @@ export function LibraryGrowthSlide({
     : 'Time to refresh your sound'
 
   return (
-    <StorySlide aspectRatio={aspectRatio}>
+    <StorySlide aspectRatio={aspectRatio} theme={theme}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col p-8 text-theme-text relative slide-p-square h-full">
         <div className="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">
           #LIBRARY

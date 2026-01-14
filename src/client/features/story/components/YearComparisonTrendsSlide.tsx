@@ -1,4 +1,4 @@
-import { StorySlide, AspectRatio } from './StorySlide'
+import { StorySlide, AspectRatio, Theme } from './StorySlide'
 
 export interface TrendData {
   biggestObsession?: {
@@ -20,17 +20,19 @@ export interface TrendData {
 export interface YearComparisonTrendsSlideProps {
   trends: TrendData
   aspectRatio?: AspectRatio
+  theme?: Theme
 }
 
 export function YearComparisonTrendsSlide({
   trends,
   aspectRatio = '9:16',
+  theme,
 }: YearComparisonTrendsSlideProps) {
   const hasNewFavorite = !!trends.newFavorite
   const showNewFavorite = hasNewFavorite && (aspectRatio === '9:16')
 
   return (
-    <StorySlide aspectRatio={aspectRatio}>
+    <StorySlide aspectRatio={aspectRatio} theme={theme}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col p-8 text-theme-text relative slide-p-square h-full">
         <div className="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">
           #TRENDS

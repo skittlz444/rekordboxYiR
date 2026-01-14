@@ -1,4 +1,4 @@
-import { StorySlide, AspectRatio } from './StorySlide'
+import { StorySlide, AspectRatio, Theme } from './StorySlide'
 
 export interface SummaryData {
   year: string
@@ -18,16 +18,17 @@ export interface SummaryData {
 export interface SummarySlideProps {
   data: SummaryData
   aspectRatio?: AspectRatio
+  theme?: Theme
 }
 
-export function SummarySlide({ data, aspectRatio = '9:16' }: SummarySlideProps) {
+export function SummarySlide({ data, aspectRatio = '9:16', theme }: SummarySlideProps) {
   // Format YYYY-MM to month name (e.g., "2025-07" -> "July")
   const monthName = data.busiestMonth
     ? new Date(`${data.busiestMonth}-01`).toLocaleString('default', { month: 'long' })
     : 'N/A'
 
   return (
-    <StorySlide aspectRatio={aspectRatio}>
+    <StorySlide aspectRatio={aspectRatio} theme={theme}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col p-8 text-theme-text relative slide-p-square h-full">
         <div className="text-center mt-6 mb-4 slide-mt-square-sm">
           <div className="text-sm font-bold opacity-50">REKORDBOX YEAR IN REVIEW</div>

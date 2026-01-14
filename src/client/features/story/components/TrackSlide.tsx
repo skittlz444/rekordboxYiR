@@ -1,18 +1,19 @@
-import { StorySlide, AspectRatio } from './StorySlide'
+import { StorySlide, AspectRatio, Theme } from './StorySlide'
 import { TrackStat } from '@/shared/types'
 
 export interface TrackSlideProps {
   tracks: TrackStat[]
   aspectRatio?: AspectRatio
+  theme?: Theme
 }
 
-export function TrackSlide({ tracks, aspectRatio = '9:16' }: TrackSlideProps) {
+export function TrackSlide({ tracks, aspectRatio = '9:16', theme }: TrackSlideProps) {
   const displayTracks = aspectRatio === '1:1' || aspectRatio === '4:5' ? tracks.slice(0, 3) : tracks.slice(0, 5)
   const topTrack = tracks[0]
   const remainingTracks = displayTracks.slice(1)
 
   return (
-    <StorySlide aspectRatio={aspectRatio}>
+    <StorySlide aspectRatio={aspectRatio} theme={theme}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col p-8 text-theme-text relative slide-p-square h-full">
         <div className="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">
           #TOPTRACKS
