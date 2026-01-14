@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import {
   OpenerSlide,
   ArtistSlide,
@@ -12,6 +12,7 @@ import {
   AspectRatio,
   DownloadableSlideWrapper,
 } from './components'
+import { BulkDownloadButton } from './components/BulkDownloadButton'
 import { StatsResponse } from '@/shared/types'
 import { transformStatsToStoryData } from './utils/storyDataTransform'
 import { Button } from '@/client/components/ui/button'
@@ -20,6 +21,7 @@ import { SettingsPanel } from '@/client/components/SettingsPanel'
 import { Settings } from 'lucide-react'
 import { useConfigStore } from '@/client/lib/store'
 import { applyPlaytimePercentage } from '@/client/lib/playtimeUtils'
+import { useBulkDownload, type Theme } from './hooks/useBulkDownload'
 
 interface StoryContainerProps {
   data: StatsResponse
@@ -27,7 +29,7 @@ interface StoryContainerProps {
 
 export function StoryContainer({ data }: StoryContainerProps) {
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('9:16')
-  const [theme, setTheme] = useState<string>('theme-pastel')
+  const [theme, setTheme] = useState<Theme>('theme-pastel')
 
   const { stats, year, comparison } = data
 
@@ -48,8 +50,51 @@ export function StoryContainer({ data }: StoryContainerProps) {
       : undefined
   }
 
+  // Refs for all slides
+  const openerRef = useRef<HTMLDivElement>(null)
+  const artistsRef = useRef<HTMLDivElement>(null)
+  const tracksRef = useRef<HTMLDivElement>(null)
+  const genresRef = useRef<HTMLDivElement>(null)
+  const busiestRef = useRef<HTMLDivElement>(null)
+  const libraryRef = useRef<HTMLDivElement>(null)
+  const comparisonRef = useRef<HTMLDivElement>(null)
+  const trendsRef = useRef<HTMLDivElement>(null)
+  const summaryRef = useRef<HTMLDivElement>(null)
+
+  // Bulk download hook
+  const { bulkDownload } = useBulkDownload()
+
+  const handleBulkDownload = (options: { allSizes: boolean; allThemes: boolean }) => {
+    const slideRefs = [
+      { name: `opener-${year}`, ref: openerRef.current?.firstElementChild as HTMLElement | null },
+      { name: `top-artists-${year}`, ref: artistsRef.current?.firstElementChild as HTMLElement | null },
+      { name: `top-tracks-${year}`, ref: tracksRef.current?.firstElementChild as HTMLElement | null },
+      { name: `top-genres-${year}`, ref: genresRef.current?.firstElementChild as HTMLElement | null },
+      { name: `busiest-day-${year}`, ref: busiestRef.current?.firstElementChild as HTMLElement | null },
+      { name: `library-growth-${year}`, ref: libraryRef.current?.firstElementChild as HTMLElement | null },
+    ]
+
+    // Add comparison slides if they exist
+    if (comparison && comparisonMetrics.length > 0 && comparisonRef.current) {
+      slideRefs.push({ name: `comparison-${year}`, ref: comparisonRef.current.firstElementChild as HTMLElement | null })
+    }
+    if (comparison && (trends.biggestObsession || trends.rankClimber || trends.newFavorite) && trendsRef.current) {
+      slideRefs.push({ name: `trends-${year}`, ref: trendsRef.current.firstElementChild as HTMLElement | null })
+    }
+
+    // Always add summary
+    slideRefs.push({ name: `summary-${year}`, ref: summaryRef.current?.firstElementChild as HTMLElement | null })
+
+    bulkDownload(slideRefs, {
+      allSizes: options.allSizes,
+      allThemes: options.allThemes,
+      currentSize: aspectRatio,
+      currentTheme: theme,
+    })
+  }
+
   return (
-    <div className={`min-h-screen bg-gray-100 p-8 ${theme}`} data-ratio={aspectRatio}>
+    <div className={`min-h-screen bg-gray-100 p-8 ${theme}`} data-ratio={aspectRatio} data-theme-container data-theme={theme}>
       <div className="flex flex-col items-center gap-4 mb-8 sticky top-4 z-50">
         {/* Aspect Ratio Switcher */}
         <div className="bg-white/80 backdrop-blur p-2 rounded-xl shadow-lg flex gap-2">
@@ -122,6 +167,9 @@ export function StoryContainer({ data }: StoryContainerProps) {
           </button>
         </div>
 
+        {/* Bulk Download Button */}
+        <BulkDownloadButton onDownload={handleBulkDownload} />
+
         {/* Settings Button */}
         <Dialog>
           <DialogTrigger asChild>
@@ -143,23 +191,23 @@ export function StoryContainer({ data }: StoryContainerProps) {
       </div>
 
       <div className="flex flex-wrap justify-center gap-8 pb-20">
-        <DownloadableSlideWrapper filename={`opener-${year}.png`}>
+        <DownloadableSlideWrapper ref={openerRef} filename={`opener-${year}.png`}>
           <OpenerSlide year={year} djName={djName || 'DJ'} logo={logo || undefined} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
 
-        <DownloadableSlideWrapper filename={`top-artists-${year}.png`}>
+        <DownloadableSlideWrapper ref={artistsRef} filename={`top-artists-${year}.png`}>
           <ArtistSlide artists={stats.topArtists} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
 
-        <DownloadableSlideWrapper filename={`top-tracks-${year}.png`}>
+        <DownloadableSlideWrapper ref={tracksRef} filename={`top-tracks-${year}.png`}>
           <TrackSlide tracks={stats.topTracks} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
 
-        <DownloadableSlideWrapper filename={`top-genres-${year}.png`}>
+        <DownloadableSlideWrapper ref={genresRef} filename={`top-genres-${year}.png`}>
           <GenreSlide genres={stats.topGenres} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
 
-        <DownloadableSlideWrapper filename={`busiest-day-${year}.png`}>
+        <DownloadableSlideWrapper ref={busiestRef} filename={`busiest-day-${year}.png`}>
           <BusiestDaySlide
             busiestMonth={stats.busiestMonth}
             longestSession={adjustedLongestSession}
@@ -167,7 +215,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
           />
         </DownloadableSlideWrapper>
 
-        <DownloadableSlideWrapper filename={`library-growth-${year}.png`}>
+        <DownloadableSlideWrapper ref={libraryRef} filename={`library-growth-${year}.png`}>
           <LibraryGrowthSlide
             newTracks={stats.libraryGrowth?.added || 0}
             totalLibrarySize={stats.libraryGrowth?.total || 0}
@@ -178,7 +226,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
         {comparison && (
           <>
             {comparisonMetrics.length > 0 && (
-              <DownloadableSlideWrapper filename={`comparison-${year}.png`}>
+              <DownloadableSlideWrapper ref={comparisonRef} filename={`comparison-${year}.png`}>
                 <YearComparisonSlide
                   comparisonYear={comparison.year}
                   metrics={comparisonMetrics}
@@ -187,7 +235,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
               </DownloadableSlideWrapper>
             )}
             {(trends.biggestObsession || trends.rankClimber || trends.newFavorite) && (
-              <DownloadableSlideWrapper filename={`trends-${year}.png`}>
+              <DownloadableSlideWrapper ref={trendsRef} filename={`trends-${year}.png`}>
                 <YearComparisonTrendsSlide
                   trends={trends}
                   aspectRatio={aspectRatio}
@@ -197,7 +245,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
           </>
         )}
 
-        <DownloadableSlideWrapper filename={`summary-${year}.png`}>
+        <DownloadableSlideWrapper ref={summaryRef} filename={`summary-${year}.png`}>
           <SummarySlide data={summaryData} aspectRatio={aspectRatio} />
         </DownloadableSlideWrapper>
       </div>
