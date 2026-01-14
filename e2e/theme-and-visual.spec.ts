@@ -256,7 +256,7 @@ test.describe('Theme Switching', () => {
     await page.waitForTimeout(300);
     
     let slideContainer = page.locator('.slide-container').first();
-    let hasPastelClass = await slideContainer.evaluate((el) => {
+    const hasPastelClass = await slideContainer.evaluate((el) => {
       return el.classList.contains('theme-pastel');
     });
     expect(hasPastelClass).toBe(true);
@@ -267,7 +267,7 @@ test.describe('Theme Switching', () => {
     await page.waitForTimeout(300);
     
     slideContainer = page.locator('.slide-container').first();
-    let hasDarkClass = await slideContainer.evaluate((el) => {
+    const hasDarkClass = await slideContainer.evaluate((el) => {
       return el.classList.contains('theme-dark');
     });
     expect(hasDarkClass).toBe(true);
