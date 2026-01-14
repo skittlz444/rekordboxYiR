@@ -1,5 +1,6 @@
 export { StorySlide } from './StorySlide'
-export type { StorySlideProps, AspectRatio, Theme } from './StorySlide'
+export type { StorySlideProps, AspectRatio } from './StorySlide'
+export type { Theme } from '../hooks/useBulkDownload'
 
 export { OpenerSlide } from './OpenerSlide'
 export type { OpenerSlideProps } from './OpenerSlide'
