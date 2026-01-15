@@ -1,12 +1,13 @@
-import { StorySlide, AspectRatio } from './StorySlide'
+import { StorySlide, AspectRatio, Theme } from './StorySlide'
 import { GenreStat } from '@/shared/types'
 
 export interface GenreSlideProps {
   genres: GenreStat[]
   aspectRatio?: AspectRatio
+  theme?: Theme
 }
 
-export function GenreSlide({ genres, aspectRatio = '9:16' }: GenreSlideProps) {
+export function GenreSlide({ genres, aspectRatio = '9:16', theme }: GenreSlideProps) {
   // Calculate percentages
   const total = genres.reduce((sum, genre) => sum + Number(genre.count), 0)
   const genresWithPercentages = genres.map((genre) => ({
@@ -33,7 +34,7 @@ export function GenreSlide({ genres, aspectRatio = '9:16' }: GenreSlideProps) {
   const conicGradient = `conic-gradient(${gradientStops.join(', ')})`
 
   return (
-    <StorySlide aspectRatio={aspectRatio}>
+    <StorySlide aspectRatio={aspectRatio} theme={theme}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col p-8 text-theme-text relative slide-p-square h-full">
         <div className="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">
           #TOPGENRES

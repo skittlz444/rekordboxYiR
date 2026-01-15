@@ -1,4 +1,4 @@
-import { StorySlide, AspectRatio } from './StorySlide'
+import { StorySlide, AspectRatio, Theme } from './StorySlide'
 
 export interface BusiestDaySlideProps {
   busiestMonth: {
@@ -10,6 +10,7 @@ export interface BusiestDaySlideProps {
     durationSeconds?: number
   }
   aspectRatio?: AspectRatio
+  theme?: Theme
 }
 
 function formatDuration(seconds?: number): string {
@@ -23,6 +24,7 @@ export function BusiestDaySlide({
   busiestMonth,
   longestSession,
   aspectRatio = '9:16',
+  theme,
 }: BusiestDaySlideProps) {
   // Format YYYY-MM to month name (e.g., "2025-07" -> "July")
   const monthName = busiestMonth.month
@@ -38,7 +40,7 @@ export function BusiestDaySlide({
     : 'N/A'
 
   return (
-    <StorySlide aspectRatio={aspectRatio}>
+    <StorySlide aspectRatio={aspectRatio} theme={theme}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col p-8 text-theme-text relative slide-p-square h-full">
         <div className="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">
           #BUSIEST

@@ -1,4 +1,4 @@
-import { StorySlide, AspectRatio } from './StorySlide'
+import { StorySlide, AspectRatio, Theme } from './StorySlide'
 import { useState } from 'react'
 
 export interface OpenerSlideProps {
@@ -6,13 +6,14 @@ export interface OpenerSlideProps {
   djName?: string
   logo?: string
   aspectRatio?: AspectRatio
+  theme?: Theme
 }
 
-export function OpenerSlide({ year, djName = 'DJ', logo, aspectRatio = '9:16' }: OpenerSlideProps) {
+export function OpenerSlide({ year, djName = 'DJ', logo, aspectRatio = '9:16', theme }: OpenerSlideProps) {
   const [logoError, setLogoError] = useState(false)
 
   return (
-    <StorySlide aspectRatio={aspectRatio}>
+    <StorySlide aspectRatio={aspectRatio} theme={theme}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col justify-center items-center p-8 text-theme-text slide-p-square h-full">
         <div className="text-xl font-bold mb-4 opacity-70 slide-mt-square-sm">REKORDBOX</div>
         <h1 className="text-6xl font-black mb-6 text-center leading-tight slide-text-square-sm text-huge-square">

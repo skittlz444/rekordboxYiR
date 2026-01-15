@@ -192,19 +192,19 @@ export function StoryContainer({ data }: StoryContainerProps) {
 
       <div className="flex flex-wrap justify-center gap-8 pb-20">
         <DownloadableSlideWrapper ref={openerRef} filename={`opener-${year}.png`}>
-          <OpenerSlide year={year} djName={djName || 'DJ'} logo={logo || undefined} aspectRatio={aspectRatio} />
+          <OpenerSlide year={year} djName={djName || 'DJ'} logo={logo || undefined} aspectRatio={aspectRatio} theme={theme} />
         </DownloadableSlideWrapper>
 
         <DownloadableSlideWrapper ref={artistsRef} filename={`top-artists-${year}.png`}>
-          <ArtistSlide artists={stats.topArtists} aspectRatio={aspectRatio} />
+          <ArtistSlide artists={stats.topArtists} aspectRatio={aspectRatio} theme={theme} />
         </DownloadableSlideWrapper>
 
         <DownloadableSlideWrapper ref={tracksRef} filename={`top-tracks-${year}.png`}>
-          <TrackSlide tracks={stats.topTracks} aspectRatio={aspectRatio} />
+          <TrackSlide tracks={stats.topTracks} aspectRatio={aspectRatio} theme={theme} />
         </DownloadableSlideWrapper>
 
         <DownloadableSlideWrapper ref={genresRef} filename={`top-genres-${year}.png`}>
-          <GenreSlide genres={stats.topGenres} aspectRatio={aspectRatio} />
+          <GenreSlide genres={stats.topGenres} aspectRatio={aspectRatio} theme={theme} />
         </DownloadableSlideWrapper>
 
         <DownloadableSlideWrapper ref={busiestRef} filename={`busiest-day-${year}.png`}>
@@ -212,6 +212,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
             busiestMonth={stats.busiestMonth}
             longestSession={adjustedLongestSession}
             aspectRatio={aspectRatio}
+            theme={theme}
           />
         </DownloadableSlideWrapper>
 
@@ -220,6 +221,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
             newTracks={stats.libraryGrowth?.added || 0}
             totalLibrarySize={stats.libraryGrowth?.total || 0}
             aspectRatio={aspectRatio}
+            theme={theme}
           />
         </DownloadableSlideWrapper>
 
@@ -231,6 +233,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
                   comparisonYear={comparison.year}
                   metrics={comparisonMetrics}
                   aspectRatio={aspectRatio}
+                  theme={theme}
                 />
               </DownloadableSlideWrapper>
             )}
@@ -239,6 +242,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
                 <YearComparisonTrendsSlide
                   trends={trends}
                   aspectRatio={aspectRatio}
+                  theme={theme}
                 />
               </DownloadableSlideWrapper>
             )}
@@ -246,7 +250,7 @@ export function StoryContainer({ data }: StoryContainerProps) {
         )}
 
         <DownloadableSlideWrapper ref={summaryRef} filename={`summary-${year}.png`}>
-          <SummarySlide data={summaryData} aspectRatio={aspectRatio} />
+          <SummarySlide data={summaryData} aspectRatio={aspectRatio} theme={theme} />
         </DownloadableSlideWrapper>
       </div>
     </div>

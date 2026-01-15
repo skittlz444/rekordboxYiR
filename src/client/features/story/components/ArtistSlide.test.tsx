@@ -46,4 +46,16 @@ describe('ArtistSlide', () => {
     render(<ArtistSlide artists={artistsWithUnknown} />)
     expect(screen.getByText('Unknown Artist')).toBeInTheDocument()
   })
+
+  it('applies theme to StorySlide container', () => {
+    const { container } = render(<ArtistSlide artists={mockArtists} theme="theme-dark" />)
+    const slideContainer = container.querySelector('.slide-container')
+    expect(slideContainer).toHaveClass('theme-dark')
+  })
+
+  it('applies default theme when no theme prop is provided', () => {
+    const { container } = render(<ArtistSlide artists={mockArtists} />)
+    const slideContainer = container.querySelector('.slide-container')
+    expect(slideContainer).toHaveClass('theme-pastel')
+  })
 })

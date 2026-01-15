@@ -12,6 +12,7 @@ import {
   YearComparisonTrendsSlide,
   SummarySlide,
   AspectRatio,
+  Theme,
 } from '../story/components'
 import { StatsResponse } from '@/shared/types'
 import { Button } from '@/client/components/ui/button'
@@ -32,7 +33,7 @@ type SlideData = { element: JSX.Element; filename: string }
 export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('9:16')
-  const [theme, setTheme] = useState<string>('theme-pastel')
+  const [theme, setTheme] = useState<Theme>('theme-pastel')
 
   const { stats, year, comparison } = data
 
@@ -64,16 +65,17 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
 
   // Build slides array with corresponding filenames
   const slidesData: SlideData[] = [
-    { element: <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} logo={logo || undefined} aspectRatio={aspectRatio} />, filename: `opener-${year}.png` },
-    { element: <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} />, filename: `top-artists-${year}.png` },
-    { element: <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} />, filename: `top-tracks-${year}.png` },
-    { element: <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} />, filename: `top-genres-${year}.png` },
+    { element: <OpenerSlide key="opener" year={year} djName={djName || 'DJ'} logo={logo || undefined} aspectRatio={aspectRatio} theme={theme} />, filename: `opener-${year}.png` },
+    { element: <ArtistSlide key="artist" artists={stats.topArtists} aspectRatio={aspectRatio} theme={theme} />, filename: `top-artists-${year}.png` },
+    { element: <TrackSlide key="track" tracks={stats.topTracks} aspectRatio={aspectRatio} theme={theme} />, filename: `top-tracks-${year}.png` },
+    { element: <GenreSlide key="genre" genres={stats.topGenres} aspectRatio={aspectRatio} theme={theme} />, filename: `top-genres-${year}.png` },
     {
       element: <BusiestDaySlide
         key="busiest"
         busiestMonth={stats.busiestMonth}
         longestSession={adjustedLongestSession}
         aspectRatio={aspectRatio}
+        theme={theme}
       />,
       filename: `busiest-day-${year}.png`
     },
@@ -83,6 +85,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
         newTracks={stats.libraryGrowth?.added || 0}
         totalLibrarySize={stats.libraryGrowth?.total || 0}
         aspectRatio={aspectRatio}
+        theme={theme}
       />,
       filename: `library-growth-${year}.png`
     },
@@ -96,6 +99,7 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
         comparisonYear={comparison.year}
         metrics={comparisonMetrics}
         aspectRatio={aspectRatio}
+        theme={theme}
       />,
       filename: `comparison-${year}.png`
     })
@@ -107,13 +111,14 @@ export function StoryModeOverlay({ data, onClose }: StoryModeOverlayProps) {
         key="trends"
         trends={trends}
         aspectRatio={aspectRatio}
+        theme={theme}
       />,
       filename: `trends-${year}.png`
     })
   }
 
   slidesData.push({
-    element: <SummarySlide key="summary" data={summaryData} aspectRatio={aspectRatio} />,
+    element: <SummarySlide key="summary" data={summaryData} aspectRatio={aspectRatio} theme={theme} />,
     filename: `summary-${year}.png`
   })
 

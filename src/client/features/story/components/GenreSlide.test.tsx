@@ -49,4 +49,16 @@ describe('GenreSlide', () => {
     render(<GenreSlide genres={genresWithUnknown} />)
     expect(screen.getByText('Unknown')).toBeInTheDocument()
   })
+
+  it('applies theme to StorySlide container', () => {
+    const { container } = render(<GenreSlide genres={mockGenres} theme="theme-club" />)
+    const slideContainer = container.querySelector('.slide-container')
+    expect(slideContainer).toHaveClass('theme-club')
+  })
+
+  it('applies default theme when no theme prop is provided', () => {
+    const { container } = render(<GenreSlide genres={mockGenres} />)
+    const slideContainer = container.querySelector('.slide-container')
+    expect(slideContainer).toHaveClass('theme-pastel')
+  })
 })

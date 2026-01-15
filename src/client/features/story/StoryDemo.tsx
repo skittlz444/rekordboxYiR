@@ -10,6 +10,7 @@ import {
   YearComparisonTrendsSlide,
   SummarySlide,
   AspectRatio,
+  Theme,
   DownloadableSlideWrapper,
 } from './components'
 import { ArtistStat, TrackStat, GenreStat } from '@/shared/types'
@@ -44,7 +45,7 @@ import { useConfigStore } from '@/client/lib/store'
 
 export function StoryDemo() {
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('9:16')
-  const [theme, setTheme] = useState<string>('theme-pastel')
+  const [theme, setTheme] = useState<Theme>('theme-pastel')
 
   const djName = useConfigStore((state) => state.djName)
   const logo = useConfigStore((state) => state.logo)
@@ -130,19 +131,19 @@ export function StoryDemo() {
 
       <div className="flex flex-wrap justify-center gap-8">
         <DownloadableSlideWrapper filename="opener.png">
-          <OpenerSlide year="2025" djName={djName || 'DJ SKITTLZ'} logo={logo || undefined} aspectRatio={aspectRatio} />
+          <OpenerSlide year="2025" djName={djName || 'DJ SKITTLZ'} logo={logo || undefined} aspectRatio={aspectRatio} theme={theme} />
         </DownloadableSlideWrapper>
 
         <DownloadableSlideWrapper filename="artists.png">
-          <ArtistSlide artists={mockArtists} aspectRatio={aspectRatio} />
+          <ArtistSlide artists={mockArtists} aspectRatio={aspectRatio} theme={theme} />
         </DownloadableSlideWrapper>
 
         <DownloadableSlideWrapper filename="tracks.png">
-          <TrackSlide tracks={mockTracks} aspectRatio={aspectRatio} />
+          <TrackSlide tracks={mockTracks} aspectRatio={aspectRatio} theme={theme} />
         </DownloadableSlideWrapper>
 
         <DownloadableSlideWrapper filename="genres.png">
-          <GenreSlide genres={mockGenres} aspectRatio={aspectRatio} />
+          <GenreSlide genres={mockGenres} aspectRatio={aspectRatio} theme={theme} />
         </DownloadableSlideWrapper>
 
         <DownloadableSlideWrapper filename="busiest.png">
@@ -150,6 +151,7 @@ export function StoryDemo() {
             busiestMonth={{ month: '2023-07', count: 342 }}
             longestSession={{ date: '2023-10-14', durationSeconds: 22320 }}
             aspectRatio={aspectRatio}
+            theme={theme}
           />
         </DownloadableSlideWrapper>
 
@@ -158,6 +160,7 @@ export function StoryDemo() {
             newTracks={420}
             totalLibrarySize={12450}
             aspectRatio={aspectRatio}
+            theme={theme}
           />
         </DownloadableSlideWrapper>
 
@@ -188,6 +191,7 @@ export function StoryDemo() {
               },
             ]}
             aspectRatio={aspectRatio}
+            theme={theme}
           />
         </DownloadableSlideWrapper>
 
@@ -210,6 +214,7 @@ export function StoryDemo() {
               },
             }}
             aspectRatio={aspectRatio}
+            theme={theme}
           />
         </DownloadableSlideWrapper>
 
@@ -230,6 +235,7 @@ export function StoryDemo() {
               logo: logo || undefined,
             }}
             aspectRatio={aspectRatio}
+            theme={theme}
           />
         </DownloadableSlideWrapper>
       </div>

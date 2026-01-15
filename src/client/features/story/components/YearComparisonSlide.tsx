@@ -1,4 +1,4 @@
-import { StorySlide, AspectRatio } from './StorySlide'
+import { StorySlide, AspectRatio, Theme } from './StorySlide'
 
 export interface ComparisonMetric {
   label: string
@@ -12,12 +12,14 @@ export interface YearComparisonSlideProps {
   comparisonYear: string
   metrics: ComparisonMetric[]
   aspectRatio?: AspectRatio
+  theme?: Theme
 }
 
 export function YearComparisonSlide({
   comparisonYear,
   metrics,
   aspectRatio = '9:16',
+  theme,
 }: YearComparisonSlideProps) {
   const metricCount = metrics.length
   
@@ -34,7 +36,7 @@ export function YearComparisonSlide({
   const isSingle = metricCount === 1
 
   return (
-    <StorySlide aspectRatio={aspectRatio}>
+    <StorySlide aspectRatio={aspectRatio} theme={theme}>
       <div className="bg-gradient-to-br from-theme-bgStart to-theme-bgEnd flex flex-col p-8 text-theme-text relative slide-p-square h-full">
         <div className="absolute top-8 left-8 text-sm font-bold opacity-50 slide-mt-square-sm slide-tag">
           #{`VS${comparisonYear}`}

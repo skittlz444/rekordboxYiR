@@ -150,6 +150,130 @@ test.describe('Aspect Ratio Settings', () => {
   });
 });
 
+test.describe('Theme Switching', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await waitForAppReady(page);
+    await page.getByRole('button', { name: /view story slide demo/i }).click();
+    await page.waitForTimeout(500);
+  });
+
+  test('should apply Pastel theme to all slides', async ({ page }) => {
+    const themeButton = page.getByRole('button', { name: /pastel/i }).first();
+    
+    await expect(themeButton).toBeVisible();
+    await themeButton.click();
+    await page.waitForTimeout(300);
+    
+    // Check that slides have the theme applied
+    const slideContainer = page.locator('.slide-container').first();
+    await expect(slideContainer).toBeVisible();
+    
+    const hasThemeClass = await slideContainer.evaluate((el) => {
+      return el.classList.contains('theme-pastel');
+    });
+    
+    expect(hasThemeClass).toBe(true);
+  });
+
+  test('should apply Club theme to all slides', async ({ page }) => {
+    const themeButton = page.getByRole('button', { name: /club/i }).first();
+    
+    await expect(themeButton).toBeVisible();
+    await themeButton.click();
+    await page.waitForTimeout(300);
+    
+    // Check that slides have the theme applied
+    const slideContainer = page.locator('.slide-container').first();
+    await expect(slideContainer).toBeVisible();
+    
+    const hasThemeClass = await slideContainer.evaluate((el) => {
+      return el.classList.contains('theme-club');
+    });
+    
+    expect(hasThemeClass).toBe(true);
+  });
+
+  test('should apply Clean theme to all slides', async ({ page }) => {
+    const themeButton = page.getByRole('button', { name: /clean/i }).first();
+    
+    await expect(themeButton).toBeVisible();
+    await themeButton.click();
+    await page.waitForTimeout(300);
+    
+    // Check that slides have the theme applied
+    const slideContainer = page.locator('.slide-container').first();
+    await expect(slideContainer).toBeVisible();
+    
+    const hasThemeClass = await slideContainer.evaluate((el) => {
+      return el.classList.contains('theme-clean');
+    });
+    
+    expect(hasThemeClass).toBe(true);
+  });
+
+  test('should apply Dark theme to all slides', async ({ page }) => {
+    const themeButton = page.getByRole('button', { name: /dark/i }).first();
+    
+    await expect(themeButton).toBeVisible();
+    await themeButton.click();
+    await page.waitForTimeout(300);
+    
+    // Check that slides have the theme applied
+    const slideContainer = page.locator('.slide-container').first();
+    await expect(slideContainer).toBeVisible();
+    
+    const hasThemeClass = await slideContainer.evaluate((el) => {
+      return el.classList.contains('theme-dark');
+    });
+    
+    expect(hasThemeClass).toBe(true);
+  });
+
+  test('should apply theme colors to slide backgrounds', async ({ page }) => {
+    // Test with Club theme (distinctive dark purple background)
+    const clubButton = page.getByRole('button', { name: /club/i }).first();
+    await clubButton.click();
+    await page.waitForTimeout(300);
+    
+    // Find a slide with gradient background
+    const slideWithBg = page.locator('.bg-gradient-to-br').first();
+    await expect(slideWithBg).toBeVisible();
+    
+    // Background should be applied
+    const hasBackground = await slideWithBg.evaluate((el) => {
+      const bg = window.getComputedStyle(el).backgroundImage;
+      return bg !== 'none' && bg.includes('gradient');
+    });
+    
+    expect(hasBackground).toBe(true);
+  });
+
+  test('should switch themes dynamically', async ({ page }) => {
+    // Start with Pastel
+    const pastelButton = page.getByRole('button', { name: /pastel/i }).first();
+    await pastelButton.click();
+    await page.waitForTimeout(300);
+    
+    let slideContainer = page.locator('.slide-container').first();
+    const hasPastelClass = await slideContainer.evaluate((el) => {
+      return el.classList.contains('theme-pastel');
+    });
+    expect(hasPastelClass).toBe(true);
+    
+    // Switch to Dark
+    const darkButton = page.getByRole('button', { name: /dark/i }).first();
+    await darkButton.click();
+    await page.waitForTimeout(300);
+    
+    slideContainer = page.locator('.slide-container').first();
+    const hasDarkClass = await slideContainer.evaluate((el) => {
+      return el.classList.contains('theme-dark');
+    });
+    expect(hasDarkClass).toBe(true);
+  });
+});
+
 test.describe('Animation and Transitions', () => {
   test('should animate between views smoothly', async ({ page }) => {
     await page.goto('/');

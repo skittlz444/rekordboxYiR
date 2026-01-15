@@ -123,6 +123,17 @@
     --chart-3: #F472B6;
     --chart-4: #FBBF24;
     --chart-5: #CBD5E1;
+    /* Update Tailwind theme color mappings */
+    --color-theme-bgStart: var(--bg-start);
+    --color-theme-bgEnd: var(--bg-end);
+    --color-theme-text: var(--text);
+    --color-theme-accent1: var(--accent-1);
+    --color-theme-accent2: var(--accent-2);
+    --color-theme-chart1: var(--chart-1);
+    --color-theme-chart2: var(--chart-2);
+    --color-theme-chart3: var(--chart-3);
+    --color-theme-chart4: var(--chart-4);
+    --color-theme-chart5: var(--chart-5);
   }
 
   /* Story Theme: Club */
@@ -137,6 +148,17 @@
     --chart-3: #FFFF00;
     --chart-4: #00FF00;
     --chart-5: #FFFFFF;
+    /* Update Tailwind theme color mappings */
+    --color-theme-bgStart: var(--bg-start);
+    --color-theme-bgEnd: var(--bg-end);
+    --color-theme-text: var(--text);
+    --color-theme-accent1: var(--accent-1);
+    --color-theme-accent2: var(--accent-2);
+    --color-theme-chart1: var(--chart-1);
+    --color-theme-chart2: var(--chart-2);
+    --color-theme-chart3: var(--chart-3);
+    --color-theme-chart4: var(--chart-4);
+    --color-theme-chart5: var(--chart-5);
   }
 
   /* Story Theme: Clean */
@@ -151,6 +173,17 @@
     --chart-3: #6B7280;
     --chart-4: #9CA3AF;
     --chart-5: #D1D5DB;
+    /* Update Tailwind theme color mappings */
+    --color-theme-bgStart: var(--bg-start);
+    --color-theme-bgEnd: var(--bg-end);
+    --color-theme-text: var(--text);
+    --color-theme-accent1: var(--accent-1);
+    --color-theme-accent2: var(--accent-2);
+    --color-theme-chart1: var(--chart-1);
+    --color-theme-chart2: var(--chart-2);
+    --color-theme-chart3: var(--chart-3);
+    --color-theme-chart4: var(--chart-4);
+    --color-theme-chart5: var(--chart-5);
   }
 
   /* Story Theme: Dark (Booth) */
@@ -165,6 +198,17 @@
     --chart-3: #B91C1C;
     --chart-4: #991B1B;
     --chart-5: #FFFFFF;
+    /* Update Tailwind theme color mappings */
+    --color-theme-bgStart: var(--bg-start);
+    --color-theme-bgEnd: var(--bg-end);
+    --color-theme-text: var(--text);
+    --color-theme-accent1: var(--accent-1);
+    --color-theme-accent2: var(--accent-2);
+    --color-theme-chart1: var(--chart-1);
+    --color-theme-chart2: var(--chart-2);
+    --color-theme-chart3: var(--chart-3);
+    --color-theme-chart4: var(--chart-4);
+    --color-theme-chart5: var(--chart-5);
   }
   
   @keyframes accordion-down {
