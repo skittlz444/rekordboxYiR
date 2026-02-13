@@ -3,7 +3,6 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
-import react from 'eslint-plugin-react';
 
 export default tseslint.config(
   { ignores: ['dist', 'node_modules', '.wrangler', 'worker-configuration.d.ts', 'coverage'] },
@@ -17,7 +16,6 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      react,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -25,14 +23,6 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      ...react.configs.recommended.rules,
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
     },
   },
 );
