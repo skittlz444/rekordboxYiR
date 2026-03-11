@@ -1,0 +1,22 @@
+{
+    "servers":{
+       "io.github.ChromeDevTools/chrome-devtools-mcp": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"chrome-devtools-mcp@0.11.0"
+			]
+		},
+        "microsoft/playwright-mcp": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"@playwright/mcp@latest"
+			]
+		},
+        "cloudflare": {
+			"command": "npx",
+			"args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"]
+		}
+    }
+}
