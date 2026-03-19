@@ -22,7 +22,7 @@ export default defineConfig({
     outDir: 'public',
     emptyOutDir: true,
     manifest: true,
-    rollupOptions: {
+    rolldownOptions: {
       input: './index.html',
     },
   },
