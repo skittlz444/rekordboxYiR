@@ -18,7 +18,7 @@ A web application that generates a "Spotify Wrapped" style year-in-review story 
 
 ## Prerequisites
 
--   Node.js (v18 or later)
+-   Node.js `20.19.0+` or `22.12.0+`
 -   npm
 
 ## Getting Started
