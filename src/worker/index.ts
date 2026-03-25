@@ -4,8 +4,6 @@ import { cors } from 'hono/cors';
 import initSqlcipher from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs';
 // @ts-expect-error - missing types
 import { SQLiteAPI } from '@7mind.io/sqlcipher-wasm';
-// @ts-expect-error - wasm import
-import wasmBinary from '@7mind.io/sqlcipher-wasm/dist/sqlcipher.wasm';
 import { MAX_FILE_SIZE_BYTES, getFileSizeLimitErrorMessage } from '../shared/constants';
 
 type Bindings = {
@@ -53,14 +51,7 @@ app.post('/upload', async (c) => {
     const u8 = new Uint8Array(buffer);
 
     // Initialize SQLCipher
-    const module = await initSqlcipher({
-      instantiateWasm: function (imports: WebAssembly.Imports, successCallback: (instance: WebAssembly.Instance) => void) {
-        WebAssembly.instantiate(wasmBinary, imports).then(function (instance) {
-          successCallback(instance);
-        });
-        return {};
-      }
-    });
+    const module = await initSqlcipher();
     const sqlite = new SQLiteAPI(module);
 
     // Write to VFS
