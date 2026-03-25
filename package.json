@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "deploy": "npm run build && wrangler deploy",
     "dev": "npm run build && wrangler dev --port 8789",
