@@ -23,11 +23,6 @@ const mocks = vi.hoisted(() => {
   };
 });
 
-// Mock the WASM binary
-vi.mock('@7mind.io/sqlcipher-wasm/dist/sqlcipher.wasm', () => ({
-  default: new ArrayBuffer(0),
-}));
-
 vi.mock('@7mind.io/sqlcipher-wasm/dist/sqlcipher.mjs', () => ({
   default: vi.fn().mockResolvedValue(mocks.mockModule),
 }));
