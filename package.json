@@ -70,7 +70,7 @@
     "hono": "^4.12.9",
     "html-to-image": "^1.11.13",
     "jszip": "^3.10.1",
-    "lucide-react": "^1.6.0",
+    "lucide-react": "^1.7.0",
     "react-dropzone": "^15.0.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
