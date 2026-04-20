@@ -67,7 +67,7 @@
     "clsx": "^2.1.1",
     "downloadjs": "^1.4.7",
     "framer-motion": "^12.38.0",
-    "hono": "^4.12.12",
+    "hono": "^4.12.14",
     "html-to-image": "^1.11.13",
     "jszip": "^3.10.1",
     "lucide-react": "^1.8.0",
