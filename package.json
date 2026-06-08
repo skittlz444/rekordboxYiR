@@ -28,8 +28,8 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "@types/node": "^25.9.1",
-    "@types/react": "^19.2.16",
+    "@types/node": "^25.9.2",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.60.1",
     "@typescript-eslint/parser": "^8.60.1",
@@ -52,7 +52,7 @@
     "typescript-eslint": "^8.60.1",
     "vite": "^8.0.16",
     "vitest": "^4.1.8",
-    "wrangler": "^4.97.0"
+    "wrangler": "^4.98.0"
   },
   "dependencies": {
     "@7mind.io/sqlcipher-wasm": "^1.2.0",
